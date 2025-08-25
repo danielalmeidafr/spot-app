@@ -6,6 +6,7 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.sp
 import com.student.R
 
 val Montserrat = FontFamily(
@@ -19,18 +20,21 @@ val Montserrat = FontFamily(
     Font(R.font.montserrat_semibolditalic, weight = FontWeight.SemiBold, FontStyle.Italic)
 )
 val Typography = Typography(
-    labelMedium = TextStyle(
-        fontFamily = Montserrat,
-        fontWeight = FontWeight.Normal
-    ),
-    labelLarge = TextStyle(
-        fontFamily = Montserrat,
-        fontWeight = FontWeight.Bold
-    ),
     titleSmall = TextStyle(
         fontFamily = Montserrat,
-        fontWeight = FontWeight.ExtraBold
-    )
+        fontWeight = FontWeight.ExtraBold,
+        fontSize = 25.sp
+    ),
+    labelSmall = TextStyle(
+        fontFamily = Montserrat,
+        fontWeight = FontWeight.Bold,
+        fontSize = 12.sp
+    ),
+    labelMedium = TextStyle(
+        fontFamily = Montserrat,
+        fontWeight = FontWeight.SemiBold,
+        fontSize = 12.sp
+    ),
 )
 
 

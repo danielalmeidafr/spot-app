@@ -16,19 +16,26 @@ private val DarkColorScheme = darkColorScheme(
     primary = Golden,
     secondary = Green,
     tertiary = Red,
-    background = DarkGray,
-    onBackground = White,
-    surface = DarkGray2
+    background = Background,
+    onBackground = TextColor,
+    surface = OutlinedColor,
+    onPrimary = TextColor
 )
 
 private val LightColorScheme = lightColorScheme(
-
+    primary = Golden,
+    secondary = Green,
+    tertiary = Red,
+    background = Background2,
+    onBackground = TextColor2,
+    surface = OutlinedColor2,
+    onPrimary = TextColor
 )
 
 @Composable
 fun SpotTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    dynamicColor: Boolean = true,
+    dynamicColor: Boolean = false,
     content: @Composable () -> Unit
 ) {
     val colorScheme = when {
