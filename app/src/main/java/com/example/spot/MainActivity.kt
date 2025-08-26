@@ -31,24 +31,25 @@ class MainActivity : ComponentActivity() {
         setContent {
             val navController = rememberNavController()
 
-            NavHost(
-                navController = navController,
-                startDestination = LoginDestination,
-                modifier = Modifier.fillMaxSize()
-            ) {
-                loginScreen(
-                    onNavigateToHome = { navController.navigate(HomeDestination) },
-                    onNavigateToSignup = { navController.navigate(SignupDestination) }
-                )
+            SpotTheme {
+                NavHost(
+                    navController = navController,
+                    startDestination = LoginDestination,
+                    modifier = Modifier.fillMaxSize()
+                ) {
+                    loginScreen(
+                        onNavigateToHome = { navController.navigate(HomeDestination) },
+                        onNavigateToSignup = { navController.navigate(SignupDestination) }
+                    )
 
-                signupScreen(
-                    onNavigateToHome = { navController.navigate(HomeDestination) },
-                    onNavigateToLogin = { navController.navigate(LoginDestination) }
-                )
+                    signupScreen(
+                        onNavigateToHome = { navController.navigate(HomeDestination) },
+                        onNavigateToLogin = { navController.navigate(LoginDestination) }
+                    )
 
-                homeScreen()
+                    homeScreen()
+                }
             }
-
         }
     }
 }
