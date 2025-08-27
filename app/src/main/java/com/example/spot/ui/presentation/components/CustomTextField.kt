@@ -1,7 +1,8 @@
-package com.example.spot.ui.presentation.login.components
+package com.example.spot.ui.presentation.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -92,7 +93,12 @@ fun CustomTextField(
                         .size(45.dp)
                         .padding(end = 25.dp)
                         .alpha(0.5f)
-                        .clickable { passwordVisible = !passwordVisible }
+                        .clickable(
+                            interactionSource = remember { MutableInteractionSource() },
+                            indication = null
+                        ) {
+                            passwordVisible = !passwordVisible
+                        }
                 )
             }
         }

@@ -10,13 +10,10 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.DividerDefaults
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -33,8 +30,8 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
-import com.example.spot.ui.presentation.login.components.CustomTextField
-import com.example.spot.ui.presentation.login.components.IconCard
+import com.example.spot.ui.presentation.components.CustomTextField
+import com.example.spot.ui.presentation.components.IconCard
 import com.student.R
 
 @Composable
@@ -59,9 +56,6 @@ fun LoginScreen(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-
-        Spacer(modifier = Modifier.height(25.dp))
-
         val logoRes = if (isDarkTheme) {
             R.drawable.logo_dark
         } else {
@@ -72,8 +66,8 @@ fun LoginScreen(
             painter = painterResource(id = logoRes),
             contentDescription = "Spot Logo",
             modifier = Modifier
-                .width(170.dp)
-                .height(150.dp)
+                .width(150.dp)
+                .height(130.dp)
         )
 
         Spacer(modifier = Modifier.height(20.dp))
