@@ -23,17 +23,17 @@ val Typography = Typography(
     titleSmall = TextStyle(
         fontFamily = Montserrat,
         fontWeight = FontWeight.ExtraBold,
-        fontSize = 25.sp
+        fontSize = 20.sp
     ),
     labelSmall = TextStyle(
         fontFamily = Montserrat,
         fontWeight = FontWeight.Bold,
-        fontSize = 12.sp
+        fontSize = 11.sp
     ),
     labelMedium = TextStyle(
         fontFamily = Montserrat,
         fontWeight = FontWeight.SemiBold,
-        fontSize = 12.sp
+        fontSize = 11.sp
     ),
 )
 
