@@ -35,6 +35,11 @@ val Typography = Typography(
         fontWeight = FontWeight.SemiBold,
         fontSize = 11.sp
     ),
+    bodySmall = TextStyle(
+        fontFamily = Montserrat,
+        fontWeight = FontWeight.Light,
+        fontSize = 8.sp
+    )
 )
 
 

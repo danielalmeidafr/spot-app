@@ -38,8 +38,6 @@ import com.student.R
 
 @Composable
 fun SignupScreen(
-    onNavigateToHome: () -> Unit,
-    onNavigateToLogin: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val isDarkTheme = isSystemInDarkTheme()
@@ -170,21 +168,6 @@ fun SignupScreen(
 
         Spacer(modifier = Modifier.height(25.dp))
 
-        /*Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            HorizontalDivider(
-                modifier = Modifier.weight(1f),
-                thickness = DividerDefaults.Thickness,
-                color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.2f)
-            )
-
-            HorizontalDivider(
-                modifier = Modifier.weight(1f),
-                thickness = DividerDefaults.Thickness,
-                color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.2f)
-            )*/
         Text(
             "ou",
             style = MaterialTheme.typography.labelMedium,
@@ -220,7 +203,9 @@ fun SignupScreen(
 
 
         TextButton(
-            onClick = onNavigateToLogin
+            onClick = {
+
+            },
         ) {
             Text(
                 buildAnnotatedString {

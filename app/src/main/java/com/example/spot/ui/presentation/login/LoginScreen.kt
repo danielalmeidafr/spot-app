@@ -36,8 +36,6 @@ import com.student.R
 
 @Composable
 fun LoginScreen(
-    onNavigateToHome: () -> Unit,
-    onNavigateToSignup: () -> Unit
 ) {
     val isDarkTheme = isSystemInDarkTheme()
 
@@ -138,21 +136,6 @@ fun LoginScreen(
 
         Spacer(modifier = Modifier.height(25.dp))
 
-        /*Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            HorizontalDivider(
-                modifier = Modifier.weight(1f),
-                thickness = DividerDefaults.Thickness,
-                color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.2f)
-            )
-
-            HorizontalDivider(
-                modifier = Modifier.weight(1f),
-                thickness = DividerDefaults.Thickness,
-                color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.2f)
-            )*/
             Text(
                 "ou",
                 style = MaterialTheme.typography.labelMedium,
@@ -188,7 +171,9 @@ fun LoginScreen(
 
 
         TextButton(
-            onClick = onNavigateToSignup
+            onClick = {
+
+            },
         ) {
             Text(
                 buildAnnotatedString {
