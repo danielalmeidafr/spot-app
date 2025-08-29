@@ -48,12 +48,12 @@ fun MainScreen(modifier: Modifier = Modifier) {
         bottomBar = {
 
             Surface(
-                shape = RoundedCornerShape(topStart = 30.dp, topEnd = 30.dp),
-                color = MaterialTheme.colorScheme.surfaceTint,
+                shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp),
+                color = MaterialTheme.colorScheme.surfaceContainer,
                 modifier = Modifier
                     .height(50.dp)
                     .fillMaxWidth()
-                    .offset(y = 30.dp)
+                    .offset(y = 35.dp)
             ) {}
             Box(
                 modifier = Modifier
@@ -65,10 +65,10 @@ fun MainScreen(modifier: Modifier = Modifier) {
                     shape = RoundedCornerShape(100.dp),
                     tonalElevation = 5.dp,
                     shadowElevation = 2.dp,
-                    color = MaterialTheme.colorScheme.surfaceTint,
+                    color = MaterialTheme.colorScheme.surfaceContainer,
                     modifier = Modifier
                         .height(55.dp)
-                        .fillMaxWidth(0.94f)
+                        .fillMaxWidth(0.95f)
                 ) {}
             }
 
@@ -100,14 +100,14 @@ fun MainScreen(modifier: Modifier = Modifier) {
                             Text(
                                 destination.label,
                                 style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.onBackground
+                                color = MaterialTheme.colorScheme.secondary
                             )
                         },
                         colors = NavigationBarItemDefaults.colors(
-                            selectedIconColor = MaterialTheme.colorScheme.onBackground,
-                            unselectedIconColor = MaterialTheme.colorScheme.onBackground,
-                            selectedTextColor = MaterialTheme.colorScheme.onBackground,
-                            unselectedTextColor = MaterialTheme.colorScheme.onBackground,
+                            selectedIconColor = MaterialTheme.colorScheme.secondary,
+                            unselectedIconColor = MaterialTheme.colorScheme.secondary,
+                            selectedTextColor = MaterialTheme.colorScheme.secondary,
+                            unselectedTextColor = MaterialTheme.colorScheme.secondary,
                             indicatorColor = Color.Transparent
                         )
                     )

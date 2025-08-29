@@ -32,6 +32,7 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import com.example.spot.ui.presentation.components.CustomTextField
 import com.example.spot.ui.presentation.components.IconCard
+import com.example.spot.ui.presentation.components.PrimaryButton
 import com.student.R
 
 @Composable
@@ -115,24 +116,12 @@ fun LoginScreen(
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        Button(
+        PrimaryButton(
+            text = "Entrar",
             onClick = {
 
-            },
-            modifier = Modifier
-                .width(260.dp)
-                .height(39.dp),
-            shape = RoundedCornerShape(15.dp),
-            colors = ButtonDefaults.buttonColors(
-                containerColor = MaterialTheme.colorScheme.primary,
-                contentColor = MaterialTheme.colorScheme.onPrimary
-            )
-        ) {
-            Text(
-                "Entrar",
-                style = MaterialTheme.typography.labelSmall
-            )
-        }
+            }
+        )
 
         Spacer(modifier = Modifier.height(25.dp))
 
