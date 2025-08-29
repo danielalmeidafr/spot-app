@@ -1,4 +1,4 @@
-package com.example.spot.ui.presentation.save
+package com.example.spot.ui.presentation.main_screen.home
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -11,7 +11,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 
 @Composable
-fun SaveScreen(modifier: Modifier = Modifier) {
+fun HomeScreen(modifier: Modifier = Modifier) {
     Column(
         modifier = Modifier.fillMaxSize()
             .background(MaterialTheme.colorScheme.background),
@@ -19,7 +19,7 @@ fun SaveScreen(modifier: Modifier = Modifier) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            "Save Screen",
+            "Home Screen",
             color = MaterialTheme.colorScheme.onBackground
         )
     }

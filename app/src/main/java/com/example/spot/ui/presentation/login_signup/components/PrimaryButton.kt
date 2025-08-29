@@ -1,4 +1,4 @@
-package com.example.spot.ui.presentation.components
+package com.example.spot.ui.presentation.login_signup.components
 
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width

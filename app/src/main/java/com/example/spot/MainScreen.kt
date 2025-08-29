@@ -1,5 +1,7 @@
 package com.example.spot
 
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -18,8 +20,11 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -31,10 +36,11 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.spot.ui.presentation.account.AccountScreen
-import com.example.spot.ui.presentation.calendar.CalendarScreen
-import com.example.spot.ui.presentation.home.HomeScreen
-import com.example.spot.ui.presentation.save.SaveScreen
+import com.example.spot.ui.presentation.main_screen.account.AccountScreen
+import com.example.spot.ui.presentation.main_screen.calendar.CalendarScreen
+import com.example.spot.ui.presentation.main_screen.home.HomeScreen
+import com.example.spot.ui.presentation.main_screen.save.SaveScreen
+import kotlinx.coroutines.delay
 
 @Composable
 fun MainScreen(modifier: Modifier = Modifier) {
@@ -46,15 +52,15 @@ fun MainScreen(modifier: Modifier = Modifier) {
     Scaffold(
         modifier = modifier,
         bottomBar = {
-
             Surface(
-                shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp),
+                shape = RoundedCornerShape(topStart = 15.dp, topEnd = 15.dp),
                 color = MaterialTheme.colorScheme.surfaceContainer,
                 modifier = Modifier
-                    .height(50.dp)
+                    .height(100.dp)
                     .fillMaxWidth()
                     .offset(y = 35.dp)
             ) {}
+
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -78,29 +84,57 @@ fun MainScreen(modifier: Modifier = Modifier) {
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Destination.entries.forEachIndexed { index, destination ->
+                    val isSelected = selectedDestination == index
+
+                    var shouldLift by remember { mutableStateOf(false) }
+
+                    LaunchedEffect(isSelected) {
+                        if (isSelected) {
+                            delay(100)
+                            shouldLift = true
+                        } else {
+                            shouldLift = false
+                        }
+                    }
+
+                    val offsetY by animateDpAsState(
+                        targetValue = if (shouldLift) (-3).dp else 0.dp,
+                        animationSpec = tween(durationMillis = 300),
+                        label = "offsetAnim"
+                    )
+
                     NavigationBarItem(
-                        selected = selectedDestination == index,
+                        selected = isSelected,
                         onClick = {
-                            navController.navigate(destination.route) {
-                                launchSingleTop = true
-                                restoreState = true
+                            if (selectedDestination != index) {
+                                navController.navigate(destination.route) {
+                                    launchSingleTop = true
+                                    restoreState = true
+                                }
+                                selectedDestination = index
                             }
-                            selectedDestination = index
                         },
                         icon = {
+                            val iconRes = if (isSelected) {
+                                if (isDarkTheme) destination.darkIconSelected else destination.lightIconSelected
+                            } else {
+                                if (isDarkTheme) destination.darkIcon else destination.lightIcon
+                            }
+
                             Icon(
-                                painter = painterResource(
-                                    id = if (isDarkTheme) destination.darkIcon else destination.lightIcon
-                                ),
+                                painter = painterResource(id = iconRes),
                                 contentDescription = destination.label,
-                                modifier = Modifier.size(20.dp)
+                                modifier = Modifier
+                                    .size(20.dp)
+                                    .offset(y = offsetY)
                             )
                         },
                         label = {
                             Text(
                                 destination.label,
                                 style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.secondary
+                                color = MaterialTheme.colorScheme.secondary,
+                                modifier = Modifier.offset(y = offsetY)
                             )
                         },
                         colors = NavigationBarItemDefaults.colors(
@@ -108,14 +142,12 @@ fun MainScreen(modifier: Modifier = Modifier) {
                             unselectedIconColor = MaterialTheme.colorScheme.secondary,
                             selectedTextColor = MaterialTheme.colorScheme.secondary,
                             unselectedTextColor = MaterialTheme.colorScheme.secondary,
-                            indicatorColor = Color.Transparent
+                            indicatorColor = Color.Transparent,
                         )
                     )
                 }
             }
         }
-
-
     ) { contentPadding ->
         AppNavHost(navController, startDestination, modifier = Modifier.padding(contentPadding))
     }
@@ -129,7 +161,8 @@ fun AppNavHost(
 ) {
     NavHost(
         navController,
-        startDestination = startDestination.route
+        startDestination = startDestination.route,
+        modifier = modifier
     ) {
         Destination.entries.forEach { destination ->
             composable(destination.route) {

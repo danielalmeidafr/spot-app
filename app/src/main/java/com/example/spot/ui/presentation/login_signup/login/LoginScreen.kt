@@ -1,8 +1,7 @@
-package com.example.spot.ui.presentation.signup
+package com.example.spot.ui.presentation.login_signup.login
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -11,12 +10,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -30,16 +24,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
-import com.example.spot.ui.presentation.components.CustomTextField
-import com.example.spot.ui.presentation.components.IconCard
-import com.example.spot.ui.presentation.components.PrimaryButton
+import com.example.spot.ui.presentation.login_signup.components.CustomTextField
+import com.example.spot.ui.presentation.login_signup.components.IconCard
+import com.example.spot.ui.presentation.login_signup.components.PrimaryButton
 import com.student.R
 
 @Composable
-fun SignupScreen(
-    modifier: Modifier = Modifier
+fun LoginScreen(
 ) {
     val isDarkTheme = isSystemInDarkTheme()
 
@@ -48,10 +42,6 @@ fun SignupScreen(
     }
 
     var password by remember {
-        mutableStateOf("")
-    }
-
-    var confirmPassword by remember {
         mutableStateOf("")
     }
 
@@ -79,7 +69,7 @@ fun SignupScreen(
         Spacer(modifier = Modifier.height(20.dp))
 
         Text(
-            "Cadastre-se",
+            "Entrar",
             style = MaterialTheme.typography.titleSmall,
             color = MaterialTheme.colorScheme.onBackground.copy(0.7f)
         )
@@ -101,55 +91,30 @@ fun SignupScreen(
             isPassword = true
         )
 
-        Spacer(modifier = Modifier.height(27.dp))
+        Spacer(modifier = Modifier.height(12.dp))
 
-        CustomTextField(
-            value = confirmPassword,
-            onValueChange = { confirmPassword = it },
-            placeholderText = "Confirme sua senha:",
-            isPassword = true
+        Text(
+            buildAnnotatedString {
+                append("Esqueceu sua ")
+                withStyle(
+                    style = SpanStyle(
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                ) {
+                    append("senha")
+                }
+                append("?")
+            },
+            style = MaterialTheme.typography.labelMedium,
+            color = MaterialTheme.colorScheme.onBackground.copy(0.7f),
+            modifier = Modifier.fillMaxWidth(0.9f),
+            textAlign = TextAlign.End
         )
-
-        Spacer(modifier = Modifier.height(21.dp))
-
-        var agreed by remember { mutableStateOf(false) }
-
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .clickable { agreed = !agreed }
-        ) {
-            Icon(
-                painter = painterResource(
-                    id = if (agreed) R.drawable.check_filled else R.drawable.check_outlined
-                ),
-                contentDescription = "Check",
-                tint = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.size(14.dp),
-            )
-
-            Spacer(modifier = Modifier.width(12.dp))
-
-            Text(
-                buildAnnotatedString {
-                    append("Eu concordo com os ")
-                    withStyle(
-                        style = SpanStyle(
-                            color = MaterialTheme.colorScheme.primary
-                        )
-                    ) {
-                        append("termos de privacidade")
-                    }
-                },
-                style = MaterialTheme.typography.labelMedium,
-                color = MaterialTheme.colorScheme.onBackground.copy(0.7f)
-            )
-        }
 
         Spacer(modifier = Modifier.height(24.dp))
 
         PrimaryButton(
-            text = "Cadastrar",
+            text = "Entrar",
             onClick = {
 
             }
@@ -157,11 +122,11 @@ fun SignupScreen(
 
         Spacer(modifier = Modifier.height(25.dp))
 
-        Text(
-            "ou",
-            style = MaterialTheme.typography.labelMedium,
-            color = MaterialTheme.colorScheme.onBackground.copy(0.7f),
-        )
+            Text(
+                "ou",
+                style = MaterialTheme.typography.labelMedium,
+                color = MaterialTheme.colorScheme.onBackground.copy(0.7f),
+            )
 
         Spacer(modifier = Modifier.height(20.dp))
 
@@ -190,7 +155,6 @@ fun SignupScreen(
 
         Spacer(modifier = Modifier.height(15.dp))
 
-
         TextButton(
             onClick = {
 
@@ -198,11 +162,11 @@ fun SignupScreen(
         ) {
             Text(
                 buildAnnotatedString {
-                    append("Já tem uma conta? ")
+                    append("Não tem uma conta? ")
                     withStyle(
                         style = SpanStyle(color = MaterialTheme.colorScheme.primary)
                     ) {
-                        append("Entre")
+                        append("Cadastre-se")
                     }
                 },
                 style = MaterialTheme.typography.labelSmall,

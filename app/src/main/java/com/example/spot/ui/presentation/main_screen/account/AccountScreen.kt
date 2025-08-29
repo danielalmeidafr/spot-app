@@ -1,4 +1,4 @@
-package com.example.spot.ui.presentation.home
+package com.example.spot.ui.presentation.main_screen.account
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -11,7 +11,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 
 @Composable
-fun HomeScreen(modifier: Modifier = Modifier) {
+fun AccountScreen(modifier: Modifier = Modifier) {
     Column(
         modifier = Modifier.fillMaxSize()
             .background(MaterialTheme.colorScheme.background),
@@ -19,7 +19,7 @@ fun HomeScreen(modifier: Modifier = Modifier) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            "Home Screen",
+            "Account Screen",
             color = MaterialTheme.colorScheme.onBackground
         )
     }

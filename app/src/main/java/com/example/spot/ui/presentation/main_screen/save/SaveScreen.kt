@@ -1,4 +1,4 @@
-package com.example.spot.ui.presentation.calendar
+package com.example.spot.ui.presentation.main_screen.save
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -11,7 +11,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 
 @Composable
-fun CalendarScreen(modifier: Modifier = Modifier) {
+fun SaveScreen(modifier: Modifier = Modifier) {
     Column(
         modifier = Modifier.fillMaxSize()
             .background(MaterialTheme.colorScheme.background),
@@ -19,7 +19,7 @@ fun CalendarScreen(modifier: Modifier = Modifier) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            "Calendar Screen",
+            "Save Screen",
             color = MaterialTheme.colorScheme.onBackground
         )
     }

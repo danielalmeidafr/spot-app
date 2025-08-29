@@ -1,4 +1,4 @@
-package com.example.spot.ui.presentation.account
+package com.example.spot.ui.presentation.main_screen.calendar
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -11,7 +11,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 
 @Composable
-fun AccountScreen(modifier: Modifier = Modifier) {
+fun CalendarScreen(modifier: Modifier = Modifier) {
     Column(
         modifier = Modifier.fillMaxSize()
             .background(MaterialTheme.colorScheme.background),
@@ -19,7 +19,7 @@ fun AccountScreen(modifier: Modifier = Modifier) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            "Account Screen",
+            "Calendar Screen",
             color = MaterialTheme.colorScheme.onBackground
         )
     }
