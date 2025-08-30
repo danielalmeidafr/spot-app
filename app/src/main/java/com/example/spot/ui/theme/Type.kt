@@ -27,7 +27,7 @@ val Typography = Typography(
     ),
     titleMedium = TextStyle(
         fontFamily = Montserrat,
-        fontWeight = FontWeight.Bold,
+        fontWeight = FontWeight.SemiBold,
         fontSize = 15.sp
     ),
     labelSmall = TextStyle(
