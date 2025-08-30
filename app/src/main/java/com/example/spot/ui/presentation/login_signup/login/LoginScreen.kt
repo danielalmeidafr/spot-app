@@ -71,7 +71,7 @@ fun LoginScreen(
         Text(
             "Entrar",
             style = MaterialTheme.typography.titleSmall,
-            color = MaterialTheme.colorScheme.onBackground.copy(0.7f)
+            color = MaterialTheme.colorScheme.onBackground
         )
 
         Spacer(modifier = Modifier.height(42.dp))
@@ -105,8 +105,8 @@ fun LoginScreen(
                 }
                 append("?")
             },
-            style = MaterialTheme.typography.labelMedium,
-            color = MaterialTheme.colorScheme.onBackground.copy(0.7f),
+            style = MaterialTheme.typography.labelSmall,
+            color = MaterialTheme.colorScheme.onBackground,
             modifier = Modifier.fillMaxWidth(0.9f),
             textAlign = TextAlign.End
         )
@@ -124,8 +124,8 @@ fun LoginScreen(
 
             Text(
                 "ou",
-                style = MaterialTheme.typography.labelMedium,
-                color = MaterialTheme.colorScheme.onBackground.copy(0.7f),
+                style = MaterialTheme.typography.labelSmall,
+                color = MaterialTheme.colorScheme.onBackground,
             )
 
         Spacer(modifier = Modifier.height(20.dp))

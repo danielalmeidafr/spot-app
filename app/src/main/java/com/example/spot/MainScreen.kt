@@ -69,7 +69,6 @@ fun MainScreen(modifier: Modifier = Modifier) {
             ) {
                 Surface(
                     shape = RoundedCornerShape(100.dp),
-                    tonalElevation = 5.dp,
                     shadowElevation = 2.dp,
                     color = MaterialTheme.colorScheme.surfaceContainer,
                     modifier = Modifier
@@ -133,15 +132,15 @@ fun MainScreen(modifier: Modifier = Modifier) {
                             Text(
                                 destination.label,
                                 style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.secondary,
+                                color = MaterialTheme.colorScheme.onBackground,
                                 modifier = Modifier.offset(y = offsetY)
                             )
                         },
                         colors = NavigationBarItemDefaults.colors(
-                            selectedIconColor = MaterialTheme.colorScheme.secondary,
-                            unselectedIconColor = MaterialTheme.colorScheme.secondary,
-                            selectedTextColor = MaterialTheme.colorScheme.secondary,
-                            unselectedTextColor = MaterialTheme.colorScheme.secondary,
+                            selectedIconColor = MaterialTheme.colorScheme.onBackground,
+                            unselectedIconColor = MaterialTheme.colorScheme.onBackground,
+                            selectedTextColor = MaterialTheme.colorScheme.onBackground,
+                            unselectedTextColor = MaterialTheme.colorScheme.onBackground,
                             indicatorColor = Color.Transparent,
                         )
                     )

@@ -78,7 +78,7 @@ fun SignupScreen(
         Text(
             "Cadastre-se",
             style = MaterialTheme.typography.titleSmall,
-            color = MaterialTheme.colorScheme.onBackground.copy(0.7f)
+            color = MaterialTheme.colorScheme.onBackground
         )
 
         Spacer(modifier = Modifier.height(42.dp))
@@ -138,8 +138,8 @@ fun SignupScreen(
                         append("termos de privacidade")
                     }
                 },
-                style = MaterialTheme.typography.labelMedium,
-                color = MaterialTheme.colorScheme.onBackground.copy(0.7f)
+                style = MaterialTheme.typography.labelSmall,
+                color = MaterialTheme.colorScheme.onBackground
             )
         }
 
@@ -156,8 +156,8 @@ fun SignupScreen(
 
         Text(
             "ou",
-            style = MaterialTheme.typography.labelMedium,
-            color = MaterialTheme.colorScheme.onBackground.copy(0.7f),
+            style = MaterialTheme.typography.labelSmall,
+            color = MaterialTheme.colorScheme.onBackground,
         )
 
         Spacer(modifier = Modifier.height(20.dp))

@@ -50,31 +50,30 @@ fun CustomTextField(
             Text(
                 placeholderText,
                 style = MaterialTheme.typography.labelSmall,
-                color = MaterialTheme.colorScheme.onBackground.copy(0.5f)
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         },
         textStyle = TextStyle(
             fontSize = 12.sp,
             fontFamily = Montserrat,
             fontWeight = FontWeight.Normal,
-            color = MaterialTheme.colorScheme.onBackground,
+            color = MaterialTheme.colorScheme.onSurface,
         ),
         modifier = modifier
             .fillMaxWidth(0.9f)
             .height(50.dp)
             .shadow(
-                elevation = 5.dp,
+                elevation = 0.5.dp,
                 shape = RoundedCornerShape(15),
                 clip = false
             ),
         shape = RoundedCornerShape(15),
         colors = OutlinedTextFieldDefaults.colors(
             unfocusedContainerColor = MaterialTheme.colorScheme.surface,
-            unfocusedBorderColor = Color.Transparent,
             focusedContainerColor = MaterialTheme.colorScheme.surface,
-            focusedBorderColor = Color.Transparent,
-            unfocusedTextColor = MaterialTheme.colorScheme.onBackground,
-            focusedTextColor = MaterialTheme.colorScheme.onBackground,
+            unfocusedBorderColor = MaterialTheme.colorScheme.outline,
+            focusedBorderColor = MaterialTheme.colorScheme.outline,
+            cursorColor = MaterialTheme.colorScheme.primary
         ),
         visualTransformation = if (isPassword && !passwordVisible) PasswordVisualTransformation() else VisualTransformation.None,
         trailingIcon = {
