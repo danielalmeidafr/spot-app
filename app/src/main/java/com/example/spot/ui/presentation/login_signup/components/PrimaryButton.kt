@@ -30,7 +30,8 @@ fun PrimaryButton(
     ) {
         Text(
             text,
-            style = MaterialTheme.typography.labelSmall
+            style = MaterialTheme.typography.labelSmall,
+            color = MaterialTheme.colorScheme.onPrimary
         )
     }
 }
