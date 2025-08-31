@@ -136,16 +136,7 @@ fun MainScreen(modifier: Modifier = Modifier) {
             }
         }
     ) { contentPadding ->
-        AppNavHost(
-            navController,
-            startDestination,
-            modifier = Modifier.padding(
-                start = contentPadding.calculateStartPadding(LayoutDirection.Ltr),
-                end = contentPadding.calculateEndPadding(LayoutDirection.Ltr),
-                top = contentPadding.calculateTopPadding(),
-                bottom = 0.dp
-            )
-        )
+        AppNavHost(navController, startDestination, modifier = Modifier.padding(contentPadding))
     }
 }
 

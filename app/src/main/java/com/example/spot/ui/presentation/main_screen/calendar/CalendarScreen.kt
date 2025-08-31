@@ -238,7 +238,6 @@ fun CalendarScreen(
             Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(bottom = 100.dp)
             ) {
                 Box(
                     modifier = Modifier
