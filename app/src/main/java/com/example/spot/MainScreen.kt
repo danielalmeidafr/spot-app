@@ -45,7 +45,8 @@ import kotlinx.coroutines.delay
 @Composable
 fun MainScreen(modifier: Modifier = Modifier) {
     val navController = rememberNavController()
-    val startDestination = Destination.SAVE
+    
+    val startDestination = Destination.HOME
     var selectedDestination by rememberSaveable { mutableIntStateOf(startDestination.ordinal) }
     val isDarkTheme = isSystemInDarkTheme()
 
