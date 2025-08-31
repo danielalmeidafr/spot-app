@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -105,9 +106,7 @@ fun CalendarScreen(
     Column(
         modifier = modifier
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Top
+            .background(MaterialTheme.colorScheme.background)
     ) {
         Surface(
             modifier = Modifier
@@ -128,7 +127,11 @@ fun CalendarScreen(
 
                 Spacer(modifier = Modifier.height(20.dp))
 
-                Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
                     WEEK.forEach { wd ->
                         Text(
                             text = wd,
@@ -171,7 +174,6 @@ fun CalendarScreen(
                     }
                 }
 
-
                 val monthListState = rememberLazyListState()
                 val initialMonthIndex = selectedMonth - 1
 
@@ -192,7 +194,7 @@ fun CalendarScreen(
                             modifier = Modifier
                                 .size(width = 60.dp, height = 30.dp)
                                 .shadow(
-                                    elevation = 1.dp,
+                                    elevation = 0.5.dp,
                                     shape = RoundedCornerShape(5.dp),
                                     clip = false
                                 )
@@ -224,5 +226,43 @@ fun CalendarScreen(
                 Spacer(modifier = Modifier.height(8.dp))
             }
         }
+
+        Spacer(modifier = Modifier.height(20.dp))
+
+        Surface(
+            modifier = Modifier
+                .fillMaxWidth(),
+            shape = RoundedCornerShape(topStart = 30.dp, topEnd = 30.dp),
+            color = MaterialTheme.colorScheme.surface,
+        ) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(bottom = 100.dp)
+            ) {
+                Box(
+                    modifier = Modifier
+                        .align(Alignment.TopCenter)
+                        .padding(top = 20.dp)
+                        .width(67.dp)
+                        .height(1.dp)
+                        .background(MaterialTheme.colorScheme.onSurface)
+                )
+
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize(),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(
+                        "Nenhum agendamento marcado",
+                        style = MaterialTheme.typography.displaySmall,
+                        color = MaterialTheme.colorScheme.onBackground
+                    )
+                }
+            }
+        }
     }
 }
+

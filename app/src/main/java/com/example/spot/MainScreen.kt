@@ -4,6 +4,8 @@ import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.calculateEndPadding
+import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
@@ -31,6 +33,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -52,21 +55,16 @@ fun MainScreen(modifier: Modifier = Modifier) {
     Scaffold(
         modifier = modifier,
         bottomBar = {
-            Surface(
-                shape = RoundedCornerShape(topStart = 15.dp, topEnd = 15.dp),
-                color = MaterialTheme.colorScheme.surfaceContainer,
-                modifier = Modifier
-                    .height(100.dp)
-                    .fillMaxWidth()
-                    .offset(y = 35.dp)
-            ) {}
+            Box(modifier = Modifier.fillMaxWidth()) {
+                Surface(
+                    shape = RoundedCornerShape(topStart = 15.dp, topEnd = 15.dp),
+                    color = MaterialTheme.colorScheme.surfaceContainer,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(100.dp)
+                        .align(Alignment.BottomCenter)
+                ) {}
 
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .offset(y = 10.dp),
-                contentAlignment = Alignment.Center
-            ) {
                 Surface(
                     shape = RoundedCornerShape(100.dp),
                     shadowElevation = 2.dp,
@@ -74,81 +72,79 @@ fun MainScreen(modifier: Modifier = Modifier) {
                     modifier = Modifier
                         .height(55.dp)
                         .fillMaxWidth(0.95f)
+                        .align(Alignment.TopCenter)
+                        .offset(y = 10.dp)
                 ) {}
-            }
 
-            NavigationBar(
-                containerColor = Color.Transparent,
-                windowInsets = NavigationBarDefaults.windowInsets,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Destination.entries.forEachIndexed { index, destination ->
-                    val isSelected = selectedDestination == index
+                NavigationBar(
+                    containerColor = Color.Transparent,
+                    windowInsets = NavigationBarDefaults.windowInsets,
+                    modifier = Modifier.align(Alignment.Center)
+                ) {
+                    Destination.entries.forEachIndexed { index, destination ->
+                        val isSelected = selectedDestination == index
 
-                    var shouldLift by remember { mutableStateOf(false) }
-
-                    LaunchedEffect(isSelected) {
-                        if (isSelected) {
-                            delay(100)
-                            shouldLift = true
-                        } else {
-                            shouldLift = false
-                        }
-                    }
-
-                    val offsetY by animateDpAsState(
-                        targetValue = if (shouldLift) (-3).dp else 0.dp,
-                        animationSpec = tween(durationMillis = 300),
-                        label = "offsetAnim"
-                    )
-
-                    NavigationBarItem(
-                        selected = isSelected,
-                        onClick = {
-                            if (selectedDestination != index) {
-                                navController.navigate(destination.route) {
-                                    launchSingleTop = true
-                                    restoreState = true
-                                }
-                                selectedDestination = index
-                            }
-                        },
-                        icon = {
-                            val iconRes = if (isSelected) {
-                                if (isDarkTheme) destination.darkIconSelected else destination.lightIconSelected
-                            } else {
-                                if (isDarkTheme) destination.darkIcon else destination.lightIcon
-                            }
-
-                            Icon(
-                                painter = painterResource(id = iconRes),
-                                contentDescription = destination.label,
-                                modifier = Modifier
-                                    .size(20.dp)
-                                    .offset(y = offsetY)
-                            )
-                        },
-                        label = {
-                            Text(
-                                destination.label,
-                                style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.onBackground,
-                                modifier = Modifier.offset(y = offsetY)
-                            )
-                        },
-                        colors = NavigationBarItemDefaults.colors(
-                            selectedIconColor = MaterialTheme.colorScheme.onBackground,
-                            unselectedIconColor = MaterialTheme.colorScheme.onBackground,
-                            selectedTextColor = MaterialTheme.colorScheme.onBackground,
-                            unselectedTextColor = MaterialTheme.colorScheme.onBackground,
-                            indicatorColor = Color.Transparent,
+                        val offsetY by animateDpAsState(
+                            targetValue = if (isSelected) (-3).dp else 0.dp,
+                            animationSpec = tween(durationMillis = 300),
+                            label = "offsetAnim"
                         )
-                    )
+
+                        NavigationBarItem(
+                            selected = isSelected,
+                            onClick = {
+                                if (!isSelected) {
+                                    navController.navigate(destination.route) {
+                                        launchSingleTop = true
+                                        restoreState = true
+                                    }
+                                    selectedDestination = index
+                                }
+                            },
+                            icon = {
+                                val iconRes = when {
+                                    isSelected && isDarkTheme -> destination.darkIconSelected
+                                    isSelected -> destination.lightIconSelected
+                                    !isSelected && isDarkTheme -> destination.darkIcon
+                                    else -> destination.lightIcon
+                                }
+                                Icon(
+                                    painter = painterResource(id = iconRes),
+                                    contentDescription = destination.label,
+                                    modifier = Modifier.size(20.dp).offset(y = offsetY)
+                                )
+                            },
+                            label = {
+                                Text(
+                                    text = destination.label,
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = MaterialTheme.colorScheme.onBackground,
+                                    modifier = Modifier.offset(y = offsetY)
+                                )
+                            },
+                            colors = NavigationBarItemDefaults.colors(
+                                selectedIconColor = MaterialTheme.colorScheme.onBackground,
+                                unselectedIconColor = MaterialTheme.colorScheme.onBackground,
+                                selectedTextColor = MaterialTheme.colorScheme.onBackground,
+                                unselectedTextColor = MaterialTheme.colorScheme.onBackground,
+                                indicatorColor = Color.Transparent,
+                            )
+                        )
+                    }
                 }
             }
         }
     ) { contentPadding ->
-        AppNavHost(navController, startDestination, modifier = Modifier.padding(contentPadding))
+        AppNavHost(
+            navController,
+            startDestination,
+            modifier = Modifier.padding(
+                start = contentPadding.calculateStartPadding(LayoutDirection.Ltr),
+                end = contentPadding.calculateEndPadding(LayoutDirection.Ltr),
+                top = contentPadding.calculateTopPadding(),
+                bottom = 0.dp
+            )
+        )
     }
 }
 
@@ -159,19 +155,13 @@ fun AppNavHost(
     modifier: Modifier = Modifier
 ) {
     NavHost(
-        navController,
+        navController = navController,
         startDestination = startDestination.route,
         modifier = modifier
     ) {
-        Destination.entries.forEach { destination ->
-            composable(destination.route) {
-                when (destination) {
-                    Destination.HOME -> HomeScreen()
-                    Destination.SAVE -> SaveScreen()
-                    Destination.CALENDAR -> CalendarScreen()
-                    Destination.ACCOUNT -> AccountScreen()
-                }
-            }
-        }
+        composable(Destination.HOME.route) { HomeScreen() }
+        composable(Destination.SAVE.route) { SaveScreen() }
+        composable(Destination.CALENDAR.route) { CalendarScreen() }
+        composable(Destination.ACCOUNT.route) { AccountScreen() }
     }
 }
