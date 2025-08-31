@@ -17,11 +17,11 @@ enum class Destination(
         R.drawable.home_light,
         R.drawable.home_dark,
         R.drawable.home_light_filled,
-        R.drawable.home_dark_filled
+        R.drawable.home_light_filled
     ),
     SAVE(
         "save",
-        "Salvos",
+        "Favoritos",
         R.drawable.save_light,
         R.drawable.save_dark,
         R.drawable.save_light_filled,
