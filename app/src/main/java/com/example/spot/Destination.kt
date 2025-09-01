@@ -29,7 +29,7 @@ enum class Destination(
     ),
     CALENDAR(
         "calendar",
-        "Agendamentos",
+        "Agenda",
         R.drawable.calendar_light,
         R.drawable.calendar_dark,
         R.drawable.calendar_light_filled,
