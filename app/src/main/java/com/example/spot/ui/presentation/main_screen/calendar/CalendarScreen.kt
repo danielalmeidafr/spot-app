@@ -39,6 +39,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import java.time.LocalDate
 import java.time.YearMonth
 
@@ -245,6 +246,7 @@ fun CalendarScreen(
                         .padding(top = 20.dp)
                         .width(67.dp)
                         .height(1.dp)
+                        .zIndex(1f)
                         .background(MaterialTheme.colorScheme.onSurface)
                 )
 
