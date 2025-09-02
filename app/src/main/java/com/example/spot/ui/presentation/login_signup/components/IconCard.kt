@@ -28,10 +28,9 @@ fun IconCard(
             .size(60.dp),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surface,
-
         ),
         elevation = CardDefaults.cardElevation(
-            defaultElevation = 0.5.dp
+            defaultElevation = 0.4.dp
         ),
         border = BorderStroke(0.5.dp, MaterialTheme.colorScheme.outline)
     ) {

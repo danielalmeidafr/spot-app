@@ -32,7 +32,7 @@ val Typography = Typography(
     ),
     labelSmall = TextStyle(
         fontFamily = Montserrat,
-        fontWeight = FontWeight.Medium,
+        fontWeight = FontWeight.SemiBold,
         fontSize = 11.sp
     ),
     bodySmall = TextStyle(

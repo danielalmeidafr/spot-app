@@ -107,12 +107,12 @@ fun CalendarScreen(
     Column(
         modifier = modifier
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background)
+            .background(MaterialTheme.colorScheme.surface)
     ) {
         Surface(
             modifier = Modifier
                 .fillMaxWidth(),
-            color = MaterialTheme.colorScheme.surface,
+            color = MaterialTheme.colorScheme.background,
         ) {
             Column(modifier = Modifier.padding(10.dp)) {
                 Spacer(Modifier.height(10.dp))
@@ -195,14 +195,14 @@ fun CalendarScreen(
                             modifier = Modifier
                                 .size(width = 60.dp, height = 30.dp)
                                 .shadow(
-                                    elevation = 0.5.dp,
+                                    elevation = 0.3.dp,
                                     shape = RoundedCornerShape(5.dp),
                                     clip = false
                                 )
                                 .clip(RoundedCornerShape(5.dp))
                                 .background(
                                     if (selected) MaterialTheme.colorScheme.primary
-                                    else MaterialTheme.colorScheme.surfaceContainer
+                                    else MaterialTheme.colorScheme.surface
                                 )
                                 .border(
                                     width = 0.5.dp,
@@ -234,7 +234,7 @@ fun CalendarScreen(
             modifier = Modifier
                 .fillMaxWidth(),
             shape = RoundedCornerShape(topStart = 30.dp, topEnd = 30.dp),
-            color = MaterialTheme.colorScheme.surface,
+            color = MaterialTheme.colorScheme.background,
         ) {
             Box(
                 modifier = Modifier
