@@ -34,6 +34,7 @@ import com.student.R
 
 @Composable
 fun LoginScreen(
+    onNavigateToSignup: () -> Unit
 ) {
     val isDarkTheme = isSystemInDarkTheme()
 
@@ -66,12 +67,12 @@ fun LoginScreen(
                 .height(130.dp)
         )
 
-        Spacer(modifier = Modifier.height(20.dp))
+        Spacer(modifier = Modifier.height(15.dp))
 
         Text(
             "Entrar",
             style = MaterialTheme.typography.titleSmall,
-            color = MaterialTheme.colorScheme.onBackground.copy(0.7f)
+            color = MaterialTheme.colorScheme.onBackground
         )
 
         Spacer(modifier = Modifier.height(42.dp))
@@ -91,27 +92,32 @@ fun LoginScreen(
             isPassword = true
         )
 
-        Spacer(modifier = Modifier.height(12.dp))
 
-        Text(
-            buildAnnotatedString {
-                append("Esqueceu sua ")
-                withStyle(
-                    style = SpanStyle(
-                        color = MaterialTheme.colorScheme.primary
-                    )
-                ) {
-                    append("senha")
-                }
-                append("?")
-            },
-            style = MaterialTheme.typography.labelMedium,
-            color = MaterialTheme.colorScheme.onBackground.copy(0.7f),
-            modifier = Modifier.fillMaxWidth(0.9f),
-            textAlign = TextAlign.End
-        )
+        TextButton(
+            onClick = {
 
-        Spacer(modifier = Modifier.height(24.dp))
+            }
+        ) {
+            Text(
+                buildAnnotatedString {
+                    append("Esqueceu sua ")
+                    withStyle(
+                        style = SpanStyle(
+                            color = MaterialTheme.colorScheme.primary
+                        )
+                    ) {
+                        append("senha")
+                    }
+                    append("?")
+                },
+                style = MaterialTheme.typography.labelSmall,
+                color = MaterialTheme.colorScheme.onBackground,
+                modifier = Modifier.fillMaxWidth(0.95f),
+                textAlign = TextAlign.End
+            )
+        }
+
+        Spacer(modifier = Modifier.height(10.dp))
 
         PrimaryButton(
             text = "Entrar",
@@ -122,11 +128,11 @@ fun LoginScreen(
 
         Spacer(modifier = Modifier.height(25.dp))
 
-            Text(
-                "ou",
-                style = MaterialTheme.typography.labelMedium,
-                color = MaterialTheme.colorScheme.onBackground.copy(0.7f),
-            )
+        Text(
+            "ou",
+            style = MaterialTheme.typography.labelSmall,
+            color = MaterialTheme.colorScheme.onBackground,
+        )
 
         Spacer(modifier = Modifier.height(20.dp))
 
@@ -156,9 +162,7 @@ fun LoginScreen(
         Spacer(modifier = Modifier.height(15.dp))
 
         TextButton(
-            onClick = {
-
-            },
+            onClick = onNavigateToSignup
         ) {
             Text(
                 buildAnnotatedString {

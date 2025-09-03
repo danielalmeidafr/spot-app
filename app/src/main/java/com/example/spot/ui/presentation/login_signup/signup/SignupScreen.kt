@@ -36,7 +36,7 @@ import com.student.R
 
 @Composable
 fun SignupScreen(
-    modifier: Modifier = Modifier
+    onNavigateToLogin: () -> Unit
 ) {
     val isDarkTheme = isSystemInDarkTheme()
 
@@ -73,12 +73,12 @@ fun SignupScreen(
                 .height(130.dp)
         )
 
-        Spacer(modifier = Modifier.height(20.dp))
+        Spacer(modifier = Modifier.height(15.dp))
 
         Text(
-            "Cadastre-se",
+            "Cadastrar",
             style = MaterialTheme.typography.titleSmall,
-            color = MaterialTheme.colorScheme.onBackground.copy(0.7f)
+            color = MaterialTheme.colorScheme.onBackground
         )
 
         Spacer(modifier = Modifier.height(42.dp))
@@ -107,7 +107,7 @@ fun SignupScreen(
             isPassword = true
         )
 
-        Spacer(modifier = Modifier.height(21.dp))
+        Spacer(modifier = Modifier.height(5.dp))
 
         var agreed by remember { mutableStateOf(false) }
 
@@ -125,25 +125,29 @@ fun SignupScreen(
                 modifier = Modifier.size(14.dp),
             )
 
-            Spacer(modifier = Modifier.width(12.dp))
+            TextButton(
+                onClick = {
 
-            Text(
-                buildAnnotatedString {
-                    append("Eu concordo com os ")
-                    withStyle(
-                        style = SpanStyle(
-                            color = MaterialTheme.colorScheme.primary
-                        )
-                    ) {
-                        append("termos de privacidade")
-                    }
-                },
-                style = MaterialTheme.typography.labelMedium,
-                color = MaterialTheme.colorScheme.onBackground.copy(0.7f)
-            )
+                }
+            ) {
+                Text(
+                    buildAnnotatedString {
+                        append("Eu concordo com os ")
+                        withStyle(
+                            style = SpanStyle(
+                                color = MaterialTheme.colorScheme.primary
+                            )
+                        ) {
+                            append("termos de privacidade")
+                        }
+                    },
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onBackground
+                )
+            }
         }
 
-        Spacer(modifier = Modifier.height(24.dp))
+        Spacer(modifier = Modifier.height(10.dp))
 
         PrimaryButton(
             text = "Cadastrar",
@@ -156,8 +160,8 @@ fun SignupScreen(
 
         Text(
             "ou",
-            style = MaterialTheme.typography.labelMedium,
-            color = MaterialTheme.colorScheme.onBackground.copy(0.7f),
+            style = MaterialTheme.typography.labelSmall,
+            color = MaterialTheme.colorScheme.onBackground,
         )
 
         Spacer(modifier = Modifier.height(20.dp))
@@ -189,9 +193,7 @@ fun SignupScreen(
 
 
         TextButton(
-            onClick = {
-
-            },
+            onClick = onNavigateToLogin
         ) {
             Text(
                 buildAnnotatedString {

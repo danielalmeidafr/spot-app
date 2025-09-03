@@ -14,26 +14,20 @@ import androidx.compose.ui.platform.LocalContext
 
 private val DarkColorScheme = darkColorScheme(
     primary = Golden,
-    background = Background,
-    onBackground = TextColor,
-    surface = OutlinedColor,
-    onPrimary = TextColor,
+    onPrimary = White,
 
-    // NAVIGATION BAR
-    surfaceContainer = ContainerColorNav,
-    secondary = LabelColorNav
+    background = DarkGray,
+    onBackground = White,
+
+    surface = DarkGray2,
+    onSurface = White,
+    onSurfaceVariant = White50,
+
+    outline = White04
 )
 
 private val LightColorScheme = lightColorScheme(
-    primary = Golden,
-    background = Background2,
-    onBackground = TextColor2,
-    surface = OutlinedColor2,
-    onPrimary = TextColor,
 
-    // NAVIGATION BAR
-    surfaceContainer = ContainerColorNav2,
-    secondary = LabelColorNav2
 )
 
 @Composable

@@ -1,5 +1,6 @@
 package com.example.spot.ui.presentation.login_signup.components
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -26,11 +27,12 @@ fun IconCard(
         modifier = Modifier
             .size(60.dp),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surface
+            containerColor = MaterialTheme.colorScheme.surface,
         ),
         elevation = CardDefaults.cardElevation(
-            defaultElevation = 2.dp
-        )
+            defaultElevation = 0.4.dp
+        ),
+        border = BorderStroke(0.5.dp, MaterialTheme.colorScheme.outline)
     ) {
         Box(
             modifier = Modifier.fillMaxSize(),

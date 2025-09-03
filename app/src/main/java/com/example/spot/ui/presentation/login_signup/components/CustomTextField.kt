@@ -13,6 +13,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -21,7 +22,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -50,31 +50,30 @@ fun CustomTextField(
             Text(
                 placeholderText,
                 style = MaterialTheme.typography.labelSmall,
-                color = MaterialTheme.colorScheme.onBackground.copy(0.5f)
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         },
         textStyle = TextStyle(
             fontSize = 12.sp,
             fontFamily = Montserrat,
             fontWeight = FontWeight.Normal,
-            color = MaterialTheme.colorScheme.onBackground,
+            color = MaterialTheme.colorScheme.onSurface,
         ),
         modifier = modifier
             .fillMaxWidth(0.9f)
             .height(50.dp)
             .shadow(
-                elevation = 5.dp,
+                elevation = 0.4.dp,
                 shape = RoundedCornerShape(15),
                 clip = false
             ),
         shape = RoundedCornerShape(15),
         colors = OutlinedTextFieldDefaults.colors(
             unfocusedContainerColor = MaterialTheme.colorScheme.surface,
-            unfocusedBorderColor = Color.Transparent,
             focusedContainerColor = MaterialTheme.colorScheme.surface,
-            focusedBorderColor = Color.Transparent,
-            unfocusedTextColor = MaterialTheme.colorScheme.onBackground,
-            focusedTextColor = MaterialTheme.colorScheme.onBackground,
+            unfocusedBorderColor = MaterialTheme.colorScheme.outline,
+            focusedBorderColor = MaterialTheme.colorScheme.outline,
+            cursorColor = MaterialTheme.colorScheme.primary
         ),
         visualTransformation = if (isPassword && !passwordVisible) PasswordVisualTransformation() else VisualTransformation.None,
         trailingIcon = {
@@ -104,4 +103,3 @@ fun CustomTextField(
         }
     )
 }
-
