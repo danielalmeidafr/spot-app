@@ -77,7 +77,7 @@ fun SignupScreen(
 
         Text(
             "Cadastrar",
-            style = MaterialTheme.typography.titleSmall,
+            style = MaterialTheme.typography.titleMedium,
             color = MaterialTheme.colorScheme.onBackground
         )
 

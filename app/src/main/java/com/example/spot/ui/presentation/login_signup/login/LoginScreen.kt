@@ -71,7 +71,7 @@ fun LoginScreen(
 
         Text(
             "Entrar",
-            style = MaterialTheme.typography.titleSmall,
+            style = MaterialTheme.typography.titleMedium,
             color = MaterialTheme.colorScheme.onBackground
         )
 
