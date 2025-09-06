@@ -185,7 +185,9 @@ fun CalendarScreen(
 
                 LazyRow(
                     state = monthListState,
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 5.dp, end = 5.dp),
                     horizontalArrangement = Arrangement.spacedBy(23.dp)
                 ) {
                     itemsIndexed(MONTHS_ABBREVIATION) { index, shortName ->
