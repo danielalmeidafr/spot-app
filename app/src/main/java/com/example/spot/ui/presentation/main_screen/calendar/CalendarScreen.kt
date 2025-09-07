@@ -145,20 +145,21 @@ fun CalendarScreen(
                     }
                 }
 
-                Spacer(modifier = Modifier.height(25.dp))
+                Spacer(modifier = Modifier.height(26.dp))
 
                 LazyVerticalGrid(
                     columns = GridCells.Fixed(7),
-                    verticalArrangement = Arrangement.spacedBy(25.dp),
+                    verticalArrangement = Arrangement.spacedBy(17.dp),
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(235.dp)
                 ) {
                     items(calendarDays) { day ->
+                        val isToday = day.date == LocalDate.now()
+
                         Box(
                             modifier = Modifier
-                                .fillMaxWidth()
-                                .clip(RoundedCornerShape(8.dp)),
+                                .size(25.dp),
                             contentAlignment = Alignment.Center
                         ) {
                             val color = if (day.inMonth) {
@@ -166,15 +167,38 @@ fun CalendarScreen(
                             } else {
                                 MaterialTheme.colorScheme.onBackground.copy(alpha = 0.5f)
                             }
-                            Text(
-                                text = day.date.dayOfMonth.toString(),
-                                style = MaterialTheme.typography.bodySmall,
-                                color = color,
-                                textAlign = TextAlign.Center,
-                            )
+
+                            if (isToday) {
+                                Box(
+                                    modifier = Modifier
+                                        .size(25.dp)
+                                        .background(
+                                            color = MaterialTheme.colorScheme.outlineVariant,
+                                            shape = RoundedCornerShape(50)
+                                        ),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    Text(
+                                        text = day.date.dayOfMonth.toString(),
+                                        style = MaterialTheme.typography.bodySmall,
+                                        color = color,
+                                        textAlign = TextAlign.Center
+                                    )
+                                }
+                            } else {
+                                Text(
+                                    text = day.date.dayOfMonth.toString(),
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = color,
+                                    textAlign = TextAlign.Center
+                                )
+                            }
                         }
+
                     }
                 }
+
+                Spacer(modifier = Modifier.height(15.dp))
 
                 val monthListState = rememberLazyListState()
                 val initialMonthIndex = selectedMonth - 1
@@ -274,7 +298,7 @@ fun CalendarScreen(
                     Spacer(modifier = Modifier.height(15.dp))
 
                     Text(
-                        "Agende serviços de barbearias para vê-los aqui",
+                        "Agende novos serviços para vê-los aqui",
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onBackground
                     )
@@ -286,4 +310,3 @@ fun CalendarScreen(
         }
     }
 }
-

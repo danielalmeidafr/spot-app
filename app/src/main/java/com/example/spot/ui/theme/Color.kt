@@ -15,5 +15,6 @@ val White04 = Color(0x0AFFFFFF)
 // LIGHT MODE
 val WhiteBack = Color(0xFFEAEAEA)
 val WhiteVariant = Color(0xFFF0F0F0)
-val Black = Color(0xFF2A2A2A)
+val WhiteVariant2 = Color(0xFFD8CBC7)
+val Black = Color(0xFF595959)
 val Black04 = Color(0x112A2A2A)

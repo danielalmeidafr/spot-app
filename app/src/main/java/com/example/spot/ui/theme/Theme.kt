@@ -38,7 +38,8 @@ private val LightColorScheme = lightColorScheme(
 
     surfaceContainer = White,
 
-    outline = Black04
+    outline = Black04,
+    outlineVariant = WhiteVariant2
 )
 
 @Composable
