@@ -54,14 +54,11 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
 
-    // Navegação
     implementation("androidx.navigation:navigation-compose:2.9.1")
 
-    // Serialização
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.8.1")
 
-    // Ícones extendidos do Material (necessário para Visibility/VisibilityOff)
-    implementation("androidx.compose.material:material-icons-extended:1.6.0")
+    implementation("androidx.core:core-splashscreen:1.0.0")
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

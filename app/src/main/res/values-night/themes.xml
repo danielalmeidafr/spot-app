@@ -2,8 +2,8 @@
 <resources>
 
     <style name="Theme.Spot.SplashScreen" parent="Theme.SplashScreen">
-        <item name="android:windowSplashScreenAnimatedIcon">@drawable/logo_splash_light</item>
-        <item name="android:windowSplashScreenBackground">@color/white</item>
+        <item name="android:windowSplashScreenAnimatedIcon">@drawable/logo_splash_dark</item>
+        <item name="android:windowSplashScreenBackground">@color/gray</item>
         <item name="postSplashScreenTheme">@style/Theme.Spot</item>
     </style>
 
