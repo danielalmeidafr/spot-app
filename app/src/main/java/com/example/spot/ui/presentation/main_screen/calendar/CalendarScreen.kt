@@ -145,11 +145,11 @@ fun CalendarScreen(
                     }
                 }
 
-                Spacer(modifier = Modifier.height(26.dp))
+                Spacer(modifier = Modifier.height(20.dp))
 
                 LazyVerticalGrid(
                     columns = GridCells.Fixed(7),
-                    verticalArrangement = Arrangement.spacedBy(17.dp),
+                    verticalArrangement = Arrangement.spacedBy(13.dp),
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(235.dp)
@@ -159,7 +159,7 @@ fun CalendarScreen(
 
                         Box(
                             modifier = Modifier
-                                .size(25.dp),
+                                .size(28.dp),
                             contentAlignment = Alignment.Center
                         ) {
                             val color = if (day.inMonth) {
@@ -171,7 +171,7 @@ fun CalendarScreen(
                             if (isToday) {
                                 Box(
                                     modifier = Modifier
-                                        .size(25.dp)
+                                        .size(28.dp)
                                         .background(
                                             color = MaterialTheme.colorScheme.outlineVariant,
                                             shape = RoundedCornerShape(50)
