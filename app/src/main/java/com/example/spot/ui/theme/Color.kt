@@ -2,24 +2,18 @@ package com.example.spot.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-// DARK MODE
-val Background = Color(0xFF121212)
-val TextColor = Color(0xFFFFFFFF)
 val Golden = Color(0xFFB29146)
 
-val OutlinedColor = Color(0xFF181818)
-
-
-// NAVIGATION BAR
-val ContainerColorNav = Color(0xFF1E1E1E)
-val LabelColorNav = Color(0xFFFFFFFF)
-
+// DARK MODE
+val DarkGray = Color(0xFF121212)
+val DarkGray2 = Color(0xFF181818)
+val White = Color(0xFFFFFFFF)
+val White04 = Color(0x0AFFFFFF)
+val White50 = Color(0x80FFFFFF)
 
 // LIGHT MODE
-val Background2 = Color (0xFFEAEAEA)
-val TextColor2 = Color(0xFF2A2A2A)
-val OutlinedColor2 = Color(0xFFF0F0F0)
-
-// NAVIGATION BAR
-val ContainerColorNav2 = Color(0xFFFFFFFF)
-val LabelColorNav2 = Color(0xFF2A2A2A)
+val WhiteBack = Color(0xFFEAEAEA)
+val WhiteVariant = Color(0xFFF0F0F0)
+val Black = Color(0xFF595959)
+val Black04 = Color(0x112A2A2A)
+val Black50 = Color(0x802A2A2A)

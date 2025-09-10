@@ -20,25 +20,10 @@ val Montserrat = FontFamily(
     Font(R.font.montserrat_semibolditalic, weight = FontWeight.SemiBold, FontStyle.Italic)
 )
 val Typography = Typography(
-    titleSmall = TextStyle(
-        fontFamily = Montserrat,
-        fontWeight = FontWeight.ExtraBold,
-        fontSize = 20.sp
-    ),
-    labelSmall = TextStyle(
-        fontFamily = Montserrat,
-        fontWeight = FontWeight.Bold,
-        fontSize = 11.sp
-    ),
-    labelMedium = TextStyle(
-        fontFamily = Montserrat,
-        fontWeight = FontWeight.SemiBold,
-        fontSize = 11.sp
-    ),
     bodySmall = TextStyle(
         fontFamily = Montserrat,
         fontWeight = FontWeight.Normal,
-        fontSize = 8.5.sp
+        fontSize = 12.sp
     )
 )
 
