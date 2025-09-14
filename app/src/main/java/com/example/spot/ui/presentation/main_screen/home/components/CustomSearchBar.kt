@@ -41,7 +41,7 @@ fun CustomSearchBar(
             .width(350.dp)
             .height(43.dp)
             .shadow(
-                elevation = 3.dp,
+                elevation = 1.5.dp,
                 shape = RoundedCornerShape(15.dp))
             .background(
                 color = MaterialTheme.colorScheme.surface,
