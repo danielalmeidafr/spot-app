@@ -4,7 +4,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -39,7 +38,7 @@ fun CustomSearchBar(
 
     Row(
         modifier = modifier
-            .fillMaxWidth(0.9f)
+            .width(350.dp)
             .height(43.dp)
             .shadow(
                 elevation = 3.dp,
@@ -48,16 +47,14 @@ fun CustomSearchBar(
                 color = MaterialTheme.colorScheme.surface,
                 shape = RoundedCornerShape(15.dp)
             )
-            .padding(horizontal = 30.dp),
+            .padding(horizontal = 50.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Image(
             painter = painterResource(id = searchRes),
             contentDescription = null,
-            modifier = Modifier.size(15.dp)
+            modifier = Modifier.size(14.dp)
         )
-
-        Spacer(modifier = Modifier.width(8.dp))
 
         BasicTextField(
             value = query,
