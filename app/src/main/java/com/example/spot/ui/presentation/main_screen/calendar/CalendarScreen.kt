@@ -5,17 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -26,13 +16,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -63,27 +48,19 @@ private fun generateCalendarDays(year: Int, month: Int): List<CalendarDay> {
     val startOffset = firstOfMonth.dayOfWeek.value % 7
     val prevYm = ym.minusMonths(1)
     val prevLength = prevYm.lengthOfMonth()
-
     val days = mutableListOf<CalendarDay>()
 
     for (i in 0 until startOffset) {
         val day = prevYm.atDay(prevLength - startOffset + 1 + i)
         days.add(CalendarDay(day, false))
     }
-
     for (d in 1..ym.lengthOfMonth()) {
         days.add(CalendarDay(ym.atDay(d), true))
     }
-
     val nextYm = ym.plusMonths(1)
     var nextDay = 1
-    while (days.size % 7 != 0) {
-        days.add(CalendarDay(nextYm.atDay(nextDay++), false))
-    }
-
-    while (days.size < 42) {
-        days.add(CalendarDay(nextYm.atDay(nextDay++), false))
-    }
+    while (days.size % 7 != 0) days.add(CalendarDay(nextYm.atDay(nextDay++), false))
+    while (days.size < 42) days.add(CalendarDay(nextYm.atDay(nextDay++), false))
 
     return days
 }
@@ -92,15 +69,13 @@ private fun generateCalendarDays(year: Int, month: Int): List<CalendarDay> {
 fun CalendarScreen(
     modifier: Modifier = Modifier,
     initialYear: Int = LocalDate.now().year,
-    initialMonth: Int = LocalDate.now().monthValue,
+    initialMonth: Int = LocalDate.now().monthValue
 ) {
     var selectedYear by rememberSaveable { mutableIntStateOf(initialYear) }
     var selectedMonth by rememberSaveable { mutableIntStateOf(initialMonth) }
-
     val calendarDays = remember(selectedYear, selectedMonth) {
         generateCalendarDays(selectedYear, selectedMonth)
     }
-
     val monthTitle = MONTHS[selectedMonth - 1]
 
     Column(
@@ -109,14 +84,10 @@ fun CalendarScreen(
             .background(MaterialTheme.colorScheme.background)
     ) {
         Surface(
-            modifier = Modifier
-                .fillMaxWidth(),
-            color = MaterialTheme.colorScheme.surface,
+            modifier = Modifier.fillMaxWidth(),
+            color = MaterialTheme.colorScheme.surface
         ) {
-            Column(
-                modifier = Modifier
-                    .padding(top = 50.dp, start = 5.dp, end = 5.dp),
-            ) {
+            Column(modifier = Modifier.padding(top = 50.dp, start = 5.dp, end = 5.dp)) {
                 Text(
                     text = monthTitle,
                     style = MaterialTheme.typography.bodyMedium,
@@ -130,8 +101,7 @@ fun CalendarScreen(
                 Spacer(modifier = Modifier.height(20.dp))
 
                 Row(
-                    modifier = Modifier
-                        .fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     WEEK.forEach { wd ->
@@ -149,25 +119,17 @@ fun CalendarScreen(
 
                 LazyVerticalGrid(
                     columns = GridCells.Fixed(7),
-                    verticalArrangement = Arrangement.spacedBy(13.dp),
+                    verticalArrangement = Arrangement.spacedBy(10.dp),
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(235.dp)
                 ) {
                     items(calendarDays) { day ->
                         val isToday = day.date == LocalDate.now()
+                        val color = if (day.inMonth) MaterialTheme.colorScheme.onBackground
+                        else MaterialTheme.colorScheme.onBackground.copy(alpha = 0.5f)
 
-                        Box(
-                            modifier = Modifier
-                                .size(28.dp),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            val color = if (day.inMonth) {
-                                MaterialTheme.colorScheme.onBackground
-                            } else {
-                                MaterialTheme.colorScheme.onBackground.copy(alpha = 0.5f)
-                            }
-
+                        Box(modifier = Modifier.size(28.dp), contentAlignment = Alignment.Center) {
                             if (isToday) {
                                 Box(
                                     modifier = Modifier
@@ -194,18 +156,11 @@ fun CalendarScreen(
                                 )
                             }
                         }
-
                     }
                 }
 
-                Spacer(modifier = Modifier.height(15.dp))
-
                 val monthListState = rememberLazyListState()
-                val initialMonthIndex = selectedMonth - 1
-
-                LaunchedEffect(Unit) {
-                    monthListState.scrollToItem(initialMonthIndex)
-                }
+                LaunchedEffect(Unit) { monthListState.scrollToItem(selectedMonth - 1) }
 
                 LazyRow(
                     state = monthListState,
@@ -236,9 +191,7 @@ fun CalendarScreen(
                                     color = MaterialTheme.colorScheme.outline,
                                     shape = RoundedCornerShape(5.dp)
                                 )
-                                .clickable {
-                                    selectedMonth = monthNumber
-                                },
+                                .clickable { selectedMonth = monthNumber },
                             contentAlignment = Alignment.Center
                         ) {
                             Text(
@@ -304,7 +257,6 @@ fun CalendarScreen(
                     )
 
                     Spacer(modifier = Modifier.height(35.dp))
-
                 }
             }
         }
