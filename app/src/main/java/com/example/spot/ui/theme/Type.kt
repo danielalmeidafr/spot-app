@@ -27,13 +27,18 @@ val Typography = Typography(
     ),
     bodyMedium = TextStyle(
         fontFamily = Montserrat,
+        fontWeight = FontWeight.SemiBold,
+        fontSize = 14.sp
+    ),
+    bodyLarge = TextStyle(
+        fontFamily = Montserrat,
         fontWeight = FontWeight.Medium,
         fontSize = 16.sp
     ),
     titleSmall = TextStyle(
         fontFamily = Montserrat,
-        fontWeight = FontWeight.Normal,
-        fontSize = 15.sp
+        fontWeight = FontWeight.Medium,
+        fontSize = 14.sp
     ),
 )
 

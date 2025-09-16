@@ -5,7 +5,17 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -16,12 +26,18 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -71,6 +87,7 @@ fun CalendarScreen(
     initialYear: Int = LocalDate.now().year,
     initialMonth: Int = LocalDate.now().monthValue
 ) {
+    val isDarkTheme = isSystemInDarkTheme()
     var selectedYear by rememberSaveable { mutableIntStateOf(initialYear) }
     var selectedMonth by rememberSaveable { mutableIntStateOf(initialMonth) }
     val calendarDays = remember(selectedYear, selectedMonth) {
@@ -90,7 +107,7 @@ fun CalendarScreen(
             Column(modifier = Modifier.padding(top = 50.dp, start = 5.dp, end = 5.dp)) {
                 Text(
                     text = monthTitle,
-                    style = MaterialTheme.typography.bodyMedium,
+                    style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onBackground,
                     modifier = Modifier
                         .fillMaxWidth()
@@ -221,42 +238,80 @@ fun CalendarScreen(
                         .align(Alignment.TopCenter)
                         .padding(top = 20.dp)
                         .width(67.dp)
-                        .height(1.dp)
-                        .background(MaterialTheme.colorScheme.onSurface)
+                        .height(2.dp)
+                        .clip(RoundedCornerShape(2.dp))
+                        .background(MaterialTheme.colorScheme.onSurface.copy(0.7f))
                 )
                 Column(
                     modifier = Modifier.align(Alignment.Center),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    val isDarkTheme = isSystemInDarkTheme()
-                    val calendarRes = if (isDarkTheme) R.drawable.calendar_dark else R.drawable.calendar_light
+                    val isScheduled: Boolean = false
 
-                    Image(
-                        painter = painterResource(id = calendarRes),
-                        contentDescription = "Calendar Image",
-                        modifier = Modifier
-                            .width(60.dp)
-                            .height(60.dp),
-                        alpha = 0.7f
-                    )
+                    if (!isScheduled) {
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth(),
+                            verticalArrangement = Arrangement.Center
+                        ) {
+                            Text(
+                                "Corte simples",
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = MaterialTheme.colorScheme.onBackground
+                            )
 
-                    Spacer(modifier = Modifier.height(30.dp))
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth(),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                val locationRes =
+                                    if (isDarkTheme) R.drawable.location_dark else R.drawable.location_light
 
-                    Text(
-                        "Nenhum agendamento marcado",
-                        style = MaterialTheme.typography.titleSmall,
-                        color = MaterialTheme.colorScheme.onBackground
-                    )
+                                Image(
+                                    painter = painterResource(id = locationRes),
+                                    contentDescription = "Location image",
+                                    modifier = Modifier.size(10.dp)
+                                )
 
-                    Spacer(modifier = Modifier.height(15.dp))
+                                Spacer(modifier = Modifier.size(3.dp))
 
-                    Text(
-                        "Agende novos serviços para vê-los aqui",
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onBackground
-                    )
+                                Text(
+                                    "Ale's Stylus",
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = MaterialTheme.colorScheme.onBackground
+                                )
+                            }
+                        }
+                    } else {
+                        val calendarRes =
+                            if (isDarkTheme) R.drawable.calendar_dark else R.drawable.calendar_light
 
-                    Spacer(modifier = Modifier.height(35.dp))
+                        Image(
+                            painter = painterResource(id = calendarRes),
+                            contentDescription = "Calendar Image",
+                            modifier = Modifier.size(60.dp),
+                            alpha = 0.7f
+                        )
+
+                        Spacer(modifier = Modifier.height(30.dp))
+
+                        Text(
+                            "Nenhum agendamento marcado",
+                            style = MaterialTheme.typography.titleSmall,
+                            color = MaterialTheme.colorScheme.onBackground
+                        )
+
+                        Spacer(modifier = Modifier.height(12.dp))
+
+                        Text(
+                            "Agende novos serviços para vê-los aqui",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onBackground
+                        )
+
+                        Spacer(modifier = Modifier.height(30.dp))
+                    }
                 }
             }
         }
