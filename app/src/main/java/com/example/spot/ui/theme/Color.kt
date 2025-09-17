@@ -3,6 +3,7 @@ package com.example.spot.ui.theme
 import androidx.compose.ui.graphics.Color
 
 val Golden = Color(0xFFB29146)
+val Green = Color(0xFF4CAF50)
 
 // DARK MODE
 val DarkGray = Color(0xFF121212)

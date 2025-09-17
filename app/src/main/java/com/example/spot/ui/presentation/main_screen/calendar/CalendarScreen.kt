@@ -23,37 +23,44 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.example.spot.ui.presentation.main_screen.calendar.components.AppointmentItem
 import com.student.R
 import java.time.LocalDate
 import java.time.YearMonth
 
 private val WEEK = listOf("D", "S", "T", "Q", "Q", "S", "S")
 private val MONTHS = listOf(
-    "Janeiro", "Fevereiro", "Março", "Abril",
-    "Maio", "Junho", "Julho", "Agosto",
-    "Setembro", "Outubro", "Novembro", "Dezembro"
+    "Janeiro",
+    "Fevereiro",
+    "Março",
+    "Abril",
+    "Maio",
+    "Junho",
+    "Julho",
+    "Agosto",
+    "Setembro",
+    "Outubro",
+    "Novembro",
+    "Dezembro"
 )
 private val MONTHS_ABBREVIATION = listOf(
-    "Jan", "Fev", "Mar", "Abr", "Mai", "Jun",
-    "Jul", "Ago", "Set", "Out", "Nov", "Dez"
+    "Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"
 )
 
 private data class CalendarDay(val date: LocalDate, val inMonth: Boolean)
@@ -83,17 +90,21 @@ private fun generateCalendarDays(year: Int, month: Int): List<CalendarDay> {
 
 @Composable
 fun CalendarScreen(
-    modifier: Modifier = Modifier,
-    initialYear: Int = LocalDate.now().year,
-    initialMonth: Int = LocalDate.now().monthValue
+    viewModel: CalendarViewModel = androidx.lifecycle.viewmodel.compose.viewModel(),
+    modifier: Modifier = Modifier
 ) {
     val isDarkTheme = isSystemInDarkTheme()
-    var selectedYear by rememberSaveable { mutableIntStateOf(initialYear) }
-    var selectedMonth by rememberSaveable { mutableIntStateOf(initialMonth) }
-    val calendarDays = remember(selectedYear, selectedMonth) {
-        generateCalendarDays(selectedYear, selectedMonth)
+    val uiState by viewModel.uiState.collectAsState()
+
+    val calendarDays = remember(uiState.year, uiState.month) {
+        generateCalendarDays(uiState.year, uiState.month)
     }
-    val monthTitle = MONTHS[selectedMonth - 1]
+
+    val monthTitle = MONTHS[uiState.month - 1]
+
+    LaunchedEffect(Unit) {
+        viewModel.loadAppointments()
+    }
 
     Column(
         modifier = modifier
@@ -177,7 +188,7 @@ fun CalendarScreen(
                 }
 
                 val monthListState = rememberLazyListState()
-                LaunchedEffect(Unit) { monthListState.scrollToItem(selectedMonth - 1) }
+                LaunchedEffect(uiState.month) { monthListState.scrollToItem(uiState.month - 1) }
 
                 LazyRow(
                     state = monthListState,
@@ -188,7 +199,7 @@ fun CalendarScreen(
                 ) {
                     itemsIndexed(MONTHS_ABBREVIATION) { index, shortName ->
                         val monthNumber = index + 1
-                        val selected = monthNumber == selectedMonth
+                        val selected = monthNumber == uiState.month
 
                         Box(
                             modifier = Modifier
@@ -208,7 +219,7 @@ fun CalendarScreen(
                                     color = MaterialTheme.colorScheme.outline,
                                     shape = RoundedCornerShape(5.dp)
                                 )
-                                .clickable { selectedMonth = monthNumber },
+                                .clickable { viewModel.selectMonth(monthNumber) },
                             contentAlignment = Alignment.Center
                         ) {
                             Text(
@@ -242,48 +253,17 @@ fun CalendarScreen(
                         .clip(RoundedCornerShape(2.dp))
                         .background(MaterialTheme.colorScheme.onSurface.copy(0.7f))
                 )
+
                 Column(
                     modifier = Modifier.align(Alignment.Center),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    val isScheduled: Boolean = false
+                    val appointments = uiState.appointments
+                    val isLoading = uiState.isLoading
 
-                    if (!isScheduled) {
-                        Column(
-                            modifier = Modifier
-                                .fillMaxWidth(),
-                            verticalArrangement = Arrangement.Center
-                        ) {
-                            Text(
-                                "Corte simples",
-                                style = MaterialTheme.typography.bodyMedium,
-                                color = MaterialTheme.colorScheme.onBackground
-                            )
-
-                            Row(
-                                modifier = Modifier
-                                    .fillMaxWidth(),
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                val locationRes =
-                                    if (isDarkTheme) R.drawable.location_dark else R.drawable.location_light
-
-                                Image(
-                                    painter = painterResource(id = locationRes),
-                                    contentDescription = "Location image",
-                                    modifier = Modifier.size(10.dp)
-                                )
-
-                                Spacer(modifier = Modifier.size(3.dp))
-
-                                Text(
-                                    "Ale's Stylus",
-                                    style = MaterialTheme.typography.bodySmall,
-                                    color = MaterialTheme.colorScheme.onBackground
-                                )
-                            }
-                        }
-                    } else {
+                    if (isLoading) {
+                        Spacer(modifier = Modifier.height(50.dp))
+                    } else if(appointments.isEmpty()) {
                         val calendarRes =
                             if (isDarkTheme) R.drawable.calendar_dark else R.drawable.calendar_light
 
@@ -311,6 +291,19 @@ fun CalendarScreen(
                         )
 
                         Spacer(modifier = Modifier.height(30.dp))
+
+                    } else {
+                        uiState.appointments.forEachIndexed { index, appointment ->
+                            AppointmentItem(appointment = appointment, isDarkTheme = isDarkTheme)
+
+                            if (index < uiState.appointments.lastIndex) {
+                                HorizontalDivider(
+                                    modifier = Modifier.fillMaxWidth(0.9f),
+                                    thickness = 1.dp,
+                                    color = MaterialTheme.colorScheme.outline
+                                )
+                            }
+                        }
                     }
                 }
             }
