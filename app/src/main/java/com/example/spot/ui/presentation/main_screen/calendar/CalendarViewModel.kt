@@ -51,7 +51,7 @@ class CalendarViewModel : ViewModel() {
                 )
             )
             _uiState.value = _uiState.value.copy(
-                appointments = emptyList(),
+                appointments = sampleAppointments,
                 isLoading = false
             )
 
