@@ -40,18 +40,65 @@ fun AppointmentItem(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .padding(25.dp),
+            .padding(20.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
         Column(
             verticalArrangement = Arrangement.Center
         ) {
-            Text(
-                appointment.title,
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onBackground
-            )
+
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Text(
+                    appointment.title,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onBackground
+                )
+
+                Spacer(modifier = Modifier.size(10.dp))
+
+                if (appointment.isPaid) {
+                    Text(
+                        "Pago",
+                        style = MaterialTheme.typography.bodySmall.copy(
+                            fontWeight = FontWeight.Medium
+                        ),
+                        color = MaterialTheme.colorScheme.secondary
+                    )
+
+                    Spacer(modifier = Modifier.size(3.dp))
+
+                    Icon(
+                        imageVector = Icons.Default.Check,
+                        contentDescription = "Check image",
+                        tint = MaterialTheme.colorScheme.secondary,
+                        modifier = Modifier.size(12.dp)
+                    )
+
+                } else {
+                    Row(verticalAlignment = Alignment.Bottom) {
+                        Text(
+                            "R$",
+                            style = MaterialTheme.typography.bodySmall.copy(
+                                fontWeight = FontWeight.Light,
+                                fontStyle = FontStyle.Italic,
+                            ),
+                            color = MaterialTheme.colorScheme.onBackground.copy(0.5f),
+                        )
+
+                        Spacer(modifier = Modifier.size(4.dp))
+
+                        Text(
+                            appointment.price ?: "",
+                            style = MaterialTheme.typography.bodySmall.copy(
+                                fontWeight = FontWeight.ExtraBold,
+                                fontSize = 13.sp
+                            ),
+                            color = MaterialTheme.colorScheme.onBackground.copy(0.9f)
+                        )
+                    }
+                }
+            }
 
             Spacer(modifier = Modifier.height(1.dp))
 
@@ -102,27 +149,6 @@ fun AppointmentItem(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             if (appointment.isPaid) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text(
-                        "Pago com pix",
-                        style = MaterialTheme.typography.bodySmall.copy(
-                            fontWeight = FontWeight.Light,
-                            fontStyle = FontStyle.Italic,
-                            fontSize = 9.sp
-                        ),
-                        color = MaterialTheme.colorScheme.secondary
-                    )
-                    Spacer(modifier = Modifier.size(2.dp))
-                    Icon(
-                        imageVector = Icons.Default.Check,
-                        contentDescription = "Check image",
-                        tint = MaterialTheme.colorScheme.secondary,
-                        modifier = Modifier.size(10.dp)
-                    )
-                }
-
-                Spacer(modifier = Modifier.size(3.dp))
-
                 Button(
                     onClick = {},
                     modifier = Modifier
@@ -143,30 +169,6 @@ fun AppointmentItem(
                     )
                 }
             } else {
-                Row(verticalAlignment = Alignment.Bottom) {
-                    Text(
-                        "R$",
-                        style = MaterialTheme.typography.bodySmall.copy(
-                            fontWeight = FontWeight.Light,
-                            fontStyle = FontStyle.Italic,
-                        ),
-                        color = MaterialTheme.colorScheme.onBackground.copy(0.5f)
-                    )
-
-                    Spacer(modifier = Modifier.size(4.dp))
-
-                    Text(
-                        appointment.price ?: "",
-                        style = MaterialTheme.typography.bodySmall.copy(
-                            fontWeight = FontWeight.ExtraBold,
-                            fontSize = 13.sp
-                        ),
-                        color = MaterialTheme.colorScheme.onBackground.copy(0.9f)
-                    )
-                }
-
-                Spacer(modifier = Modifier.size(3.dp))
-
                 Button(
                     onClick = {},
                     modifier = Modifier
@@ -190,3 +192,4 @@ fun AppointmentItem(
         }
     }
 }
+

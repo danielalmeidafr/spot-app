@@ -188,7 +188,7 @@ fun CalendarScreen(
                 }
 
                 val monthListState = rememberLazyListState()
-                LaunchedEffect(uiState.month) { monthListState.scrollToItem(uiState.month - 1) }
+                LaunchedEffect(Unit) { monthListState.scrollToItem(uiState.month - 1) }
 
                 LazyRow(
                     state = monthListState,
@@ -301,6 +301,14 @@ fun CalendarScreen(
                                     modifier = Modifier.fillMaxWidth(0.9f),
                                     thickness = 1.dp,
                                     color = MaterialTheme.colorScheme.outline
+                                )
+                            } else{
+                                Spacer(modifier = Modifier.height(30.dp))
+
+                                Text(
+                                    "Nenhum agendamento novo",
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = MaterialTheme.colorScheme.onBackground.copy(0.6f)
                                 )
                             }
                         }
