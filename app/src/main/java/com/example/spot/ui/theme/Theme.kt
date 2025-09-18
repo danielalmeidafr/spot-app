@@ -14,6 +14,10 @@ private val DarkColorScheme = darkColorScheme(
     primary = Golden,
     onPrimary = White,
 
+    secondary = Green,
+
+    tertiary = Red,
+
     background = DarkGray,
     onBackground = White,
 
@@ -27,6 +31,10 @@ private val DarkColorScheme = darkColorScheme(
 private val LightColorScheme = lightColorScheme(
     primary = Golden,
     onPrimary = White,
+
+    secondary = Green,
+
+    tertiary = Red,
 
     background = WhiteBack,
     onBackground = Black,

@@ -38,7 +38,7 @@ fun CustomSearchBar(
 
     Row(
         modifier = modifier
-            .width(350.dp)
+            .width(340.dp)
             .height(43.dp)
             .shadow(
                 elevation = 1.5.dp,
