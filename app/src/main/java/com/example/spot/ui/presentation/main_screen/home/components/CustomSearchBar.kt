@@ -2,6 +2,8 @@ package com.example.spot.ui.presentation.main_screen.home.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -14,6 +16,7 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
@@ -35,6 +38,9 @@ fun CustomSearchBar(
     } else {
         R.drawable.search_light
     }
+
+    val interactionSource = remember { MutableInteractionSource() }
+    val isFocused = interactionSource.collectIsFocusedAsState().value
 
     Row(
         modifier = modifier
@@ -64,10 +70,11 @@ fun CustomSearchBar(
                 color = MaterialTheme.colorScheme.onSurface,
                 textAlign = TextAlign.Center
             ),
-            cursorBrush = androidx.compose.ui.graphics.SolidColor(MaterialTheme.colorScheme.onSurface),
+            cursorBrush = androidx.compose.ui.graphics.SolidColor(MaterialTheme.colorScheme.onSurface.copy(0.7f)),
+            interactionSource = interactionSource,
             modifier = Modifier.fillMaxWidth()
         ) { innerTextField ->
-            if (query.isEmpty()) {
+            if (query.isEmpty() && !isFocused) {
                 Text(
                     text = "Procure sua barbearia favorita",
                     style = MaterialTheme.typography.bodySmall,

@@ -37,6 +37,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.spot.ui.presentation.main_screen.home.components.CustomSearchBar
+import com.example.spot.ui.presentation.main_screen.home.components.clearFocusOnTap
 import com.student.R
 
 @Composable
@@ -47,7 +48,8 @@ fun HomeScreen(modifier: Modifier = Modifier) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background),
+            .background(MaterialTheme.colorScheme.background)
+            .clearFocusOnTap(),
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
