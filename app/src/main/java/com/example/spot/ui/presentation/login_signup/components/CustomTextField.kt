@@ -13,7 +13,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -63,7 +62,7 @@ fun CustomTextField(
             .fillMaxWidth(0.9f)
             .height(50.dp)
             .shadow(
-                elevation = 0.4.dp,
+                elevation = 0.2.dp,
                 shape = RoundedCornerShape(15),
                 clip = false
             ),

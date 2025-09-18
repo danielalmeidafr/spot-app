@@ -32,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import com.example.spot.ui.presentation.login_signup.components.CustomTextField
 import com.example.spot.ui.presentation.login_signup.components.IconCard
 import com.example.spot.ui.presentation.login_signup.components.PrimaryButton
+import com.example.spot.ui.util.clearFocusOnTap
 import com.student.R
 
 @Composable
@@ -55,7 +56,8 @@ fun SignupScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background),
+            .background(MaterialTheme.colorScheme.background)
+            .clearFocusOnTap(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {

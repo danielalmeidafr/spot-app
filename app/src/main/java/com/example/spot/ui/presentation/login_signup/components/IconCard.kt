@@ -30,7 +30,7 @@ fun IconCard(
             containerColor = MaterialTheme.colorScheme.surface,
         ),
         elevation = CardDefaults.cardElevation(
-            defaultElevation = 0.4.dp
+            defaultElevation = 0.2.dp
         ),
         border = BorderStroke(0.5.dp, MaterialTheme.colorScheme.outline)
     ) {
