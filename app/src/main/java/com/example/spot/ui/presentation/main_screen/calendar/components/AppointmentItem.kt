@@ -40,7 +40,7 @@ fun AppointmentItem(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .padding(20.dp),
+            .padding(start = 25.dp, end = 25.dp, top = 20.dp, bottom = 20.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -83,7 +83,7 @@ fun AppointmentItem(
                                 fontWeight = FontWeight.Light,
                                 fontStyle = FontStyle.Italic,
                             ),
-                            color = MaterialTheme.colorScheme.onBackground.copy(0.5f),
+                            color = MaterialTheme.colorScheme.onBackground.copy(0.9f),
                         )
 
                         Spacer(modifier = Modifier.size(4.dp))
@@ -92,7 +92,7 @@ fun AppointmentItem(
                             appointment.price ?: "",
                             style = MaterialTheme.typography.bodySmall.copy(
                                 fontWeight = FontWeight.ExtraBold,
-                                fontSize = 13.sp
+                                fontSize = 12.sp
                             ),
                             color = MaterialTheme.colorScheme.onBackground.copy(0.9f)
                         )

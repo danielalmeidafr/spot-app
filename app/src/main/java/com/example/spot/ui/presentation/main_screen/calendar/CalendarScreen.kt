@@ -251,65 +251,80 @@ fun CalendarScreen(
                         .width(67.dp)
                         .height(2.dp)
                         .clip(RoundedCornerShape(2.dp))
-                        .background(MaterialTheme.colorScheme.onSurface.copy(0.7f))
+                        .background(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f))
                 )
+
+                val appointments = uiState.appointments
+                val isLoading = uiState.isLoading
+
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(start = 15.dp)
+                ) {
+                    Spacer(modifier = Modifier.height(70.dp))
+                    if (appointments.isNotEmpty()) {
+                        Text(
+                            text = "Seus horários:",
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onBackground
+                        )
+                    }
+                }
 
                 Column(
                     modifier = Modifier.align(Alignment.Center),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    val appointments = uiState.appointments
-                    val isLoading = uiState.isLoading
+                    when {
+                        isLoading -> {
+                            Spacer(modifier = Modifier.height(50.dp))
+                        }
 
-                    if (isLoading) {
-                        Spacer(modifier = Modifier.height(50.dp))
-                    } else if(appointments.isEmpty()) {
-                        val calendarRes =
-                            if (isDarkTheme) R.drawable.calendar_dark else R.drawable.calendar_light
+                        appointments.isEmpty() -> {
+                            val calendarRes =
+                                if (isDarkTheme) R.drawable.calendar_dark else R.drawable.calendar_light
 
-                        Image(
-                            painter = painterResource(id = calendarRes),
-                            contentDescription = "Calendar Image",
-                            modifier = Modifier.size(60.dp),
-                            alpha = 0.7f
-                        )
+                            Image(
+                                painter = painterResource(id = calendarRes),
+                                contentDescription = "Calendar Image",
+                                modifier = Modifier.size(60.dp),
+                                alpha = 0.7f
+                            )
 
-                        Spacer(modifier = Modifier.height(30.dp))
+                            Spacer(modifier = Modifier.height(30.dp))
 
-                        Text(
-                            "Nenhum agendamento marcado",
-                            style = MaterialTheme.typography.titleSmall,
-                            color = MaterialTheme.colorScheme.onBackground
-                        )
+                            Text(
+                                text = "Nenhum agendamento marcado",
+                                style = MaterialTheme.typography.titleSmall,
+                                color = MaterialTheme.colorScheme.onBackground
+                            )
 
-                        Spacer(modifier = Modifier.height(12.dp))
+                            Spacer(modifier = Modifier.height(12.dp))
 
-                        Text(
-                            "Agende novos serviços para vê-los aqui",
-                            style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onBackground
-                        )
+                            Text(
+                                text = "Agende novos serviços para vê-los aqui",
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onBackground
+                            )
 
-                        Spacer(modifier = Modifier.height(30.dp))
+                            Spacer(modifier = Modifier.height(30.dp))
+                        }
 
-                    } else {
-                        uiState.appointments.forEachIndexed { index, appointment ->
-                            AppointmentItem(appointment = appointment, isDarkTheme = isDarkTheme)
-
-                            if (index < uiState.appointments.lastIndex) {
-                                HorizontalDivider(
-                                    modifier = Modifier.fillMaxWidth(0.9f),
-                                    thickness = 1.dp,
-                                    color = MaterialTheme.colorScheme.outline
+                        else -> {
+                            appointments.forEachIndexed { index, appointment ->
+                                AppointmentItem(
+                                    appointment = appointment,
+                                    isDarkTheme = isDarkTheme
                                 )
-                            } else{
-                                Spacer(modifier = Modifier.height(30.dp))
 
-                                Text(
-                                    "Nenhum agendamento novo",
-                                    style = MaterialTheme.typography.bodySmall,
-                                    color = MaterialTheme.colorScheme.onBackground.copy(0.6f)
-                                )
+                                if (index < appointments.lastIndex) {
+                                    HorizontalDivider(
+                                        modifier = Modifier.fillMaxWidth(0.9f),
+                                        thickness = 1.dp,
+                                        color = MaterialTheme.colorScheme.outline
+                                    )
+                                }
                             }
                         }
                     }
