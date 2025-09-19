@@ -1,8 +1,10 @@
 package com.example.spot.ui.presentation.main_screen.home
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -25,12 +27,13 @@ import androidx.compose.ui.unit.dp
 import com.example.spot.ui.presentation.main_screen.home.components.CustomSearchBar
 import com.example.spot.ui.presentation.main_screen.home.components.EstablishmentCard
 import com.example.spot.ui.presentation.main_screen.home.components.NextScheduleCard
+import com.example.spot.ui.presentation.main_screen.home.components.PaymentsMethods
 import com.example.spot.ui.util.clearFocusOnTap
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun HomeScreen(modifier: Modifier = Modifier) {
     var query by remember { mutableStateOf("") }
-    var active by remember { mutableStateOf(false) }
 
     Column(
         modifier = Modifier
@@ -40,9 +43,6 @@ fun HomeScreen(modifier: Modifier = Modifier) {
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-
-        var query by remember { mutableStateOf("") }
-
         CustomSearchBar(
             query = query,
             onQueryChange = { query = it },
@@ -53,76 +53,86 @@ fun HomeScreen(modifier: Modifier = Modifier) {
 
         Spacer(modifier = Modifier.height(23.dp))
 
-        NextScheduleCard(
-            isScheduled = true,
-            nextSchedule = "Hoje, 13h30"
-        )
-
-        Spacer(modifier = Modifier.height(23.dp))
-
-        Text(
-            "Recomendadas:",
-            modifier = Modifier.fillMaxWidth(0.9f),
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onBackground,
-            textAlign = TextAlign.Start
-        )
-
-        Spacer(modifier = Modifier.height(20.dp))
-
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .navigationBarsPadding()
-                .padding(bottom = 20.dp),
-            verticalArrangement = Arrangement.spacedBy(50.dp),
+                .navigationBarsPadding(),
+            contentPadding = PaddingValues(
+                bottom = 20.dp
+            ),
+            verticalArrangement = Arrangement.spacedBy(30 .dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+
             item {
-                EstablishmentCard(
-                    name = "Ale's Stylus",
-                    rating = 4.5,
-                    totalReviews = 125,
-                    isAvailable = false,
-                    nextTime = "Hoje, 14h30",
-                    neighborhood = "Santana",
-                    distance = "2,6km"
+                NextScheduleCard(
+                    isScheduled = true,
+                    nextSchedule = "Hoje, 13h30"
+                )
+            }
+
+            stickyHeader {
+                Text(
+                    "Recomendadas:",
+                    modifier = Modifier
+                        .fillMaxWidth(0.9f)
+                        .background(MaterialTheme.colorScheme.background)
+                        .padding(bottom = 5.dp),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onBackground,
+                    textAlign = TextAlign.Start
                 )
             }
 
             item {
                 EstablishmentCard(
-                    name = "Barbearia do João",
-                    rating = 4.2,
-                    totalReviews = 90,
+                    name = "Studio Barber Lux",
+                    rating = 4.8,
+                    totalReviews = 310,
                     isAvailable = true,
-                    nextTime = "Hoje, 15h00",
-                    neighborhood = "Tatuapé",
-                    distance = "1,8km"
+                    nextTime = "Hoje, 16h00",
+                    neighborhood = "Moema",
+                    distance = "3,1km",
+                    paymentsMethods = listOf(PaymentsMethods.PIX, PaymentsMethods.CASH, PaymentsMethods.CARD)
                 )
             }
 
             item {
                 EstablishmentCard(
-                    name = "Ale's Stylus",
-                    rating = 4.5,
-                    totalReviews = 125,
+                    name = "Salão Estilo & Beleza",
+                    rating = 4.3,
+                    totalReviews = 78,
                     isAvailable = false,
-                    nextTime = "Hoje, 14h30",
-                    neighborhood = "Santana",
-                    distance = "2,6km"
+                    nextTime = "Amanhã, 10h00",
+                    neighborhood = "Pinheiros",
+                    distance = "5,4km",
+                    paymentsMethods = listOf(PaymentsMethods.PIX, PaymentsMethods.CASH)
                 )
             }
 
             item {
                 EstablishmentCard(
-                    name = "Barbearia do João",
-                    rating = 4.2,
-                    totalReviews = 90,
+                    name = "Tattoo House SP",
+                    rating = 4.9,
+                    totalReviews = 452,
                     isAvailable = true,
-                    nextTime = "Hoje, 15h00",
-                    neighborhood = "Tatuapé",
-                    distance = "1,8km"
+                    nextTime = "Hoje, 18h30",
+                    neighborhood = "Vila Madalena",
+                    distance = "4,2km",
+                    paymentsMethods = listOf(PaymentsMethods.PIX)
+                )
+            }
+
+            item {
+                EstablishmentCard(
+                    name = "Beleza Express",
+                    rating = 4.1,
+                    totalReviews = 65,
+                    isAvailable = true,
+                    nextTime = "Hoje, 15h45",
+                    neighborhood = "Liberdade",
+                    distance = "2,0km",
+                    paymentsMethods = listOf(PaymentsMethods.CASH, PaymentsMethods.CARD)
                 )
             }
         }
