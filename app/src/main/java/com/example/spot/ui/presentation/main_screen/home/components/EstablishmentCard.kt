@@ -75,7 +75,7 @@ fun EstablishmentCard(
             containerColor = MaterialTheme.colorScheme.surface,
         ),
         border = BorderStroke(
-            width = 1.dp,
+            width = 0.5.dp,
             color = MaterialTheme.colorScheme.outline
         ),
         onClick = {
@@ -85,7 +85,7 @@ fun EstablishmentCard(
                 isExpanded = true
             }
         },
-        shape = RoundedCornerShape(10.dp),
+        shape = RoundedCornerShape(13.dp),
         modifier = modifier
             .fillMaxWidth(0.85f)
             .height(cardHeight)
@@ -100,7 +100,7 @@ fun EstablishmentCard(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(imageHeight)
-                    .clip(RoundedCornerShape(5.dp)),
+                    .clip(RoundedCornerShape(2.dp)),
                 contentScale = ContentScale.Crop
             )
         }
