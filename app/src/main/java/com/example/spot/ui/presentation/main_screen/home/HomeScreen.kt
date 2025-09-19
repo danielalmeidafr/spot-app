@@ -1,24 +1,21 @@
 package com.example.spot.ui.presentation.main_screen.home
 
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -29,15 +26,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.spot.ui.presentation.main_screen.home.components.CustomSearchBar
+import com.example.spot.ui.presentation.main_screen.home.components.EstablishmentCard
 import com.example.spot.ui.util.clearFocusOnTap
-import com.student.R
 
 @Composable
 fun HomeScreen(modifier: Modifier = Modifier) {
@@ -63,7 +57,7 @@ fun HomeScreen(modifier: Modifier = Modifier) {
                 .padding(top = 20.dp)
         )
 
-        Spacer(modifier = Modifier.height(30.dp))
+        Spacer(modifier = Modifier.height(23.dp))
 
         Surface(
             modifier = Modifier
@@ -111,168 +105,72 @@ fun HomeScreen(modifier: Modifier = Modifier) {
             }
         }
 
-        Spacer(modifier = Modifier.height(30.dp))
+        Spacer(modifier = Modifier.height(23.dp))
 
         Text(
             "Recomendadas:",
-            modifier = Modifier.fillMaxWidth(0.93f),
+            modifier = Modifier.fillMaxWidth(0.95f),
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onBackground,
             textAlign = TextAlign.Start
         )
 
-        Spacer(modifier = Modifier.height(22.dp))
+        Spacer(modifier = Modifier.height(12.dp))
 
-        Card(
-            colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.surface,
-            ),
-            elevation = CardDefaults.cardElevation(
-                defaultElevation = 0.2.dp
-            ),
-            shape = RoundedCornerShape(18.dp),
-            border = BorderStroke(1.dp, color = MaterialTheme.colorScheme.outline),
+        LazyColumn(
             modifier = Modifier
-                .size(width = 350.dp, height = 360.dp)
+                .fillMaxSize()
+                .navigationBarsPadding(),
+            verticalArrangement = Arrangement.spacedBy(50.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            contentPadding = PaddingValues(vertical = 16.dp, horizontal = 12.dp)
         ) {
-            Box(
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Image(
-                    painter = painterResource(id = R.drawable.bar_image),
-                    contentDescription = "Bar image",
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(230.dp),
-                    contentScale = ContentScale.Crop
+            item {
+                EstablishmentCard(
+                    name = "Ale's Stylus",
+                    rating = 4.5,
+                    totalReviews = 125,
+                    isAvailable = false,
+                    nextTime = "Hoje, 14h30",
+                    neighborhood = "Santana",
+                    distance = "2,6km"
                 )
             }
 
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(start = 15.dp, end = 15.dp, top = 10.dp)
-            ) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    Text(
-                        "Ale's Stylus",
-                        style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold),
-                        color = MaterialTheme.colorScheme.onBackground
-                    )
+            item {
+                EstablishmentCard(
+                    name = "Barbearia do João",
+                    rating = 4.2,
+                    totalReviews = 90,
+                    isAvailable = true,
+                    nextTime = "Hoje, 15h00",
+                    neighborhood = "Tatuapé",
+                    distance = "1,8km"
+                )
+            }
 
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(4.dp)
-                    ) {
-                        Text(
-                            "4,5",
-                            style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onBackground
-                        )
+            item {
+                EstablishmentCard(
+                    name = "Ale's Stylus",
+                    rating = 4.5,
+                    totalReviews = 125,
+                    isAvailable = false,
+                    nextTime = "Hoje, 14h30",
+                    neighborhood = "Santana",
+                    distance = "2,6km"
+                )
+            }
 
-                        Image(
-                            painter = painterResource(id = R.drawable.rating),
-                            contentDescription = "Rating image",
-                            modifier = Modifier.size(10.5.dp)
-                        )
-
-                        Text(
-                            "(125 avaliações)",
-                            style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onBackground
-                        )
-                    }
-                }
-
-                val isAvailable: Boolean = false
-
-                if (isAvailable){
-                    Text(
-                        "Aberto",
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.secondary
-                    )
-                } else {
-                    Text(
-                        "Fechado",
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.tertiary
-                    )
-                }
-
-
-
-                Spacer(modifier = Modifier.height(7.dp))
-
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(3.dp)
-                ) {
-                    Text(
-                        "Próximo horário disponível:",
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onBackground
-                    )
-
-                    Text(
-                        "Hoje, 14h30",
-                        style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.Medium),
-                        color = MaterialTheme.colorScheme.onBackground
-                    )
-                }
-
-                Spacer(modifier = Modifier.height(7.dp))
-
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    val isDarkTheme = isSystemInDarkTheme()
-                    val locationRes =
-                        if (isDarkTheme) R.drawable.location_dark else R.drawable.location_light
-
-                    Image(
-                        painter = painterResource(id = locationRes),
-                        contentDescription = "Location image",
-                        modifier = Modifier
-                            .size(10.dp)
-                            .alpha(0.8f)
-                    )
-
-                    Spacer(modifier = Modifier.size(3.dp))
-
-                    Text(
-                        "Santana • 2,6km",
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onBackground
-                    )
-                }
-
-                Spacer(modifier = Modifier.height(7.dp))
-
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(6.dp)
-                ) {
-                    Text(
-                        "Aceito:",
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onBackground
-                    )
-
-                    Image(
-                        painter = painterResource(id = R.drawable.pix),
-                        contentDescription = "Pix image",
-                        modifier = Modifier.size(15.dp)
-                    )
-
-                    Image(
-                        painter = painterResource(id = R.drawable.cash),
-                        contentDescription = "Cash image",
-                        modifier = Modifier.size(17.dp)
-                    )
-                }
+            item {
+                EstablishmentCard(
+                    name = "Barbearia do João",
+                    rating = 4.2,
+                    totalReviews = 90,
+                    isAvailable = true,
+                    nextTime = "Hoje, 15h00",
+                    neighborhood = "Tatuapé",
+                    distance = "1,8km"
+                )
             }
         }
     }
