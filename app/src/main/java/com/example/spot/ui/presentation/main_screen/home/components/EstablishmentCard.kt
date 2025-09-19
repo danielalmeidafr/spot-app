@@ -3,7 +3,16 @@ package com.example.spot.ui.presentation.main_screen.home.components
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -38,10 +47,10 @@ fun EstablishmentCard(
             defaultElevation = 0.2.dp
         ),
         shape = RoundedCornerShape(18.dp),
-        border = BorderStroke(0.2.dp, color = MaterialTheme.colorScheme.outline),
+        border = BorderStroke(1.dp, color = MaterialTheme.colorScheme.outline),
         modifier = Modifier
-            .fillMaxWidth(0.98f)
-            .height(380.dp)
+            .fillMaxWidth(0.85f)
+            .height(320.dp)
     ) {
         Box(
             modifier = Modifier.fillMaxWidth()
@@ -51,7 +60,7 @@ fun EstablishmentCard(
                 contentDescription = "Bar image",
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(250.dp),
+                    .height(185.dp),
                 contentScale = ContentScale.Crop
             )
         }
@@ -59,7 +68,7 @@ fun EstablishmentCard(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(start = 15.dp, end = 15.dp, top = 14.dp)
+                .padding(15.dp)
         ) {
             Row(
                 modifier = Modifier
@@ -90,7 +99,7 @@ fun EstablishmentCard(
                     )
 
                     Text(
-                        "($totalReviews avaliações)",
+                        "($totalReviews)",
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onBackground
                     )
