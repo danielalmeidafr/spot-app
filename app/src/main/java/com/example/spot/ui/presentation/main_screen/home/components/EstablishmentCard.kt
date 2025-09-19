@@ -1,6 +1,5 @@
 package com.example.spot.ui.presentation.main_screen.home.components
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
@@ -44,10 +43,9 @@ fun EstablishmentCard(
             containerColor = MaterialTheme.colorScheme.surface,
         ),
         elevation = CardDefaults.cardElevation(
-            defaultElevation = 0.2.dp
+            defaultElevation = 0.5.dp
         ),
         shape = RoundedCornerShape(18.dp),
-        border = BorderStroke(1.dp, color = MaterialTheme.colorScheme.outline),
         modifier = Modifier
             .fillMaxWidth(0.85f)
             .height(320.dp)
