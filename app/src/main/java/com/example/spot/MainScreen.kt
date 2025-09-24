@@ -32,6 +32,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -131,7 +132,7 @@ fun MainScreen(modifier: Modifier = Modifier) {
                         label = {
                             Text(
                                 destination.label,
-                                style = MaterialTheme.typography.bodySmall,
+                                style = MaterialTheme.typography.bodySmall.copy(fontSize = 8.5.sp),
                                 color = MaterialTheme.colorScheme.onBackground,
                                 modifier = Modifier.offset(y = offsetY)
                             )
