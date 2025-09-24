@@ -34,7 +34,7 @@ val Typography = Typography(
         fontFamily = Montserrat,
         fontWeight = FontWeight.Medium,
         fontSize = 16.sp
-    ),
+    )
 )
 
 
