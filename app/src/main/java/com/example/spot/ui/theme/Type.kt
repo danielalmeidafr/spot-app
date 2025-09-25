@@ -34,6 +34,11 @@ val Typography = Typography(
         fontFamily = Montserrat,
         fontWeight = FontWeight.Medium,
         fontSize = 16.sp
+    ),
+    titleSmall = TextStyle(
+        fontFamily = Montserrat,
+        fontWeight = FontWeight.Medium,
+        fontSize = 15.sp
     )
 )
 
