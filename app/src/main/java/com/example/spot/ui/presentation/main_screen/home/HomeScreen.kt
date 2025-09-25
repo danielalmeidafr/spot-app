@@ -59,7 +59,7 @@ fun HomeScreen(
             onQueryChange = { query = it },
             modifier = Modifier
                 .statusBarsPadding()
-                .padding(top = 20.dp)
+                .padding(top = 20.dp, bottom = 5.dp)
         )
 
         val establishmentList = listOf(
@@ -113,10 +113,13 @@ fun HomeScreen(
         )
 
         LazyColumn(
-            contentPadding = contentPadding,
+            contentPadding = PaddingValues(
+                top = 15.dp,
+                bottom = contentPadding.calculateBottomPadding()
+            ),
             modifier = Modifier
                 .fillMaxSize(),
-            verticalArrangement = Arrangement.spacedBy(20 .dp),
+            verticalArrangement = Arrangement.spacedBy(20.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
@@ -133,7 +136,7 @@ fun HomeScreen(
                     modifier = Modifier
                         .fillMaxWidth(0.9f)
                         .background(MaterialTheme.colorScheme.background)
-                        .padding(bottom = 5.dp),
+                        .padding(top = 10.dp, bottom = 5.dp),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onBackground,
                     textAlign = TextAlign.Start

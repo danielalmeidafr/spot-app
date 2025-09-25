@@ -74,8 +74,11 @@ fun EstablishmentCard(
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surface,
         ),
+        elevation = CardDefaults.cardElevation(
+            defaultElevation = 0.5.dp
+        ),
         border = BorderStroke(
-            width = 0.5.dp,
+            width = 0.2.dp,
             color = MaterialTheme.colorScheme.outline
         ),
         onClick = {
@@ -90,6 +93,7 @@ fun EstablishmentCard(
             .fillMaxWidth(0.85f)
             .height(cardHeight)
             .animateContentSize()
+            .padding(1.dp)
     ) {
         Box(
             modifier = Modifier.fillMaxWidth()
