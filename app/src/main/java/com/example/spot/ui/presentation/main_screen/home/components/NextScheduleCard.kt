@@ -21,9 +21,9 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun NextScheduleCard(
+    modifier: Modifier = Modifier,
     isScheduled: Boolean,
     nextSchedule: String? = null,
-    modifier: Modifier = Modifier
 ) {
     Surface(
         modifier = Modifier
@@ -31,7 +31,7 @@ fun NextScheduleCard(
             .height(45.dp),
         color = MaterialTheme.colorScheme.surface,
         shape = RoundedCornerShape(14.dp),
-        shadowElevation = 1.5.dp
+        shadowElevation = 1.dp
     ) {
         Box(
             modifier = Modifier.fillMaxSize(),

@@ -4,6 +4,7 @@ import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
@@ -149,7 +150,7 @@ fun MainScreen(modifier: Modifier = Modifier) {
             }
         }
     ) { contentPadding ->
-        AppNavHost(navController, startDestination, modifier = Modifier.padding(contentPadding))
+        AppNavHost(navController, startDestination, contentPadding = contentPadding)
     }
 }
 
@@ -157,6 +158,7 @@ fun MainScreen(modifier: Modifier = Modifier) {
 fun AppNavHost(
     navController: NavHostController,
     startDestination: Destination,
+    contentPadding: PaddingValues,
     modifier: Modifier = Modifier
 ) {
     NavHost(
@@ -167,7 +169,7 @@ fun AppNavHost(
         Destination.entries.forEach { destination ->
             composable(destination.route) {
                 when (destination) {
-                    Destination.HOME -> HomeScreen()
+                    Destination.HOME -> HomeScreen(contentPadding = contentPadding)
                     Destination.SAVE -> SaveScreen()
                     Destination.CALENDAR -> CalendarScreen()
                     Destination.ACCOUNT -> AccountScreen()

@@ -5,14 +5,12 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -30,9 +28,23 @@ import com.example.spot.ui.presentation.main_screen.home.components.NextSchedule
 import com.example.spot.ui.presentation.main_screen.home.components.PaymentsMethods
 import com.example.spot.ui.util.clearFocusOnTap
 
+data class EstablishmentData(
+    val name: String,
+    val rating: Double,
+    val totalReviews: Int,
+    val isAvailable: Boolean,
+    val nextTime: String,
+    val neighborhood: String,
+    val distance: String,
+    val paymentsMethods: List<PaymentsMethods>
+)
+
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun HomeScreen(modifier: Modifier = Modifier) {
+fun HomeScreen(
+    modifier: Modifier = Modifier,
+    contentPadding: PaddingValues = PaddingValues(0.dp),
+) {
     var query by remember { mutableStateOf("") }
 
     Column(
@@ -40,7 +52,6 @@ fun HomeScreen(modifier: Modifier = Modifier) {
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
             .clearFocusOnTap(),
-        verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         CustomSearchBar(
@@ -51,16 +62,61 @@ fun HomeScreen(modifier: Modifier = Modifier) {
                 .padding(top = 20.dp)
         )
 
-        Spacer(modifier = Modifier.height(23.dp))
+        val establishmentList = listOf(
+            EstablishmentData(
+                name = "Studio Barber Lux",
+                rating = 4.8,
+                totalReviews = 310,
+                isAvailable = true,
+                nextTime = "Hoje, 16h00",
+                neighborhood = "Moema",
+                distance = "3,1km",
+                paymentsMethods = listOf(
+                    PaymentsMethods.PIX,
+                    PaymentsMethods.CASH,
+                    PaymentsMethods.CARD
+                )
+            ),
+
+            EstablishmentData(
+                name = "Salão Estilo & Beleza",
+                rating = 4.3,
+                totalReviews = 78,
+                isAvailable = false,
+                nextTime = "Amanhã, 10h00",
+                neighborhood = "Pinheiros",
+                distance = "5,4km",
+                paymentsMethods = listOf(PaymentsMethods.PIX, PaymentsMethods.CASH)
+            ),
+
+            EstablishmentData(
+                name = "Tattoo House SP",
+                rating = 4.9,
+                totalReviews = 452,
+                isAvailable = true,
+                nextTime = "Hoje, 18h30",
+                neighborhood = "Vila Madalena",
+                distance = "4,2km",
+                paymentsMethods = listOf(PaymentsMethods.PIX)
+            ),
+
+            EstablishmentData(
+                name = "Beleza Express",
+                rating = 4.1,
+                totalReviews = 65,
+                isAvailable = true,
+                nextTime = "Hoje, 15h45",
+                neighborhood = "Liberdade",
+                distance = "2,0km",
+                paymentsMethods = listOf(PaymentsMethods.CASH, PaymentsMethods.CARD)
+            )
+        )
 
         LazyColumn(
+            contentPadding = contentPadding,
             modifier = Modifier
-                .fillMaxSize()
-                .navigationBarsPadding(),
-            contentPadding = PaddingValues(
-                bottom = 20.dp
-            ),
-            verticalArrangement = Arrangement.spacedBy(30 .dp),
+                .fillMaxSize(),
+            verticalArrangement = Arrangement.spacedBy(20 .dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
@@ -84,55 +140,16 @@ fun HomeScreen(modifier: Modifier = Modifier) {
                 )
             }
 
-            item {
+            items(establishmentList) { establishment ->
                 EstablishmentCard(
-                    name = "Studio Barber Lux",
-                    rating = 4.8,
-                    totalReviews = 310,
-                    isAvailable = true,
-                    nextTime = "Hoje, 16h00",
-                    neighborhood = "Moema",
-                    distance = "3,1km",
-                    paymentsMethods = listOf(PaymentsMethods.PIX, PaymentsMethods.CASH, PaymentsMethods.CARD)
-                )
-            }
-
-            item {
-                EstablishmentCard(
-                    name = "Salão Estilo & Beleza",
-                    rating = 4.3,
-                    totalReviews = 78,
-                    isAvailable = false,
-                    nextTime = "Amanhã, 10h00",
-                    neighborhood = "Pinheiros",
-                    distance = "5,4km",
-                    paymentsMethods = listOf(PaymentsMethods.PIX, PaymentsMethods.CASH)
-                )
-            }
-
-            item {
-                EstablishmentCard(
-                    name = "Tattoo House SP",
-                    rating = 4.9,
-                    totalReviews = 452,
-                    isAvailable = true,
-                    nextTime = "Hoje, 18h30",
-                    neighborhood = "Vila Madalena",
-                    distance = "4,2km",
-                    paymentsMethods = listOf(PaymentsMethods.PIX)
-                )
-            }
-
-            item {
-                EstablishmentCard(
-                    name = "Beleza Express",
-                    rating = 4.1,
-                    totalReviews = 65,
-                    isAvailable = true,
-                    nextTime = "Hoje, 15h45",
-                    neighborhood = "Liberdade",
-                    distance = "2,0km",
-                    paymentsMethods = listOf(PaymentsMethods.CASH, PaymentsMethods.CARD)
+                    name = establishment.name,
+                    rating = establishment.rating,
+                    totalReviews = establishment.totalReviews,
+                    isAvailable = establishment.isAvailable,
+                    nextTime = establishment.nextTime,
+                    neighborhood = establishment.neighborhood,
+                    distance = establishment.distance,
+                    paymentsMethods = establishment.paymentsMethods,
                 )
             }
         }

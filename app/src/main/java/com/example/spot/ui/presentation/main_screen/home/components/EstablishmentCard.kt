@@ -58,7 +58,7 @@ fun EstablishmentCard(
     onNavigateToDetails: () -> Unit = {}
 ) {
     val context = LocalContext.current
-    var isExpanded by remember { mutableStateOf(true) }
+    var isExpanded by remember { mutableStateOf(false) }
 
     val cardHeight by animateDpAsState(
         targetValue = if (isExpanded) 300.dp else 210.dp,
