@@ -7,7 +7,7 @@ val Green = Color(0xFF4CAF50)
 val Red = Color(0xFFFF5E3A)
 
 // DARK MODE
-val DarkGray = Color(0xFF121212)
+val DarkGray = Color(0xFF0F0E0F)
 val DarkGray2 = Color(0xFF181818)
 val DarkGray3 = Color(0xFF1E1E1E)
 val White = Color(0xFFFFFFFF)

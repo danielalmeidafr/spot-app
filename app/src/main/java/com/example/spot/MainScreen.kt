@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
@@ -38,16 +37,16 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.spot.ui.presentation.main_screen.account.AccountScreen
 import com.example.spot.ui.presentation.main_screen.calendar.CalendarScreen
 import com.example.spot.ui.presentation.main_screen.home.HomeScreen
+import com.example.spot.ui.presentation.main_screen.profile.ProfileScreen
 import com.example.spot.ui.presentation.main_screen.save.SaveScreen
 import kotlinx.coroutines.delay
 
 @Composable
 fun MainScreen(modifier: Modifier = Modifier) {
     val navController = rememberNavController()
-    val startDestination = Destination.HOME
+    val startDestination = Destination.PROFILE
     var selectedDestination by rememberSaveable { mutableIntStateOf(startDestination.ordinal) }
     val isDarkTheme = isSystemInDarkTheme()
 
@@ -172,7 +171,7 @@ fun AppNavHost(
                     Destination.HOME -> HomeScreen(contentPadding = contentPadding)
                     Destination.SAVE -> SaveScreen()
                     Destination.CALENDAR -> CalendarScreen()
-                    Destination.ACCOUNT -> AccountScreen()
+                    Destination.PROFILE -> ProfileScreen()
                 }
             }
         }

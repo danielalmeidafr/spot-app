@@ -35,8 +35,8 @@ enum class Destination(
         R.drawable.calendar_light_filled,
         R.drawable.calendar_dark_filled
     ),
-    ACCOUNT(
-        "account",
+    PROFILE(
+        "profile",
         "Perfil",
         R.drawable.account_light,
         R.drawable.account_dark,
