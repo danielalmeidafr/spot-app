@@ -16,31 +16,31 @@ enum class Destination(
         "Início",
         R.drawable.home_light,
         R.drawable.home_dark,
-        R.drawable.home_light_filled,
-        R.drawable.home_light_filled
+        R.drawable.home_filled_light,
+        R.drawable.home_filled_dark
     ),
     SAVE(
         "save",
         "Favoritos",
         R.drawable.save_light,
         R.drawable.save_dark,
-        R.drawable.save_light_filled,
-        R.drawable.save_dark_filled
+        R.drawable.save_filled_light,
+        R.drawable.save_filled_dark
     ),
     CALENDAR(
         "calendar",
         "Agenda",
         R.drawable.calendar_light,
         R.drawable.calendar_dark,
-        R.drawable.calendar_light_filled,
-        R.drawable.calendar_dark_filled
+        R.drawable.calendar_filled_light,
+        R.drawable.calendar_filled_dark
     ),
     ACCOUNT(
         "account",
         "Perfil",
         R.drawable.account_light,
         R.drawable.account_dark,
-        R.drawable.account_light_filled,
-        R.drawable.account_dark_filled
+        R.drawable.account_filled_light,
+        R.drawable.account_filled_dark
     );
 }
