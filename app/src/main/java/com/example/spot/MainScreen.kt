@@ -60,7 +60,7 @@ fun MainScreen(modifier: Modifier = Modifier) {
                 modifier = Modifier
                     .height(100.dp)
                     .fillMaxWidth()
-                    .offset(y = 35.dp)
+                    .offset(y = 45.dp)
             ) {}
 
             Box(
