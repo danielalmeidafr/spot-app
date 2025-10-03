@@ -277,7 +277,7 @@ fun CalendarScreen(
                     }
 
                     val monthListState = rememberLazyListState()
-                    LaunchedEffect(uiState.month) { monthListState.animateScrollToItem(uiState.month - 1) }
+                    LaunchedEffect(Unit) { monthListState.scrollToItem(uiState.month - 1) }
 
                     LazyRow(
                         state = monthListState,
