@@ -10,12 +10,15 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -23,11 +26,16 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.BottomSheetScaffold
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -37,6 +45,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -47,18 +56,7 @@ import java.time.YearMonth
 
 private val WEEK = listOf("D", "S", "T", "Q", "Q", "S", "S")
 private val MONTHS = listOf(
-    "Janeiro",
-    "Fevereiro",
-    "Março",
-    "Abril",
-    "Maio",
-    "Junho",
-    "Julho",
-    "Agosto",
-    "Setembro",
-    "Outubro",
-    "Novembro",
-    "Dezembro"
+    "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
 )
 private val MONTHS_ABBREVIATION = listOf(
     "Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"
@@ -89,6 +87,7 @@ private fun generateCalendarDays(year: Int, month: Int): List<CalendarDay> {
     return days
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CalendarScreen(
     modifier: Modifier = Modifier,
@@ -102,183 +101,45 @@ fun CalendarScreen(
     }
 
     val monthTitle = MONTHS[uiState.month - 1]
+    val scaffoldState = rememberBottomSheetScaffoldState()
 
     LaunchedEffect(Unit) {
         viewModel.loadAppointments()
     }
 
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background)
-    ) {
-        Surface(
-            modifier = Modifier.fillMaxWidth(),
-            color = MaterialTheme.colorScheme.surface
-        ) {
-            Column(modifier = Modifier.padding(top = 50.dp, start = 5.dp, end = 5.dp)) {
-                Text(
-                    text = monthTitle,
-                    style = MaterialTheme.typography.bodyLarge,
-                    color = MaterialTheme.colorScheme.onBackground,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(start = 8.dp),
-                    textAlign = TextAlign.Start
-                )
+    BottomSheetScaffold(
+        scaffoldState = scaffoldState,
+        sheetPeekHeight = 440.dp,
+        sheetShape = RoundedCornerShape(topStart = 30.dp, topEnd = 30.dp),
+        sheetContainerColor = MaterialTheme.colorScheme.surface,
+        sheetContent = {
+            val appointments = uiState.appointments
+            val isLoading = uiState.isLoading
 
-                Spacer(modifier = Modifier.height(20.dp))
-
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    WEEK.forEach { wd ->
-                        Text(
-                            text = wd,
-                            style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.8f),
-                            modifier = Modifier.weight(1f),
-                            textAlign = TextAlign.Center
-                        )
-                    }
-                }
-
-                Spacer(modifier = Modifier.height(20.dp))
-
-                LazyVerticalGrid(
-                    columns = GridCells.Fixed(7),
-                    verticalArrangement = Arrangement.spacedBy(10.dp),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(235.dp)
-                ) {
-                    items(calendarDays) { day ->
-                        val isToday = day.date == LocalDate.now()
-                        val color = if (day.inMonth) MaterialTheme.colorScheme.onBackground
-                        else MaterialTheme.colorScheme.onBackground.copy(alpha = 0.5f)
-
-                        Box(modifier = Modifier.size(28.dp), contentAlignment = Alignment.Center) {
-                            if (isToday) {
-                                Box(
-                                    modifier = Modifier
-                                        .size(28.dp)
-                                        .background(
-                                            color = MaterialTheme.colorScheme.outlineVariant,
-                                            shape = RoundedCornerShape(50)
-                                        ),
-                                    contentAlignment = Alignment.Center
-                                ) {
-                                    Text(
-                                        text = day.date.dayOfMonth.toString(),
-                                        style = MaterialTheme.typography.bodySmall,
-                                        color = color,
-                                        textAlign = TextAlign.Center
-                                    )
-                                }
-                            } else {
-                                Text(
-                                    text = day.date.dayOfMonth.toString(),
-                                    style = MaterialTheme.typography.bodySmall,
-                                    color = color,
-                                    textAlign = TextAlign.Center
-                                )
-                            }
-                        }
-                    }
-                }
-
-                val monthListState = rememberLazyListState()
-                LaunchedEffect(Unit) { monthListState.scrollToItem(uiState.month - 1) }
-
-                LazyRow(
-                    state = monthListState,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(start = 5.dp, end = 5.dp),
-                    horizontalArrangement = Arrangement.spacedBy(23.dp)
-                ) {
-                    itemsIndexed(MONTHS_ABBREVIATION) { index, shortName ->
-                        val monthNumber = index + 1
-                        val selected = monthNumber == uiState.month
-
-                        Box(
-                            modifier = Modifier
-                                .size(width = 60.dp, height = 30.dp)
-                                .shadow(
-                                    elevation = 0.3.dp,
-                                    shape = RoundedCornerShape(5.dp),
-                                    clip = false
-                                )
-                                .clip(RoundedCornerShape(5.dp))
-                                .background(
-                                    if (selected) MaterialTheme.colorScheme.primary
-                                    else MaterialTheme.colorScheme.surfaceContainer
-                                )
-                                .border(
-                                    width = 0.5.dp,
-                                    color = MaterialTheme.colorScheme.outline,
-                                    shape = RoundedCornerShape(5.dp)
-                                )
-                                .clickable { viewModel.selectMonth(monthNumber) },
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Text(
-                                text = shortName,
-                                style = MaterialTheme.typography.bodySmall,
-                                color = if (selected) MaterialTheme.colorScheme.onPrimary
-                                else MaterialTheme.colorScheme.onBackground
-                            )
-                        }
-                    }
-                }
-
-                Spacer(modifier = Modifier.height(8.dp))
-            }
-        }
-
-        Spacer(modifier = Modifier.height(20.dp))
-
-        Surface(
-            modifier = Modifier.fillMaxWidth(),
-            shape = RoundedCornerShape(topStart = 30.dp, topEnd = 30.dp),
-            color = MaterialTheme.colorScheme.surface
-        ) {
-            Box(modifier = Modifier.fillMaxSize()) {
-                Box(
-                    modifier = Modifier
-                        .align(Alignment.TopCenter)
-                        .padding(top = 20.dp)
-                        .width(67.dp)
-                        .height(2.dp)
-                        .clip(RoundedCornerShape(2.dp))
-                        .background(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f))
-                )
-
-                val appointments = uiState.appointments
-                val isLoading = uiState.isLoading
-
+            Box(modifier = Modifier
+                .fillMaxWidth()
+                .fillMaxHeight(0.96f)) {
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(start = 15.dp)
+                        .navigationBarsPadding()
+                        .verticalScroll(rememberScrollState()),
+                    horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Spacer(modifier = Modifier.height(70.dp))
+                    Spacer(modifier = Modifier.height(20.dp))
+
                     if (appointments.isNotEmpty()) {
                         Text(
                             text = "Seus horários:",
                             style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.onBackground
+                            color = MaterialTheme.colorScheme.onBackground,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(start = 15.dp)
                         )
+                        Spacer(modifier = Modifier.height(10.dp))
                     }
-                }
 
-                Column(
-                    modifier = Modifier
-                        .align(Alignment.Center)
-                        .navigationBarsPadding(),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
                     when {
                         isLoading -> {
                             Spacer(modifier = Modifier.height(50.dp))
@@ -294,43 +155,173 @@ fun CalendarScreen(
                                 modifier = Modifier.size(60.dp),
                                 alpha = 0.7f
                             )
-
                             Spacer(modifier = Modifier.height(30.dp))
-
                             Text(
                                 text = "Nenhum agendamento marcado",
                                 style = MaterialTheme.typography.titleSmall,
                                 color = MaterialTheme.colorScheme.onBackground
                             )
-
                             Spacer(modifier = Modifier.height(12.dp))
-
                             Text(
                                 text = "Agende novos serviços para vê-los aqui",
                                 style = MaterialTheme.typography.bodySmall,
                                 color = MaterialTheme.colorScheme.onBackground
                             )
-
                             Spacer(modifier = Modifier.height(30.dp))
                         }
 
                         else -> {
-                            appointments.forEachIndexed { index, appointment ->
-                                AppointmentItem(
-                                    appointment = appointment,
-                                    isDarkTheme = isDarkTheme
-                                )
+                            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                                appointments.forEachIndexed { index, appointment ->
+                                    AppointmentItem(
+                                        appointment = appointment,
+                                        isDarkTheme = isDarkTheme
+                                    )
 
-                                if (index < appointments.lastIndex) {
-                                    HorizontalDivider(
-                                        modifier = Modifier.fillMaxWidth(0.9f),
-                                        thickness = 1.dp,
-                                        color = MaterialTheme.colorScheme.outline
+                                    if (index < appointments.lastIndex) {
+                                        HorizontalDivider(
+                                            modifier = Modifier.fillMaxWidth(0.9f),
+                                            thickness = 1.dp,
+                                            color = MaterialTheme.colorScheme.outline
+                                        )
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    ) { paddingValues ->
+        Column(
+            modifier = modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.background)
+                .padding(paddingValues)
+                .statusBarsPadding()
+        ) {
+            Surface(
+                modifier = Modifier.fillMaxWidth(),
+                color = MaterialTheme.colorScheme.surface
+            ) {
+                Column(modifier = Modifier.padding(top = 15.dp, start = 5.dp, end = 5.dp)) {
+                    Text(
+                        text = monthTitle,
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = MaterialTheme.colorScheme.onBackground,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(start = 8.dp),
+                        textAlign = TextAlign.Start
+                    )
+
+                    Spacer(modifier = Modifier.height(20.dp))
+
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        WEEK.forEach { wd ->
+                            Text(
+                                text = wd,
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.8f),
+                                modifier = Modifier.weight(1f),
+                                textAlign = TextAlign.Center
+                            )
+                        }
+                    }
+
+                    Spacer(modifier = Modifier.height(20.dp))
+
+                    LazyVerticalGrid(
+                        columns = GridCells.Fixed(7),
+                        verticalArrangement = Arrangement.spacedBy(10.dp),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(235.dp)
+                    ) {
+                        items(calendarDays) { day ->
+                            val isToday = day.date == LocalDate.now()
+                            val color = if (day.inMonth) MaterialTheme.colorScheme.onBackground
+                            else MaterialTheme.colorScheme.onBackground.copy(alpha = 0.5f)
+
+                            Box(modifier = Modifier.size(28.dp), contentAlignment = Alignment.Center) {
+                                if (isToday) {
+                                    Box(
+                                        modifier = Modifier
+                                            .size(28.dp)
+                                            .background(
+                                                color = MaterialTheme.colorScheme.outlineVariant,
+                                                shape = RoundedCornerShape(50)
+                                            ),
+                                        contentAlignment = Alignment.Center
+                                    ) {
+                                        Text(
+                                            text = day.date.dayOfMonth.toString(),
+                                            style = MaterialTheme.typography.bodySmall,
+                                            color = color,
+                                            textAlign = TextAlign.Center
+                                        )
+                                    }
+                                } else {
+                                    Text(
+                                        text = day.date.dayOfMonth.toString(),
+                                        style = MaterialTheme.typography.bodySmall,
+                                        color = color,
+                                        textAlign = TextAlign.Center
                                     )
                                 }
                             }
                         }
                     }
+
+                    val monthListState = rememberLazyListState()
+                    LaunchedEffect(uiState.month) { monthListState.animateScrollToItem(uiState.month - 1) }
+
+                    LazyRow(
+                        state = monthListState,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(start = 5.dp, end = 5.dp),
+                        horizontalArrangement = Arrangement.spacedBy(23.dp)
+                    ) {
+                        itemsIndexed(MONTHS_ABBREVIATION) { index, shortName ->
+                            val monthNumber = index + 1
+                            val selected = monthNumber == uiState.month
+
+                            Box(
+                                modifier = Modifier
+                                    .size(width = 60.dp, height = 30.dp)
+                                    .shadow(
+                                        elevation = 0.3.dp,
+                                        shape = RoundedCornerShape(5.dp),
+                                        clip = false
+                                    )
+                                    .clip(RoundedCornerShape(5.dp))
+                                    .background(
+                                        if (selected) MaterialTheme.colorScheme.primary
+                                        else MaterialTheme.colorScheme.surfaceContainer
+                                    )
+                                    .border(
+                                        width = 0.5.dp,
+                                        color = MaterialTheme.colorScheme.outline,
+                                        shape = RoundedCornerShape(5.dp)
+                                    )
+                                    .clickable { viewModel.selectMonth(monthNumber) },
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Text(
+                                    text = shortName,
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = if (selected) MaterialTheme.colorScheme.onPrimary
+                                    else MaterialTheme.colorScheme.onBackground
+                                )
+                            }
+                        }
+                    }
+
+                    Spacer(modifier = Modifier.height(8.dp))
                 }
             }
         }
