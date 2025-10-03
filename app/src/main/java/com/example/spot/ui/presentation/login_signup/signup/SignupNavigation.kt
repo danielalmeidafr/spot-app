@@ -12,7 +12,7 @@ fun NavGraphBuilder.signupScreen(
 ) {
     composable<SignupDestination> {
         SignupScreen(
-            onNavigateToLogin = { onNavigateToLogin() }
+            onNavigateToLogin = { onNavigateToLogin() },
         )
     }
 }

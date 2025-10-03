@@ -1,7 +1,9 @@
 package com.example.spot.ui.presentation.login_signup.components
 
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -20,9 +22,9 @@ fun PrimaryButton(
     Button(
         onClick = onClick,
         modifier = modifier
-            .width(260.dp)
-            .height(39.dp),
-        shape = RoundedCornerShape(15.dp),
+            .fillMaxWidth(0.85f)
+            .height(45.dp),
+        shape = CircleShape,
         colors = ButtonDefaults.buttonColors(
             containerColor = MaterialTheme.colorScheme.primary,
             contentColor = MaterialTheme.colorScheme.onPrimary

@@ -12,7 +12,8 @@ fun NavGraphBuilder.loginScreen(
 ) {
     composable<LoginDestination> {
         LoginScreen(
-            onNavigateToSignup = { onNavigateToSignup() }
+            onNavigateToSignup = { onNavigateToSignup() },
+            onNavigateToWelcome = { }
         )
     }
 }

@@ -1,6 +1,7 @@
 package com.example.spot.ui.presentation.login_signup.components
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -21,6 +22,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -61,8 +63,13 @@ fun CustomTextField(
         modifier = modifier
             .fillMaxWidth(0.9f)
             .height(50.dp)
+            .border(
+                width = 0.2.dp,
+                color = MaterialTheme.colorScheme.outline,
+                shape = RoundedCornerShape(8.dp)
+            )
             .shadow(
-                elevation = 0.2.dp,
+                elevation = 0.5.dp,
                 shape = RoundedCornerShape(15),
                 clip = false
             ),
@@ -70,9 +77,9 @@ fun CustomTextField(
         colors = OutlinedTextFieldDefaults.colors(
             unfocusedContainerColor = MaterialTheme.colorScheme.surface,
             focusedContainerColor = MaterialTheme.colorScheme.surface,
-            unfocusedBorderColor = MaterialTheme.colorScheme.outline,
-            focusedBorderColor = MaterialTheme.colorScheme.outline,
-            cursorColor = MaterialTheme.colorScheme.primary
+            unfocusedBorderColor = Color.Transparent,
+            focusedBorderColor = Color.Transparent,
+            cursorColor = MaterialTheme.colorScheme.primary,
         ),
         visualTransformation = if (isPassword && !passwordVisible) PasswordVisualTransformation() else VisualTransformation.None,
         trailingIcon = {

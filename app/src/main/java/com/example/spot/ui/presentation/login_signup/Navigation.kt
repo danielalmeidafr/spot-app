@@ -15,7 +15,7 @@ fun Navigation(modifier: Modifier = Modifier) {
 
     val navController = rememberNavController()
 
-    NavHost (
+    NavHost(
         navController = navController,
         startDestination = LoginDestination,
         modifier = Modifier.fillMaxSize()
