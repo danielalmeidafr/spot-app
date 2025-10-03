@@ -1,0 +1,89 @@
+package com.example.spot.ui.presentation.main_screen.profile.components
+
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.LinearProgressIndicator
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.unit.dp
+
+@Composable
+fun ProfileProgressBar(
+    currentVisits: Int,
+    goalVisits: Int,
+    rewardText: String,
+) {
+    val progress = currentVisits.toFloat() / goalVisits.toFloat()
+
+    val remainingVisits = goalVisits - currentVisits
+
+    val incentiveMessage = buildAnnotatedString {
+        append("Falta")
+        append(if (remainingVisits == 1) " $remainingVisits " else "m $remainingVisits ")
+        append("agendamento")
+        append(if (remainingVisits == 1) " " else "s ")
+        append("para você ganhar ")
+        withStyle(style = SpanStyle(fontWeight = FontWeight.SemiBold)) {
+            append(rewardText)
+        }
+        append("!")
+    }
+
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(12.dp))
+            .padding(16.dp)
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = "SEU PRÓXIMO BENEFÍCIO:",
+                style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.Bold),
+                color = MaterialTheme.colorScheme.onBackground
+            )
+            Text(
+                text = "$currentVisits de $goalVisits",
+                style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.SemiBold),
+                color = MaterialTheme.colorScheme.onBackground
+            )
+        }
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        LinearProgressIndicator(
+            progress = { progress },
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(6.dp)
+                .clip(RoundedCornerShape(50)),
+            color = MaterialTheme.colorScheme.primary,
+            trackColor = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.3f)
+        )
+
+        Spacer(modifier = Modifier.height(10.dp))
+
+        Text(
+            text = incentiveMessage,
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onBackground
+        )
+    }
+}
