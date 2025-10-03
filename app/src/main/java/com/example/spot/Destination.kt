@@ -38,9 +38,9 @@ enum class Destination(
     PROFILE(
         "profile",
         "Perfil",
-        R.drawable.account_light,
-        R.drawable.account_dark,
-        R.drawable.account_light_filled,
-        R.drawable.account_dark_filled
+        R.drawable.profile_light,
+        R.drawable.profile_dark,
+        R.drawable.profile_filled_light,
+        R.drawable.profile_filled_dark
     );
 }

@@ -171,7 +171,7 @@ fun AppNavHost(
                     Destination.HOME -> HomeScreen(contentPadding = contentPadding)
                     Destination.SAVE -> SaveScreen()
                     Destination.CALENDAR -> CalendarScreen()
-                    Destination.PROFILE -> ProfileScreen()
+                    Destination.PROFILE -> ProfileScreen(contentPadding = contentPadding)
                 }
             }
         }
