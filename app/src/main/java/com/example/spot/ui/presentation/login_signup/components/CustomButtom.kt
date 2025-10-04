@@ -55,10 +55,10 @@ fun CustomButton(
             Image(
                 painter = painterResource(id = imagePainter),
                 contentDescription = text,
-                modifier = Modifier.size(15.dp)
+                modifier = Modifier.size(20.dp)
             )
 
-            Spacer(modifier = Modifier.width(8.dp))
+            Spacer(modifier = Modifier.width(10.dp))
 
             Text(
                 text = text,
