@@ -8,11 +8,11 @@ import kotlinx.serialization.Serializable
 object SignupDestination
 
 fun NavGraphBuilder.signupScreen(
-    onNavigateToLogin: () -> Unit
+    onBack: () -> Unit
 ) {
     composable<SignupDestination> {
         SignupScreen(
-            onNavigateToLogin = { onNavigateToLogin() },
+            onBack = onBack
         )
     }
 }

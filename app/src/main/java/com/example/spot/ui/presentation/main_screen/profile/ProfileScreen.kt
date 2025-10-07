@@ -42,10 +42,11 @@ import com.student.R
 fun ProfileScreen(
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(0.dp),
+    onNavigateToLogin: () -> Unit
     ) {
     val isLogged: Boolean = true
 
-    if (!isLogged) {
+    if (isLogged) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -56,13 +57,15 @@ fun ProfileScreen(
             verticalArrangement = Arrangement.Center
         ) {
             Image(
-                painter = painterResource(R.drawable.user_image),
+                painter = painterResource(if (isSystemInDarkTheme()){
+                    R.drawable.logo_dark
+                } else{
+                    R.drawable.logo_light
+                }),
                 contentDescription = "Profile image",
                 modifier = Modifier
-                    .size(130.dp)
+                    .size(150.dp)
             )
-
-            Spacer(modifier = Modifier.height(30.dp))
 
             Text(
                 "Bem-vindo ao Spot!",
@@ -89,7 +92,7 @@ fun ProfileScreen(
             Spacer(modifier = Modifier.height(30.dp))
 
             Button(
-                onClick = {},
+                onClick = onNavigateToLogin,
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(40.dp),

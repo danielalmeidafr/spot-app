@@ -45,7 +45,7 @@ import com.student.R
 
 @Composable
 fun SignupScreen(
-    onNavigateToLogin: () -> Unit,
+    onBack: () -> Unit
 ) {
     var email by remember {
         mutableStateOf("")
@@ -62,6 +62,7 @@ fun SignupScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
+            .clearFocusOnTap()
     ) {
         Column(
             modifier = Modifier
@@ -77,7 +78,7 @@ fun SignupScreen(
                 Spacer(modifier = Modifier.height(50.dp))
 
                 Surface(
-                    onClick = onNavigateToLogin,
+                    onClick = onBack,
                     modifier = Modifier.size(55.dp),
                     shape = CircleShape,
                     color = MaterialTheme.colorScheme.background
@@ -115,8 +116,7 @@ fun SignupScreen(
                     .fillMaxSize()
                     .clip(RoundedCornerShape(topStart = 25.dp, topEnd = 25.dp))
                     .background(MaterialTheme.colorScheme.background)
-                    .navigationBarsPadding()
-                    .clearFocusOnTap(),
+                    .navigationBarsPadding(),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Top
             ) {

@@ -18,15 +18,14 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.BottomSheetScaffold
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
@@ -116,60 +115,74 @@ fun CalendarScreen(
             Box(modifier = Modifier
                 .fillMaxWidth()
                 .fillMaxHeight(0.96f)) {
-                Column(
+
+                LazyColumn(
                     modifier = Modifier
                         .fillMaxSize()
-                        .navigationBarsPadding()
-                        .verticalScroll(rememberScrollState()),
+                        .navigationBarsPadding(),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Spacer(modifier = Modifier.height(20.dp))
+                    item {
+                        Spacer(modifier = Modifier.height(20.dp))
+                    }
 
                     if (appointments.isNotEmpty()) {
-                        Text(
-                            text = "Seus horários:",
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.onBackground,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(start = 15.dp)
-                        )
-                        Spacer(modifier = Modifier.height(10.dp))
+                        item {
+                            Text(
+                                text = "Seus horários:",
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = MaterialTheme.colorScheme.onBackground,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(start = 15.dp)
+                            )
+                            Spacer(modifier = Modifier.height(10.dp))
+                        }
                     }
 
                     when {
                         isLoading -> {
-                            Spacer(modifier = Modifier.height(50.dp))
+                            item {
+                                Spacer(modifier = Modifier.height(50.dp))
+                                Text(
+                                    text = "Carregando Agendamentos...",
+                                    style = MaterialTheme.typography.titleSmall,
+                                    color = MaterialTheme.colorScheme.primary
+                                )
+                                Spacer(modifier = Modifier.height(30.dp))
+                            }
                         }
 
                         appointments.isEmpty() -> {
-                            val calendarRes =
-                                if (isDarkTheme) R.drawable.calendar_dark else R.drawable.calendar_light
+                            item {
+                                val calendarRes =
+                                    if (isDarkTheme) R.drawable.calendar_dark else R.drawable.calendar_light
 
-                            Image(
-                                painter = painterResource(id = calendarRes),
-                                contentDescription = "Calendar Image",
-                                modifier = Modifier.size(60.dp),
-                                alpha = 0.7f
-                            )
-                            Spacer(modifier = Modifier.height(30.dp))
-                            Text(
-                                text = "Nenhum agendamento marcado",
-                                style = MaterialTheme.typography.titleSmall,
-                                color = MaterialTheme.colorScheme.onBackground
-                            )
-                            Spacer(modifier = Modifier.height(12.dp))
-                            Text(
-                                text = "Agende novos serviços para vê-los aqui",
-                                style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.onBackground
-                            )
-                            Spacer(modifier = Modifier.height(30.dp))
+                                Image(
+                                    painter = painterResource(id = calendarRes),
+                                    contentDescription = "Calendar Image",
+                                    modifier = Modifier.size(60.dp),
+                                    alpha = 0.7f
+                                )
+                                Spacer(modifier = Modifier.height(30.dp))
+                                Text(
+                                    text = "Nenhum agendamento marcado",
+                                    style = MaterialTheme.typography.titleSmall,
+                                    color = MaterialTheme.colorScheme.onBackground
+                                )
+                                Spacer(modifier = Modifier.height(12.dp))
+                                Text(
+                                    text = "Agende novos serviços para vê-los aqui",
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = MaterialTheme.colorScheme.onBackground
+                                )
+                                Spacer(modifier = Modifier.height(30.dp))
+                            }
                         }
 
                         else -> {
-                            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                                appointments.forEachIndexed { index, appointment ->
+                            itemsIndexed(appointments) { index, appointment ->
+                                Column(horizontalAlignment = Alignment.CenterHorizontally) {
                                     AppointmentItem(
                                         appointment = appointment,
                                         isDarkTheme = isDarkTheme
