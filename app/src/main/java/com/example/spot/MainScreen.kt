@@ -253,8 +253,8 @@ private val slideInTransition: AnimatedContentTransitionScope<NavBackStackEntry>
 
         slideIntoContainer(
             towards = direction,
-            animationSpec = tween(500)
-        ) + fadeIn(tween(500))
+            animationSpec = tween(400)
+        ) + fadeIn(tween(400))
     } else {
         null
     }
@@ -269,8 +269,8 @@ private val slideOutTransition: AnimatedContentTransitionScope<NavBackStackEntry
 
         slideOutOfContainer(
             towards = direction,
-            animationSpec = tween(500)
-        ) + fadeOut(tween(500))
+            animationSpec = tween(400)
+        ) + fadeOut(tween(400))
     } else {
         null
     }

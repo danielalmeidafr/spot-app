@@ -34,6 +34,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -179,7 +180,7 @@ fun SignupScreen(
                                     append("termos de privacidade")
                                 }
                             },
-                            style = MaterialTheme.typography.labelSmall,
+                            style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.Bold),
                             color = MaterialTheme.colorScheme.onBackground
                         )
                     }
@@ -209,7 +210,7 @@ fun SignupScreen(
 
                     Text(
                         "ou",
-                        style = MaterialTheme.typography.labelSmall.copy(fontSize = 12.sp),
+                        style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.Bold, fontSize = 12.sp),
                         color = MaterialTheme.colorScheme.onBackground,
                         modifier = Modifier.padding(horizontal = 20.dp)
                     )

@@ -50,7 +50,7 @@ fun CustomTextField(
         placeholder = {
             Text(
                 placeholderText,
-                style = MaterialTheme.typography.labelSmall,
+                style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.Bold),
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         },
