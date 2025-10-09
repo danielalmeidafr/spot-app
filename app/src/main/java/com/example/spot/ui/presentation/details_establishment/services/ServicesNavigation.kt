@@ -10,6 +10,6 @@ object ServicesDestination
 fun NavGraphBuilder.servicesScreen(
 ) {
     composable<ServicesDestination> {
-        Services()
+        ServicesScreen()
     }
 }

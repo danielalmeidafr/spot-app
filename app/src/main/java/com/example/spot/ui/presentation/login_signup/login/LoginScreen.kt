@@ -60,7 +60,6 @@ fun LoginScreen(
         modifier = Modifier
             .fillMaxSize()
             .clearFocusOnTap()
-
     ) {
         Column(
             modifier = Modifier

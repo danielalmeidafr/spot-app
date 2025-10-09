@@ -45,6 +45,7 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.spot.ui.presentation.main_screen.calendar.components.AppointmentItem
 import com.student.R
 import java.time.LocalDate
@@ -52,7 +53,18 @@ import java.time.YearMonth
 
 private val WEEK = listOf("D", "S", "T", "Q", "Q", "S", "S")
 private val MONTHS = listOf(
-    "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
+    "Janeiro",
+    "Fevereiro",
+    "Março",
+    "Abril",
+    "Maio",
+    "Junho",
+    "Julho",
+    "Agosto",
+    "Setembro",
+    "Outubro",
+    "Novembro",
+    "Dezembro"
 )
 private val MONTHS_ABBREVIATION = listOf(
     "Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"
@@ -87,7 +99,7 @@ private fun generateCalendarDays(year: Int, month: Int): List<CalendarDay> {
 @Composable
 fun CalendarScreen(
     modifier: Modifier = Modifier,
-    viewModel: CalendarViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
+    viewModel: CalendarViewModel = viewModel()
 ) {
     val isDarkTheme = isSystemInDarkTheme()
     val uiState by viewModel.uiState.collectAsState()
