@@ -55,7 +55,7 @@ fun EstablishmentCard(
     distance: String,
     paymentsMethods: List<PaymentsMethods>,
     modifier: Modifier = Modifier,
-    onNavigateToDetails: () -> Unit = {}
+    onNavigateToServices: () -> Unit
 ) {
     val context = LocalContext.current
     var isExpanded by remember { mutableStateOf(false) }
@@ -83,7 +83,7 @@ fun EstablishmentCard(
         ),
         onClick = {
             if (isExpanded) {
-                Toast.makeText(context, "vai para tela de serviços", Toast.LENGTH_SHORT).show()
+                onNavigateToServices()
             } else {
                 isExpanded = true
             }

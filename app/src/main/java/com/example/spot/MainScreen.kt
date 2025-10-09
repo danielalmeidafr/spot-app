@@ -51,12 +51,15 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.spot.ui.presentation.details_establishment.services.ServicesDestination
+import com.example.spot.ui.presentation.details_establishment.services.servicesScreen
 import com.example.spot.ui.presentation.login_signup.login.LoginDestination
 import com.example.spot.ui.presentation.login_signup.login.loginScreen
 import com.example.spot.ui.presentation.login_signup.signup.SignupDestination
 import com.example.spot.ui.presentation.login_signup.signup.signupScreen
 import com.example.spot.ui.presentation.main_screen.calendar.CalendarScreen
 import com.example.spot.ui.presentation.main_screen.home.HomeScreen
+import com.example.spot.ui.presentation.main_screen.home.homeScreen
 import com.example.spot.ui.presentation.main_screen.profile.ProfileScreen
 import com.example.spot.ui.presentation.main_screen.profile.profileScreen
 import com.example.spot.ui.presentation.main_screen.save.SaveScreen
@@ -79,15 +82,28 @@ fun MainScreen(modifier: Modifier = Modifier) {
         }
     }
 
-    val shouldShowBottomBar = currentRoute != null && Destination.entries.any { it.route == currentRoute }
+    val onNavigateToServices: () -> Unit = {
+        navController.navigate(ServicesDestination) {
+            launchSingleTop = true
+        }
+    }
+
+    val shouldShowBottomBar =
+        currentRoute != null && Destination.entries.any { it.route == currentRoute }
 
     Scaffold(
         modifier = modifier,
         bottomBar = {
             AnimatedVisibility(
                 visible = shouldShowBottomBar,
-                enter = slideInVertically(initialOffsetY = { it }, animationSpec = tween(400)) + fadeIn(animationSpec = tween(400)),
-                exit = slideOutVertically(targetOffsetY = { it }, animationSpec = tween(600)) + fadeOut(animationSpec = tween(600))
+                enter = slideInVertically(
+                    initialOffsetY = { it },
+                    animationSpec = tween(400)
+                ) + fadeIn(animationSpec = tween(400)),
+                exit = slideOutVertically(
+                    targetOffsetY = { it },
+                    animationSpec = tween(600)
+                ) + fadeOut(animationSpec = tween(600))
             ) {
                 Box(
                     modifier = Modifier.fillMaxWidth()
@@ -191,7 +207,8 @@ fun MainScreen(modifier: Modifier = Modifier) {
             navController,
             startDestination,
             contentPadding = contentPadding,
-            onNavigateToLogin = onNavigateToLogin
+            onNavigateToLogin = onNavigateToLogin,
+            onNavigateToServices = onNavigateToServices
         )
 
         BackHandler(enabled = shouldShowBottomBar) {
@@ -244,37 +261,41 @@ private fun getDestinationIndex(route: String?): Int {
     return Destination.entries.indexOfFirst { it.route == route }
 }
 
-private val slideInTransition: AnimatedContentTransitionScope<NavBackStackEntry>.() -> EnterTransition? = {
-    val targetIndex = getDestinationIndex(targetState.destination.route)
-    val initialIndex = getDestinationIndex(initialState.destination.route)
+private val slideInTransition: AnimatedContentTransitionScope<NavBackStackEntry>.() -> EnterTransition? =
+    {
+        val targetIndex = getDestinationIndex(targetState.destination.route)
+        val initialIndex = getDestinationIndex(initialState.destination.route)
 
-    if (targetIndex != -1 && initialIndex != -1) {
-        val direction = if (targetIndex > initialIndex) SlideDirection.Left else SlideDirection.Right
+        if (targetIndex != -1 && initialIndex != -1) {
+            val direction =
+                if (targetIndex > initialIndex) SlideDirection.Left else SlideDirection.Right
 
-        slideIntoContainer(
-            towards = direction,
-            animationSpec = tween(400)
-        ) + fadeIn(tween(400))
-    } else {
-        null
+            slideIntoContainer(
+                towards = direction,
+                animationSpec = tween(400)
+            ) + fadeIn(tween(400))
+        } else {
+            null
+        }
     }
-}
 
-private val slideOutTransition: AnimatedContentTransitionScope<NavBackStackEntry>.() -> ExitTransition? = {
-    val targetIndex = getDestinationIndex(targetState.destination.route)
-    val initialIndex = getDestinationIndex(initialState.destination.route)
+private val slideOutTransition: AnimatedContentTransitionScope<NavBackStackEntry>.() -> ExitTransition? =
+    {
+        val targetIndex = getDestinationIndex(targetState.destination.route)
+        val initialIndex = getDestinationIndex(initialState.destination.route)
 
-    if (targetIndex != -1 && initialIndex != -1) {
-        val direction = if (targetIndex > initialIndex) SlideDirection.Left else SlideDirection.Right
+        if (targetIndex != -1 && initialIndex != -1) {
+            val direction =
+                if (targetIndex > initialIndex) SlideDirection.Left else SlideDirection.Right
 
-        slideOutOfContainer(
-            towards = direction,
-            animationSpec = tween(400)
-        ) + fadeOut(tween(400))
-    } else {
-        null
+            slideOutOfContainer(
+                towards = direction,
+                animationSpec = tween(400)
+            ) + fadeOut(tween(400))
+        } else {
+            null
+        }
     }
-}
 
 
 @Composable
@@ -283,7 +304,8 @@ fun AppNavHost(
     startDestination: Destination,
     contentPadding: PaddingValues,
     modifier: Modifier = Modifier,
-    onNavigateToLogin: () -> Unit
+    onNavigateToLogin: () -> Unit,
+    onNavigateToServices: () -> Unit
 ) {
     NavHost(
         navController,
@@ -299,7 +321,11 @@ fun AppNavHost(
                 popExitTransition = slideOutTransition
             ) {
                 when (destination) {
-                    Destination.HOME -> HomeScreen(contentPadding = contentPadding)
+                    Destination.HOME -> HomeScreen(
+                        contentPadding = contentPadding,
+                        onNavigateToServices = onNavigateToServices
+                    )
+
                     Destination.SAVE -> SaveScreen()
                     Destination.CALENDAR -> CalendarScreen()
                     Destination.PROFILE -> ProfileScreen(
@@ -309,6 +335,10 @@ fun AppNavHost(
                 }
             }
         }
+
+        homeScreen(
+            onNavigateToServices = { navController.navigate(ServicesDestination) }
+        )
 
         loginScreen(
             onNavigateToSignup = { navController.navigate(SignupDestination) },
@@ -322,5 +352,7 @@ fun AppNavHost(
         profileScreen(
             onNavigateToLogin = { navController.navigate(LoginDestination) }
         )
+
+        servicesScreen()
     }
 }

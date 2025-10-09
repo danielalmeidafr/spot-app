@@ -44,6 +44,7 @@ data class EstablishmentData(
 fun HomeScreen(
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(0.dp),
+    onNavigateToServices: () -> Unit
 ) {
     var query by remember { mutableStateOf("") }
 
@@ -153,6 +154,7 @@ fun HomeScreen(
                     neighborhood = establishment.neighborhood,
                     distance = establishment.distance,
                     paymentsMethods = establishment.paymentsMethods,
+                    onNavigateToServices = onNavigateToServices
                 )
             }
         }
