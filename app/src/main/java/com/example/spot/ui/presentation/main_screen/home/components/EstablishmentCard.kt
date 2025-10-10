@@ -227,7 +227,7 @@ fun EstablishmentCard(
                             contentDescription = "Arrow image",
                             modifier = Modifier
                                 .size(15.dp)
-                                .offset(x = 15.dp)
+                                .offset(x = 10.dp)
                         )
                     }
                 }
@@ -296,7 +296,7 @@ fun EstablishmentCard(
                                 contentDescription = "Arrow image",
                                 modifier = Modifier
                                     .size(15.dp)
-                                    .offset(x = 15.dp)
+                                    .offset(x = 10.dp)
                             )
                         }
                     }
