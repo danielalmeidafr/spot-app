@@ -80,7 +80,8 @@ fun ServiceItem(
                             fontWeight = FontWeight.ExtraBold,
                             fontSize = 12.sp
                         ),
-                        color = MaterialTheme.colorScheme.onBackground.copy(0.9f)
+                        color = MaterialTheme.colorScheme.onBackground,
+                        maxLines = if (isExpanded) Int.MAX_VALUE else 1
                     )
                 }
             }
@@ -109,9 +110,9 @@ fun ServiceItem(
                 Text(
                     text = "···",
                     modifier = Modifier
-                        .padding(top = 2.dp)
+                        .padding(top = 5.dp)
                         .clip(RoundedCornerShape(4.dp))
-                        .background(MaterialTheme.colorScheme.surfaceContainer)
+                        .background(MaterialTheme.colorScheme.surface)
                         .padding(horizontal = 6.dp, vertical = 1.dp)
                         .clickable { isExpanded = true },
                     style = MaterialTheme.typography.bodySmall.copy(

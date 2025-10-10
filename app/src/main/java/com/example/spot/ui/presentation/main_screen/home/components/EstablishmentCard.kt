@@ -1,6 +1,5 @@
 package com.example.spot.ui.presentation.main_screen.home.components
 
-import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.animateDpAsState
@@ -20,6 +19,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -38,7 +38,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -57,16 +56,15 @@ fun EstablishmentCard(
     modifier: Modifier = Modifier,
     onNavigateToServices: () -> Unit
 ) {
-    val context = LocalContext.current
     var isExpanded by remember { mutableStateOf(false) }
 
     val cardHeight by animateDpAsState(
-        targetValue = if (isExpanded) 300.dp else 210.dp,
+        targetValue = if (isExpanded) 320.dp else 250.dp,
         animationSpec = tween(durationMillis = 300), label = "cardHeight"
     )
 
     val imageHeight by animateDpAsState(
-        targetValue = if (isExpanded) 160.dp else 110.dp,
+        targetValue = if (isExpanded) 180.dp else 150.dp,
         animationSpec = tween(durationMillis = 300), label = "imageHeight"
     )
 
@@ -112,7 +110,7 @@ fun EstablishmentCard(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(15.dp)
+                .padding(top = 15.dp, start = 15.dp, end = 15.dp, bottom = 10.dp)
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -227,7 +225,9 @@ fun EstablishmentCard(
                         Image(
                             painter = painterResource(arrowRes),
                             contentDescription = "Arrow image",
-                            modifier = Modifier.size(15.dp)
+                            modifier = Modifier
+                                .size(15.dp)
+                                .offset(x = 15.dp)
                         )
                     }
                 }
@@ -294,7 +294,9 @@ fun EstablishmentCard(
                             Image(
                                 painter = painterResource(arrowRes),
                                 contentDescription = "Arrow image",
-                                modifier = Modifier.size(15.dp)
+                                modifier = Modifier
+                                    .size(15.dp)
+                                    .offset(x = 15.dp)
                             )
                         }
                     }
