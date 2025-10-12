@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -56,7 +57,7 @@ fun ServiceItem(
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(
                     text = serviceItem.title,
-                    style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Medium),
+                    style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.SemiBold, fontSize = 12.sp),
                     color = MaterialTheme.colorScheme.onBackground
                 )
 
@@ -86,7 +87,7 @@ fun ServiceItem(
                 }
             }
 
-            Spacer(modifier = Modifier.height(1.dp))
+            Spacer(modifier = Modifier.height(2.dp))
 
             val textModifier = if (hasVisualOverflow || isExpanded) {
                 Modifier.clickable { isExpanded = !isExpanded }
@@ -97,7 +98,7 @@ fun ServiceItem(
             Text(
                 text = serviceItem.description,
                 modifier = textModifier,
-                style = MaterialTheme.typography.bodySmall,
+                style = MaterialTheme.typography.bodySmall.copy(fontSize = 10.sp),
                 color = MaterialTheme.colorScheme.onBackground.copy(0.7f),
                 maxLines = if (isExpanded) Int.MAX_VALUE else 2,
                 overflow = TextOverflow.Ellipsis,
@@ -133,9 +134,10 @@ fun ServiceItem(
             Button(
                 onClick = {},
                 modifier = Modifier
-                    .width(92.dp)
+                    .width(80.dp)
                     .height(30.dp),
                 shape = RoundedCornerShape(5.dp),
+                contentPadding = PaddingValues(horizontal = 1.dp, vertical = 4.dp),
                 colors = ButtonDefaults.buttonColors(
                     containerColor = MaterialTheme.colorScheme.primary,
                     contentColor = MaterialTheme.colorScheme.onPrimary

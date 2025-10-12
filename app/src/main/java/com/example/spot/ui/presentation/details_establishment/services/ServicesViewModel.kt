@@ -34,13 +34,45 @@ class ServicesViewModel : ViewModel() {
                     services = listOf(
                         ServiceItem(
                             title = "Corte simples",
-                            description = "Corte social na tesoura.",
+                            description = "Corte social na tesoura",
                             price = "35,00"
                         ),
                         ServiceItem(
                             title = "Corte degradê",
-                            description = "Corte com degradê na máquina.",
+                            description = "Corte com degradê na máquina",
                             price = "45,00"
+                        )
+                    )
+                ),
+
+                ServiceCategory(
+                    title = "Processos:",
+                    services = listOf(
+                        ServiceItem(
+                            title = "Progressiva",
+                            description = "Procedimento químico que alisa os fios e tira o friz",
+                            price = "120,00"
+                        ),
+                        ServiceItem(
+                            title = "Luzes",
+                            description = "Processo químico que ilumina mechas do cabelo sei la sei la sei la sei la",
+                            price = "60,00"
+                        )
+                    )
+                ),
+
+                ServiceCategory(
+                    title = "Acabamentos:",
+                    services = listOf(
+                        ServiceItem(
+                            title = "Sobrancelha",
+                            description = "Limpeza e design das sobrancelhas",
+                            price = "10,00"
+                        ),
+                        ServiceItem(
+                            title = "Barba",
+                            description = "Barba completa – alinhamento e finalização",
+                            price = "20,00"
                         )
                     )
                 ),
