@@ -1,4 +1,4 @@
-package com.example.spot.ui.presentation.main_screen.save
+package com.example.spot.ui.presentation.main_screen.favorite
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.dp
 import com.student.R
 
 @Composable
-fun SaveScreen(modifier: Modifier = Modifier) {
+fun FavoriteScreen(modifier: Modifier = Modifier) {
     val isDarkTheme = isSystemInDarkTheme()
 
     Column(
@@ -31,9 +31,9 @@ fun SaveScreen(modifier: Modifier = Modifier) {
     ) {
 
         val saveRes = if (isDarkTheme) {
-            R.drawable.save_dark
+            R.drawable.favorite_dark
         } else {
-            R.drawable.save_light
+            R.drawable.favorite_light
         }
 
         Image(

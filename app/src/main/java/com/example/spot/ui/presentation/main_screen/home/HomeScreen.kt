@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -43,8 +44,6 @@ data class EstablishmentData(
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
-    contentPadding: PaddingValues = PaddingValues(0.dp),
-    onNavigateToServices: () -> Unit
 ) {
     var query by remember { mutableStateOf("") }
 
@@ -59,8 +58,7 @@ fun HomeScreen(
             query = query,
             onQueryChange = { query = it },
             modifier = Modifier
-                .statusBarsPadding()
-                .padding(top = 20.dp, bottom = 5.dp)
+                .padding(top = 20.dp, bottom = 20.dp)
         )
 
         val establishmentList = listOf(
@@ -114,13 +112,10 @@ fun HomeScreen(
         )
 
         LazyColumn(
-            contentPadding = PaddingValues(
-                top = 15.dp,
-                bottom = contentPadding.calculateBottomPadding()
-            ),
             modifier = Modifier
-                .fillMaxSize(),
-            verticalArrangement = Arrangement.spacedBy(20.dp),
+                .fillMaxSize()
+                .navigationBarsPadding(),
+            verticalArrangement = Arrangement.spacedBy(25.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
@@ -137,7 +132,7 @@ fun HomeScreen(
                     modifier = Modifier
                         .fillMaxWidth(0.9f)
                         .background(MaterialTheme.colorScheme.background)
-                        .padding(top = 10.dp, bottom = 5.dp),
+                        .padding(bottom = 10.dp),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onBackground,
                     textAlign = TextAlign.Start
@@ -154,7 +149,7 @@ fun HomeScreen(
                     neighborhood = establishment.neighborhood,
                     distance = establishment.distance,
                     paymentsMethods = establishment.paymentsMethods,
-                    onNavigateToServices = onNavigateToServices
+                    onNavigateToServices = {  }
                 )
             }
         }

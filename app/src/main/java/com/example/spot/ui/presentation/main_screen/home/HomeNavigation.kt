@@ -12,7 +12,7 @@ fun NavGraphBuilder.homeScreen(
 ){
     composable<HomeDestination>{
         HomeScreen(
-            onNavigateToServices = onNavigateToServices
+        //    onNavigateToServices = onNavigateToServices
         )
     }
 }

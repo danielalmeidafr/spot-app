@@ -1,4 +1,4 @@
-package com.example.spot.ui.presentation.main_screen.calendar
+package com.example.spot.ui.presentation.main_screen.schedules
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -23,7 +23,7 @@ data class CalendarUiState(
     val isLoading: Boolean = true
 )
 
-class CalendarViewModel : ViewModel() {
+class ScheduleViewModel : ViewModel() {
     private val _uiState = MutableStateFlow(CalendarUiState())
     val uiState: StateFlow<CalendarUiState> = _uiState
 

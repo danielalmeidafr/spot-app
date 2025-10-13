@@ -40,10 +40,8 @@ import com.student.R
 
 @Composable
 fun ProfileScreen(
-    modifier: Modifier = Modifier,
-    contentPadding: PaddingValues = PaddingValues(0.dp),
-    onNavigateToLogin: () -> Unit
-    ) {
+    modifier: Modifier = Modifier
+) {
     val isLogged: Boolean = true
 
     if (isLogged) {
@@ -57,11 +55,13 @@ fun ProfileScreen(
             verticalArrangement = Arrangement.Center
         ) {
             Image(
-                painter = painterResource(if (isSystemInDarkTheme()){
-                    R.drawable.logo_dark
-                } else{
-                    R.drawable.logo_light
-                }),
+                painter = painterResource(
+                    if (isSystemInDarkTheme()) {
+                        R.drawable.logo_dark
+                    } else {
+                        R.drawable.logo_light
+                    }
+                ),
                 contentDescription = "Profile image",
                 modifier = Modifier
                     .size(150.dp)
@@ -92,7 +92,7 @@ fun ProfileScreen(
             Spacer(modifier = Modifier.height(30.dp))
 
             Button(
-                onClick = onNavigateToLogin,
+                onClick = {  },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(40.dp),
@@ -120,8 +120,7 @@ fun ProfileScreen(
     } else {
         LazyColumn(
             contentPadding = PaddingValues(
-                top = 15.dp,
-                bottom = contentPadding.calculateBottomPadding()
+                top = 15.dp
             ),
             modifier = Modifier
                 .fillMaxSize()
@@ -205,15 +204,15 @@ fun ProfileScreen(
                     horizontalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
                     ProfileCard(
-                        iconLight = R.drawable.calendar_profile_light,
-                        iconDark = R.drawable.calendar_profile_dark,
+                        iconLight = R.drawable.schedule_profile_light,
+                        iconDark = R.drawable.schedule_profile_dark,
                         value = "4",
                         label = "Agendamentos"
                     )
 
                     ProfileCard(
-                        iconLight = R.drawable.save_light,
-                        iconDark = R.drawable.save_dark,
+                        iconLight = R.drawable.favorite_light,
+                        iconDark = R.drawable.favorite_dark,
                         value = "5",
                         label = "Favoritos"
                     )
