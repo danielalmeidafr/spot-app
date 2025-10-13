@@ -45,6 +45,7 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.spot.ui.presentation.main_screen.schedules.components.AppointmentItem
 import com.student.R
 import java.time.LocalDate
@@ -98,7 +99,7 @@ private fun generateCalendarDays(year: Int, month: Int): List<CalendarDay> {
 @Composable
 fun ScheduleScreen(
     modifier: Modifier = Modifier,
-    viewModel: ScheduleViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
+    viewModel: ScheduleViewModel = viewModel()
 ) {
     val isDarkTheme = isSystemInDarkTheme()
     val uiState by viewModel.uiState.collectAsState()
@@ -208,12 +209,12 @@ fun ScheduleScreen(
                 }
             }
         }
-    ) { paddingValues ->
+    ) { innerPadding ->
         Column(
             modifier = modifier
                 .fillMaxSize()
                 .background(MaterialTheme.colorScheme.background)
-                .padding(paddingValues)
+                .padding(innerPadding)
         ) {
             Surface(
                 modifier = Modifier.fillMaxWidth(),
