@@ -130,7 +130,7 @@ fun ProfileScreen(
         ) {
             item {
                 Box(
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
                 ) {
                     Text(
                         "PERFIL",
@@ -202,7 +202,7 @@ fun ProfileScreen(
                 Row(
                     modifier = Modifier
                         .fillMaxWidth(0.95f),
-                    horizontalArrangement = Arrangement.spacedBy(10.dp)
+                    horizontalArrangement = Arrangement.spacedBy(15.dp, Alignment.CenterHorizontally),
                 ) {
                     ProfileCard(
                         iconLight = R.drawable.calendar_profile_light,
