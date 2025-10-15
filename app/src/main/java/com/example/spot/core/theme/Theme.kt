@@ -1,4 +1,4 @@
-package com.example.spot.ui.theme
+package com.example.spot.core.theme
 
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme

@@ -41,11 +41,12 @@ import com.student.R
 @Composable
 fun ProfileScreen(
     modifier: Modifier = Modifier,
+    onNavigateToLogin: () -> Unit,
     innerPadding: PaddingValues = PaddingValues()
 ) {
     val isLogged: Boolean = true
 
-    if (!isLogged) {
+    if (isLogged) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -93,7 +94,7 @@ fun ProfileScreen(
             Spacer(modifier = Modifier.height(30.dp))
 
             Button(
-                onClick = {  },
+                onClick = { onNavigateToLogin() },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(40.dp),

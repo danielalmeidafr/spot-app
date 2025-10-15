@@ -4,7 +4,8 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import com.example.spot.ui.theme.SpotTheme
+import com.example.spot.core.navigation.AppNavHost
+import com.example.spot.core.theme.SpotTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -12,7 +13,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             SpotTheme {
-                MainScreen()
+                AppNavHost()
             }
         }
     }

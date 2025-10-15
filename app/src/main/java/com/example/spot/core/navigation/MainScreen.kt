@@ -1,4 +1,4 @@
-package com.example.spot
+package com.example.spot.core.navigation
 
 import androidx.annotation.DrawableRes
 import androidx.compose.animation.AnimatedVisibility
@@ -40,14 +40,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.spot.ui.presentation.main_screen.favorite.FavoriteScreen
 import com.example.spot.ui.presentation.main_screen.home.HomeScreen
 import com.example.spot.ui.presentation.main_screen.profile.ProfileScreen
 import com.example.spot.ui.presentation.main_screen.schedules.ScheduleScreen
-import com.example.spot.ui.theme.SpotTheme
 import com.student.R
 import kotlinx.coroutines.delay
 
@@ -104,7 +102,11 @@ sealed class ScreenItem(
 }
 
 @Composable
-fun MainScreen(modifier: Modifier = Modifier) {
+fun MainScreen(
+    modifier: Modifier = Modifier,
+    onNavigateToServices: () -> Unit,
+    onNavigateToLogin: () -> Unit
+) {
     val screens = remember {
         listOf(
             ScreenItem.Home,
@@ -247,19 +249,18 @@ fun MainScreen(modifier: Modifier = Modifier) {
         ) { page ->
             val item = screens[page]
             when (item) {
-                ScreenItem.Home -> HomeScreen(innerPadding = innerPadding)
+                ScreenItem.Home -> HomeScreen(
+                    innerPadding = innerPadding,
+                    onNavigateToServices = onNavigateToServices
+                )
+
                 ScreenItem.Favorite -> FavoriteScreen(innerPadding = innerPadding)
                 ScreenItem.Schedules -> ScheduleScreen()
-                ScreenItem.Profile -> ProfileScreen(innerPadding = innerPadding)
+                ScreenItem.Profile -> ProfileScreen(
+                    innerPadding = innerPadding,
+                    onNavigateToLogin = onNavigateToLogin
+                )
             }
         }
-    }
-}
-
-@Preview
-@Composable
-private fun MainScreenPreview() {
-    SpotTheme {
-        MainScreen()
     }
 }

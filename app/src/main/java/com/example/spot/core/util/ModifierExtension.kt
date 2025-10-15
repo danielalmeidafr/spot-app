@@ -1,4 +1,4 @@
-package com.example.spot.ui.util
+package com.example.spot.core.util
 
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.ui.Modifier

@@ -1,4 +1,4 @@
-package com.example.spot.ui.presentation.login_signup.login
+package com.example.spot.ui.presentation.auth.login
 
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable

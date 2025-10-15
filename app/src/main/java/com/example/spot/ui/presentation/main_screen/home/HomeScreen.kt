@@ -7,9 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
@@ -27,7 +25,7 @@ import com.example.spot.ui.presentation.main_screen.home.components.CustomSearch
 import com.example.spot.ui.presentation.main_screen.home.components.EstablishmentCard
 import com.example.spot.ui.presentation.main_screen.home.components.NextScheduleCard
 import com.example.spot.ui.presentation.main_screen.home.components.PaymentsMethods
-import com.example.spot.ui.util.clearFocusOnTap
+import com.example.spot.core.util.clearFocusOnTap
 
 data class EstablishmentData(
     val name: String,
@@ -44,6 +42,7 @@ data class EstablishmentData(
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
+    onNavigateToServices: () -> Unit,
     innerPadding: PaddingValues = PaddingValues()
 ) {
     var query by remember { mutableStateOf("") }
@@ -150,7 +149,7 @@ fun HomeScreen(
                     neighborhood = establishment.neighborhood,
                     distance = establishment.distance,
                     paymentsMethods = establishment.paymentsMethods,
-                    onNavigateToServices = {  }
+                    onNavigateToServices = onNavigateToServices
                 )
             }
         }

@@ -12,7 +12,7 @@ fun NavGraphBuilder.profileScreen(
 ) {
     composable<ProfileDestination> {
         ProfileScreen(
-          //  onNavigateToLogin = { onNavigateToLogin() },
+          onNavigateToLogin = onNavigateToLogin
         )
     }
 }
