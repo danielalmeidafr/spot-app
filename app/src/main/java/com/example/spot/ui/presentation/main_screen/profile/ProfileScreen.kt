@@ -40,17 +40,18 @@ import com.student.R
 
 @Composable
 fun ProfileScreen(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    innerPadding: PaddingValues = PaddingValues()
 ) {
     val isLogged: Boolean = true
 
-    if (isLogged) {
+    if (!isLogged) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .navigationBarsPadding()
                 .background(MaterialTheme.colorScheme.background)
-                .padding(horizontal = 30.dp, vertical = 50.dp),
+                .padding(horizontal = 30.dp, vertical = 50.dp)
+                .padding(innerPadding),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
@@ -119,12 +120,9 @@ fun ProfileScreen(
         }
     } else {
         LazyColumn(
-            contentPadding = PaddingValues(
-                top = 15.dp
-            ),
             modifier = Modifier
                 .fillMaxSize()
-                .statusBarsPadding(),
+                .padding(innerPadding),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             item {
@@ -201,7 +199,7 @@ fun ProfileScreen(
                 Row(
                     modifier = Modifier
                         .fillMaxWidth(0.95f),
-                    horizontalArrangement = Arrangement.spacedBy(10.dp)
+                    horizontalArrangement = Arrangement.spacedBy(15.dp, Alignment.CenterHorizontally)
                 ) {
                     ProfileCard(
                         iconLight = R.drawable.schedule_profile_light,

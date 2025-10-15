@@ -44,6 +44,7 @@ data class EstablishmentData(
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
+    innerPadding: PaddingValues = PaddingValues()
 ) {
     var query by remember { mutableStateOf("") }
 
@@ -58,7 +59,7 @@ fun HomeScreen(
             query = query,
             onQueryChange = { query = it },
             modifier = Modifier
-                .padding(top = 20.dp, bottom = 20.dp)
+                .padding(top = 20.dp)
         )
 
         val establishmentList = listOf(
@@ -114,7 +115,7 @@ fun HomeScreen(
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .navigationBarsPadding(),
+                .padding(innerPadding),
             verticalArrangement = Arrangement.spacedBy(25.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
