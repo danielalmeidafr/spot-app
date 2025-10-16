@@ -122,9 +122,9 @@ fun ServicesScreen(
                 ) {
                     Icon(
                         painter = painterResource(id = if (isSystemInDarkTheme()) {
-                            R.drawable.save_dark
+                            R.drawable.favorite_dark
                         } else {
-                            R.drawable.save_light
+                            R.drawable.favorite_light
                         }),
                         contentDescription = "Favoritar",
                         tint = MaterialTheme.colorScheme.onSurface,
