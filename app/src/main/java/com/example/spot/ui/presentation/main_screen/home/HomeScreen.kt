@@ -1,8 +1,5 @@
 package com.example.spot.ui.presentation.main_screen.home
 
-import androidx.compose.animation.core.animateFloat
-import androidx.compose.animation.core.infiniteRepeatable
-import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -56,9 +53,9 @@ fun HomeScreen(
                 .padding(top = 20.dp)
         )
 
-        if (uiState.isLoading){
+        if (uiState.isLoading) {
             LoadingScreen()
-        } else{
+        } else {
             LazyColumn(
                 modifier = Modifier
                     .fillMaxSize()
