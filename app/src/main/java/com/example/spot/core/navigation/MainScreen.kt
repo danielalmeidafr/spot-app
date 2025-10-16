@@ -1,6 +1,5 @@
 package com.example.spot.core.navigation
 
-import androidx.annotation.DrawableRes
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
@@ -8,7 +7,6 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
@@ -20,6 +18,15 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.DateRange
+import androidx.compose.material.icons.outlined.FavoriteBorder
+import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material.icons.outlined.Person
+import androidx.compose.material.icons.rounded.DateRange
+import androidx.compose.material.icons.rounded.Favorite
+import androidx.compose.material.icons.rounded.Home
+import androidx.compose.material.icons.rounded.Person
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
@@ -38,22 +45,19 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalLayoutDirection
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.spot.ui.presentation.main_screen.favorite.FavoriteScreen
 import com.example.spot.ui.presentation.main_screen.home.HomeScreen
 import com.example.spot.ui.presentation.main_screen.profile.ProfileScreen
 import com.example.spot.ui.presentation.main_screen.schedules.ScheduleScreen
-import com.student.R
 import kotlinx.coroutines.delay
 
 class BottomAppBarItem(
-    @DrawableRes val selectedIconDark: Int,
-    @DrawableRes val unselectedIconDark: Int,
-    @DrawableRes val selectedIconLight: Int,
-    @DrawableRes val unselectedIconLight: Int,
+    val selectedIcon: ImageVector,
+    val unselectedIcon: ImageVector,
     val label: String
 )
 
@@ -62,40 +66,32 @@ sealed class ScreenItem(
 ) {
     data object Home : ScreenItem(
         bottomAppBarItem = BottomAppBarItem(
-            selectedIconDark = R.drawable.home_filled_dark,
-            unselectedIconDark = R.drawable.home_dark,
-            selectedIconLight = R.drawable.home_filled_light,
-            unselectedIconLight = R.drawable.home_light,
+            selectedIcon = Icons.Rounded.Home,
+            unselectedIcon = Icons.Outlined.Home,
             label = "Início"
         )
     )
 
     data object Favorite : ScreenItem(
         bottomAppBarItem = BottomAppBarItem(
-            selectedIconDark = R.drawable.favorite_filled_dark,
-            unselectedIconDark = R.drawable.favorite_dark,
-            selectedIconLight = R.drawable.favorite_filled_light,
-            unselectedIconLight = R.drawable.favorite_light,
+            selectedIcon = Icons.Rounded.Favorite,
+            unselectedIcon = Icons.Outlined.FavoriteBorder,
             label = "Favoritos"
         )
     )
 
     data object Schedules : ScreenItem(
         bottomAppBarItem = BottomAppBarItem(
-            selectedIconDark = R.drawable.schedule_filled_dark,
-            unselectedIconDark = R.drawable.schedule_dark,
-            selectedIconLight = R.drawable.schedule_filled_light,
-            unselectedIconLight = R.drawable.schedule_light,
+            selectedIcon = Icons.Rounded.DateRange,
+            unselectedIcon = Icons.Outlined.DateRange,
             label = "Agendamentos"
         )
     )
 
     data object Profile : ScreenItem(
         bottomAppBarItem = BottomAppBarItem(
-            selectedIconDark = R.drawable.profile_filled_dark,
-            unselectedIconDark = R.drawable.profile_dark,
-            selectedIconLight = R.drawable.profile_filled_light,
-            unselectedIconLight = R.drawable.profile_light,
+            selectedIcon = Icons.Rounded.Person,
+            unselectedIcon = Icons.Outlined.Person,
             label = "Perfil"
         )
     )
@@ -157,7 +153,7 @@ fun MainScreen(
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .offset(y = 10.dp),
+                            .offset(y = 11.dp),
                         contentAlignment = Alignment.Center
                     ) {
                         Surface(
@@ -202,25 +198,24 @@ fun MainScreen(
                                 },
                                 icon = {
                                     val isSelected = currentScreen == navItem
-                                    val isDarkTheme = isSystemInDarkTheme()
-                                    val iconRes = if (isSelected) {
-                                        if (isDarkTheme) navItem.bottomAppBarItem.selectedIconDark else navItem.bottomAppBarItem.selectedIconLight
+                                    val iconVector = if (isSelected) {
+                                        navItem.bottomAppBarItem.selectedIcon
                                     } else {
-                                        if (isDarkTheme) navItem.bottomAppBarItem.unselectedIconDark else navItem.bottomAppBarItem.unselectedIconLight
+                                        navItem.bottomAppBarItem.unselectedIcon
                                     }
 
                                     Icon(
-                                        painter = painterResource(id = iconRes),
+                                        imageVector = iconVector,
                                         contentDescription = navItem.bottomAppBarItem.label,
                                         modifier = Modifier
-                                            .size(20.dp)
+                                            .size(22.dp)
                                             .offset(y = offsetY)
                                     )
                                 },
                                 label = {
                                     Text(
                                         navItem.bottomAppBarItem.label,
-                                        style = MaterialTheme.typography.bodySmall.copy(fontSize = 8.5.sp),
+                                        style = MaterialTheme.typography.bodySmall.copy(fontSize = 9.sp),
                                         color = MaterialTheme.colorScheme.onBackground,
                                         modifier = Modifier.offset(y = offsetY)
                                     )

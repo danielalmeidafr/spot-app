@@ -23,8 +23,15 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.KeyboardArrowUp
+import androidx.compose.material.icons.filled.LocationOn
+import androidx.compose.material.icons.rounded.KeyboardArrowDown
+import androidx.compose.material.icons.rounded.KeyboardArrowUp
+import androidx.compose.material.icons.rounded.LocationOn
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -187,15 +194,12 @@ fun EstablishmentCard(
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    val locationRes =
-                        if (isSystemInDarkTheme()) R.drawable.location_dark else R.drawable.location_light
-
-                    Image(
-                        painter = painterResource(id = locationRes),
-                        contentDescription = "Location image",
+                    Icon(
+                        imageVector = Icons.Rounded.LocationOn,
+                        tint = MaterialTheme.colorScheme.onBackground.copy(0.8f),
+                        contentDescription = "Imagem de localização",
                         modifier = Modifier
-                            .size(10.dp)
-                            .alpha(0.8f)
+                            .size(13.dp)
                     )
 
                     Spacer(modifier = Modifier.size(3.dp))
@@ -211,16 +215,11 @@ fun EstablishmentCard(
                     IconButton(
                         onClick = { isExpanded = !isExpanded },
                     ) {
-                        val arrowRes = if (isSystemInDarkTheme()) {
-                            R.drawable.down_arrow_dark
-                        } else {
-                            R.drawable.down_arrow_light
-                        }
-                        Image(
-                            painter = painterResource(arrowRes),
-                            contentDescription = "Arrow image",
+                        Icon(
+                            imageVector = Icons.Rounded.KeyboardArrowDown,
+                            tint = MaterialTheme.colorScheme.onBackground.copy(0.8f),
+                            contentDescription = "Seta para baixo",
                             modifier = Modifier
-                                .size(15.dp)
                                 .offset(x = 10.dp)
                         )
                     }
@@ -280,16 +279,11 @@ fun EstablishmentCard(
                         IconButton(
                             onClick = { isExpanded = false }
                         ) {
-                            val arrowRes = if (isSystemInDarkTheme()) {
-                                R.drawable.up_arrow_dark
-                            } else {
-                                R.drawable.up_arrow_light
-                            }
-                            Image(
-                                painter = painterResource(arrowRes),
-                                contentDescription = "Arrow image",
+                            Icon(
+                                imageVector = Icons.Rounded.KeyboardArrowUp,
+                                tint = MaterialTheme.colorScheme.onBackground.copy(0.8f),
+                                contentDescription = "Seta para cima",
                                 modifier = Modifier
-                                    .size(15.dp)
                                     .offset(x = 10.dp)
                             )
                         }

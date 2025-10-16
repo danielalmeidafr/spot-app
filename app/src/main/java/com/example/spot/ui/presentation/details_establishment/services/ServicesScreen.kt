@@ -6,6 +6,7 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -20,6 +21,8 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.FavoriteBorder
+import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -62,7 +65,6 @@ fun ServicesScreen(
         modifier = modifier
             .fillMaxSize()
             .statusBarsPadding()
-            .navigationBarsPadding()
             .background(MaterialTheme.colorScheme.background),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top
@@ -73,12 +75,17 @@ fun ServicesScreen(
                     .fillMaxWidth()
                     .height(imageHeight)
             ) {
+                Image(
+                    painter = painterResource(id = R.drawable.bar_image),
+                    contentDescription = "Imagem do estabelecimento",
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier.matchParentSize()
+                )
                 Surface(
                     modifier = Modifier
                         .padding(start = 16.dp, top = 16.dp)
                         .align(Alignment.TopStart)
-                        .size(40.dp)
-                        .zIndex(2f),
+                        .size(40.dp),
                     shape = RoundedCornerShape(10.dp),
                     color = MaterialTheme.colorScheme.surface
                 ) {
@@ -90,54 +97,38 @@ fun ServicesScreen(
                     )
                 }
 
-                Surface(
+                Row(
                     modifier = Modifier
-                        .padding(end  = 70.dp, top = 16.dp)
-                        .size(40.dp)
                         .align(Alignment.TopEnd)
-                        .zIndex(1f),
-                    shape = RoundedCornerShape(10.dp),
-                    color = MaterialTheme.colorScheme.surface
+                        .padding(top = 16.dp, end = 16.dp),
+                    horizontalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
-                    Icon(
-                        painter = painterResource(id = if (isSystemInDarkTheme()) {
-                            R.drawable.share_dark
-                        } else {
-                            R.drawable.share_light
-                        }),
-                        contentDescription = "Compartilhar",
-                        tint = MaterialTheme.colorScheme.onSurface,
-                        modifier = Modifier.padding(12.dp)
-                    )
-                }
+                    Surface(
+                        modifier = Modifier.size(40.dp),
+                        shape = RoundedCornerShape(10.dp),
+                        color = MaterialTheme.colorScheme.surface
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Share,
+                            contentDescription = "Compartilhar",
+                            tint = MaterialTheme.colorScheme.onSurface,
+                            modifier = Modifier.padding(10.dp)
+                        )
+                    }
 
-                Surface(
-                    modifier = Modifier
-                        .padding(end  = 16.dp, top = 16.dp)
-                        .size(40.dp)
-                        .align(Alignment.TopEnd)
-                        .zIndex(1f),
-                    shape = RoundedCornerShape(10.dp),
-                    color = MaterialTheme.colorScheme.surface
-                ) {
-                    Icon(
-                        painter = painterResource(id = if (isSystemInDarkTheme()) {
-                            R.drawable.favorite_dark
-                        } else {
-                            R.drawable.favorite_light
-                        }),
-                        contentDescription = "Favoritar",
-                        tint = MaterialTheme.colorScheme.onSurface,
-                        modifier = Modifier.padding(12.dp)
-                    )
+                    Surface(
+                        modifier = Modifier.size(40.dp),
+                        shape = RoundedCornerShape(10.dp),
+                        color = MaterialTheme.colorScheme.surface
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.FavoriteBorder,
+                            contentDescription = "Favoritar",
+                            tint = MaterialTheme.colorScheme.onSurface,
+                            modifier = Modifier.padding(10.dp)
+                        )
+                    }
                 }
-
-                Image(
-                    painter = painterResource(id = R.drawable.bar_image),
-                    contentDescription = "Images of establishment",
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier.matchParentSize()
-                )
             }
         }
 
