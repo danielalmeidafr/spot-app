@@ -1,4 +1,4 @@
-package com.example.spot.ui.presentation.login_signup.components
+package com.example.spot.ui.presentation.auth.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
@@ -30,7 +30,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.spot.ui.theme.Montserrat
+import com.example.spot.core.theme.Montserrat
 import com.student.R
 
 @Composable

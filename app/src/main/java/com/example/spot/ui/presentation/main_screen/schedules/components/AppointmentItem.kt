@@ -1,4 +1,4 @@
-package com.example.spot.ui.presentation.main_screen.calendar.components
+package com.example.spot.ui.presentation.main_screen.schedules.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -27,8 +27,7 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.graphics.alpha
-import com.example.spot.ui.presentation.main_screen.calendar.Appointment
+import com.example.spot.ui.presentation.main_screen.schedules.Appointment
 import com.student.R
 
 @Composable

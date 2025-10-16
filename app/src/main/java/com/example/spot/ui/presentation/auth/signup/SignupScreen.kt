@@ -1,4 +1,4 @@
-package com.example.spot.ui.presentation.login_signup.signup
+package com.example.spot.ui.presentation.auth.signup
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -38,10 +38,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.spot.ui.presentation.login_signup.components.CustomButton
-import com.example.spot.ui.presentation.login_signup.components.CustomTextField
-import com.example.spot.ui.presentation.login_signup.components.PrimaryButton
-import com.example.spot.ui.util.clearFocusOnTap
+import com.example.spot.ui.presentation.auth.components.CustomButton
+import com.example.spot.ui.presentation.auth.components.CustomTextField
+import com.example.spot.ui.presentation.auth.components.PrimaryButton
+import com.example.spot.core.util.clearFocusOnTap
 import com.student.R
 
 @Composable

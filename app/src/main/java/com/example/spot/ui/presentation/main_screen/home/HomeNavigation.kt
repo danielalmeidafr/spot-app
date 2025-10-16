@@ -9,8 +9,8 @@ object HomeDestination
 
 fun NavGraphBuilder.homeScreen(
     onNavigateToServices: () -> Unit
-){
-    composable<HomeDestination>{
+) {
+    composable<HomeDestination> {
         HomeScreen(
             onNavigateToServices = onNavigateToServices
         )

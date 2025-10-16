@@ -41,27 +41,29 @@ import com.student.R
 @Composable
 fun ProfileScreen(
     modifier: Modifier = Modifier,
-    contentPadding: PaddingValues = PaddingValues(0.dp),
-    onNavigateToLogin: () -> Unit
-    ) {
+    onNavigateToLogin: () -> Unit,
+    innerPadding: PaddingValues = PaddingValues()
+) {
     val isLogged: Boolean = true
 
     if (isLogged) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .navigationBarsPadding()
                 .background(MaterialTheme.colorScheme.background)
-                .padding(horizontal = 30.dp, vertical = 50.dp),
+                .padding(horizontal = 30.dp, vertical = 50.dp)
+                .padding(innerPadding),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
             Image(
-                painter = painterResource(if (isSystemInDarkTheme()){
-                    R.drawable.logo_dark
-                } else{
-                    R.drawable.logo_light
-                }),
+                painter = painterResource(
+                    if (isSystemInDarkTheme()) {
+                        R.drawable.logo_dark
+                    } else {
+                        R.drawable.logo_light
+                    }
+                ),
                 contentDescription = "Profile image",
                 modifier = Modifier
                     .size(150.dp)
@@ -92,7 +94,7 @@ fun ProfileScreen(
             Spacer(modifier = Modifier.height(30.dp))
 
             Button(
-                onClick = onNavigateToLogin,
+                onClick = { onNavigateToLogin() },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(40.dp),
@@ -119,13 +121,9 @@ fun ProfileScreen(
         }
     } else {
         LazyColumn(
-            contentPadding = PaddingValues(
-                top = 15.dp,
-                bottom = contentPadding.calculateBottomPadding()
-            ),
             modifier = Modifier
                 .fillMaxSize()
-                .statusBarsPadding(),
+                .padding(innerPadding),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             item {
@@ -202,18 +200,18 @@ fun ProfileScreen(
                 Row(
                     modifier = Modifier
                         .fillMaxWidth(0.95f),
-                    horizontalArrangement = Arrangement.spacedBy(15.dp, Alignment.CenterHorizontally),
+                    horizontalArrangement = Arrangement.spacedBy(15.dp, Alignment.CenterHorizontally)
                 ) {
                     ProfileCard(
-                        iconLight = R.drawable.calendar_profile_light,
-                        iconDark = R.drawable.calendar_profile_dark,
+                        iconLight = R.drawable.schedule_profile_light,
+                        iconDark = R.drawable.schedule_profile_dark,
                         value = "4",
                         label = "Agendamentos"
                     )
 
                     ProfileCard(
-                        iconLight = R.drawable.save_light,
-                        iconDark = R.drawable.save_dark,
+                        iconLight = R.drawable.favorite_light,
+                        iconDark = R.drawable.favorite_dark,
                         value = "5",
                         label = "Favoritos"
                     )

@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
@@ -26,7 +25,7 @@ import com.example.spot.ui.presentation.main_screen.home.components.CustomSearch
 import com.example.spot.ui.presentation.main_screen.home.components.EstablishmentCard
 import com.example.spot.ui.presentation.main_screen.home.components.NextScheduleCard
 import com.example.spot.ui.presentation.main_screen.home.components.PaymentsMethods
-import com.example.spot.ui.util.clearFocusOnTap
+import com.example.spot.core.util.clearFocusOnTap
 
 data class EstablishmentData(
     val name: String,
@@ -43,8 +42,8 @@ data class EstablishmentData(
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
-    contentPadding: PaddingValues = PaddingValues(0.dp),
-    onNavigateToServices: () -> Unit
+    onNavigateToServices: () -> Unit,
+    innerPadding: PaddingValues = PaddingValues()
 ) {
     var query by remember { mutableStateOf("") }
 
@@ -59,8 +58,7 @@ fun HomeScreen(
             query = query,
             onQueryChange = { query = it },
             modifier = Modifier
-                .statusBarsPadding()
-                .padding(top = 20.dp, bottom = 5.dp)
+                .padding(top = 20.dp)
         )
 
         val establishmentList = listOf(
@@ -114,13 +112,10 @@ fun HomeScreen(
         )
 
         LazyColumn(
-            contentPadding = PaddingValues(
-                top = 15.dp,
-                bottom = contentPadding.calculateBottomPadding()
-            ),
             modifier = Modifier
-                .fillMaxSize(),
-            verticalArrangement = Arrangement.spacedBy(20.dp),
+                .fillMaxSize()
+                .padding(innerPadding),
+            verticalArrangement = Arrangement.spacedBy(25.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
@@ -137,7 +132,7 @@ fun HomeScreen(
                     modifier = Modifier
                         .fillMaxWidth(0.9f)
                         .background(MaterialTheme.colorScheme.background)
-                        .padding(top = 10.dp, bottom = 5.dp),
+                        .padding(bottom = 10.dp),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onBackground,
                     textAlign = TextAlign.Start

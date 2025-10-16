@@ -1,4 +1,4 @@
-package com.example.spot.ui.presentation.main_screen.calendar
+package com.example.spot.ui.presentation.main_screen.schedules
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -10,14 +10,11 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -45,14 +42,26 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.example.spot.ui.presentation.main_screen.calendar.components.AppointmentItem
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.spot.ui.presentation.main_screen.schedules.components.AppointmentItem
 import com.student.R
 import java.time.LocalDate
 import java.time.YearMonth
 
 private val WEEK = listOf("D", "S", "T", "Q", "Q", "S", "S")
 private val MONTHS = listOf(
-    "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
+    "Janeiro",
+    "Fevereiro",
+    "Março",
+    "Abril",
+    "Maio",
+    "Junho",
+    "Julho",
+    "Agosto",
+    "Setembro",
+    "Outubro",
+    "Novembro",
+    "Dezembro"
 )
 private val MONTHS_ABBREVIATION = listOf(
     "Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"
@@ -85,9 +94,9 @@ private fun generateCalendarDays(year: Int, month: Int): List<CalendarDay> {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CalendarScreen(
+fun ScheduleScreen(
     modifier: Modifier = Modifier,
-    viewModel: CalendarViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
+    viewModel: ScheduleViewModel = viewModel()
 ) {
     val isDarkTheme = isSystemInDarkTheme()
     val uiState by viewModel.uiState.collectAsState()
@@ -112,20 +121,15 @@ fun CalendarScreen(
             val appointments = uiState.appointments
             val isLoading = uiState.isLoading
 
-            Box(modifier = Modifier
-                .fillMaxWidth()
-                .fillMaxHeight(0.96f)) {
-
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+            ) {
                 LazyColumn(
                     modifier = Modifier
-                        .fillMaxSize()
-                        .navigationBarsPadding(),
+                        .fillMaxSize(),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    item {
-                        Spacer(modifier = Modifier.height(20.dp))
-                    }
-
                     if (appointments.isNotEmpty()) {
                         item {
                             Text(
@@ -156,7 +160,7 @@ fun CalendarScreen(
                         appointments.isEmpty() -> {
                             item {
                                 val calendarRes =
-                                    if (isDarkTheme) R.drawable.calendar_dark else R.drawable.calendar_light
+                                    if (isDarkTheme) R.drawable.schedule_dark else R.drawable.schedule_light
 
                                 Image(
                                     painter = painterResource(id = calendarRes),
@@ -202,13 +206,12 @@ fun CalendarScreen(
                 }
             }
         }
-    ) { paddingValues ->
+    ) { innerPadding ->
         Column(
             modifier = modifier
                 .fillMaxSize()
                 .background(MaterialTheme.colorScheme.background)
-                .padding(paddingValues)
-                .statusBarsPadding()
+                .padding(innerPadding)
         ) {
             Surface(
                 modifier = Modifier.fillMaxWidth(),
@@ -256,7 +259,10 @@ fun CalendarScreen(
                             val color = if (day.inMonth) MaterialTheme.colorScheme.onBackground
                             else MaterialTheme.colorScheme.onBackground.copy(alpha = 0.5f)
 
-                            Box(modifier = Modifier.size(28.dp), contentAlignment = Alignment.Center) {
+                            Box(
+                                modifier = Modifier.size(28.dp),
+                                contentAlignment = Alignment.Center
+                            ) {
                                 if (isToday) {
                                     Box(
                                         modifier = Modifier
