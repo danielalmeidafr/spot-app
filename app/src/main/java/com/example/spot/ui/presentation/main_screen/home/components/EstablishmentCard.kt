@@ -41,18 +41,12 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.example.spot.ui.presentation.main_screen.home.EstablishmentData
 import com.student.R
 
 @Composable
 fun EstablishmentCard(
-    name: String,
-    rating: Double,
-    totalReviews: Int,
-    isAvailable: Boolean,
-    nextTime: String,
-    neighborhood: String,
-    distance: String,
-    paymentsMethods: List<PaymentsMethods>,
+    establishmentData: EstablishmentData,
     modifier: Modifier = Modifier,
     onNavigateToServices: () -> Unit
 ) {
@@ -118,7 +112,7 @@ fun EstablishmentCard(
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Text(
-                    name,
+                    establishmentData.name,
                     style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold),
                     color = MaterialTheme.colorScheme.onBackground
                 )
@@ -129,7 +123,7 @@ fun EstablishmentCard(
                     modifier = Modifier.animateContentSize(tween(durationMillis = 300))
                 ) {
                     Text(
-                        String.format("%.1f", rating),
+                        String.format("%.1f", establishmentData.rating),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onBackground
                     )
@@ -146,7 +140,7 @@ fun EstablishmentCard(
                         exit = fadeOut() + shrinkVertically()
                     ) {
                         Text(
-                            "($totalReviews)",
+                            "(${establishmentData.totalReviews})",
                             style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.onBackground
                         )
@@ -155,9 +149,9 @@ fun EstablishmentCard(
             }
 
             Text(
-                text = if (isAvailable) "Aberto" else "Fechado",
+                text = if (establishmentData.isAvailable) "Aberto" else "Fechado",
                 style = MaterialTheme.typography.bodySmall,
-                color = if (isAvailable) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.tertiary
+                color = if (establishmentData.isAvailable) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.tertiary
             )
 
             Spacer(modifier = Modifier.height(7.dp))
@@ -178,7 +172,7 @@ fun EstablishmentCard(
                         )
 
                         Text(
-                            nextTime,
+                            establishmentData.nextTime,
                             style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.Medium),
                             color = MaterialTheme.colorScheme.onBackground
                         )
@@ -207,7 +201,7 @@ fun EstablishmentCard(
                     Spacer(modifier = Modifier.size(3.dp))
 
                     Text(
-                        "$neighborhood • $distance",
+                        "${establishmentData.neighborhood} • ${establishmentData.distance}",
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onBackground
                     )
@@ -249,7 +243,7 @@ fun EstablishmentCard(
                             horizontalArrangement = Arrangement.spacedBy(6.dp),
                         ) {
                             Text(
-                                "Aceito:",
+                                "Aceita:",
                                 style = MaterialTheme.typography.bodySmall,
                                 color = MaterialTheme.colorScheme.onBackground
                             )
@@ -260,7 +254,7 @@ fun EstablishmentCard(
                                 R.drawable.card_light
                             }
 
-                            paymentsMethods.forEach { method ->
+                            establishmentData.paymentsMethods.forEach { method ->
                                 when (method) {
                                     PaymentsMethods.PIX -> Image(
                                         painter = painterResource(id = R.drawable.pix),

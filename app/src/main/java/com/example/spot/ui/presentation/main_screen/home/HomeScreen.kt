@@ -39,6 +39,7 @@ fun HomeScreen(
 
     val query = uiState.searchQuery
 
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -53,49 +54,45 @@ fun HomeScreen(
                 .padding(top = 20.dp)
         )
 
-        if (uiState.isLoading) {
-            LoadingScreen()
-        } else {
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(innerPadding),
-                verticalArrangement = Arrangement.spacedBy(25.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
+        when {
+            uiState.isLoading -> {
+                LoadingScreen()
+            }
+            else -> {
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(innerPadding),
+                    verticalArrangement = Arrangement.spacedBy(25.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
 
-                item {
-                    NextScheduleCard(
-                        isScheduled = uiState.nextSchedule.isScheduled,
-                        nextSchedule = uiState.nextSchedule.nextScheduleTime
-                    )
-                }
+                    item {
+                        NextScheduleCard(
+                            isScheduled = uiState.nextSchedule.isScheduled,
+                            nextSchedule = uiState.nextSchedule.nextScheduleTime
+                        )
+                    }
 
-                stickyHeader {
-                    Text(
-                        uiState.listTitle,
-                        modifier = Modifier
-                            .fillMaxWidth(0.9f)
-                            .background(MaterialTheme.colorScheme.background)
-                            .padding(bottom = 10.dp),
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onBackground,
-                        textAlign = TextAlign.Start
-                    )
-                }
+                    stickyHeader {
+                        Text(
+                            uiState.listTitle,
+                            modifier = Modifier
+                                .fillMaxWidth(0.9f)
+                                .background(MaterialTheme.colorScheme.background)
+                                .padding(bottom = 10.dp),
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onBackground,
+                            textAlign = TextAlign.Start
+                        )
+                    }
 
-                items(uiState.establishments) { establishment ->
-                    EstablishmentCard(
-                        name = establishment.name,
-                        rating = establishment.rating,
-                        totalReviews = establishment.totalReviews,
-                        isAvailable = establishment.isAvailable,
-                        nextTime = establishment.nextTime,
-                        neighborhood = establishment.neighborhood,
-                        distance = establishment.distance,
-                        paymentsMethods = establishment.paymentsMethods,
-                        onNavigateToServices = onNavigateToServices
-                    )
+                    items(uiState.establishments) { establishment ->
+                        EstablishmentCard(
+                            establishmentData = establishment,
+                            onNavigateToServices = onNavigateToServices
+                        )
+                    }
                 }
             }
         }

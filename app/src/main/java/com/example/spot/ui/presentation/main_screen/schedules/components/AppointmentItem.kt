@@ -32,7 +32,7 @@ import com.student.R
 
 @Composable
 fun AppointmentItem(
-    appointment: AppointmentData,
+    appointmentData: AppointmentData,
     isDarkTheme: Boolean,
     modifier: Modifier = Modifier
 ) {
@@ -49,14 +49,14 @@ fun AppointmentItem(
 
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(
-                    appointment.title,
+                    appointmentData.title,
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onBackground
                 )
 
                 Spacer(modifier = Modifier.size(10.dp))
 
-                if (appointment.isPaid) {
+                if (appointmentData.isPaid) {
                     Text(
                         "Pago",
                         style = MaterialTheme.typography.bodySmall.copy(
@@ -88,7 +88,7 @@ fun AppointmentItem(
                         Spacer(modifier = Modifier.size(4.dp))
 
                         Text(
-                            appointment.price ?: "",
+                            appointmentData.price ?: "",
                             style = MaterialTheme.typography.bodySmall.copy(
                                 fontWeight = FontWeight.ExtraBold,
                                 fontSize = 12.sp
@@ -116,7 +116,7 @@ fun AppointmentItem(
                 Spacer(modifier = Modifier.size(3.dp))
 
                 Text(
-                    appointment.location,
+                    appointmentData.location,
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onBackground
                 )
@@ -126,7 +126,7 @@ fun AppointmentItem(
 
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(
-                    appointment.date,
+                    appointmentData.date,
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onBackground
                 )
@@ -134,7 +134,7 @@ fun AppointmentItem(
                 Spacer(modifier = Modifier.size(6.dp))
 
                 Text(
-                    appointment.time,
+                    appointmentData.time,
                     style = MaterialTheme.typography.bodySmall.copy(
                         fontWeight = FontWeight.SemiBold,
                         fontSize = 12.sp
@@ -148,7 +148,7 @@ fun AppointmentItem(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            if (appointment.isPaid) {
+            if (appointmentData.isPaid) {
                 Button(
                     onClick = {},
                     modifier = Modifier

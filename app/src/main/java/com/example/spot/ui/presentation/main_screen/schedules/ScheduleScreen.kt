@@ -43,6 +43,7 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.spot.ui.presentation.main_screen.schedules.components.AppointmentItem
 import com.student.R
@@ -180,19 +181,19 @@ fun ScheduleScreen(
                             item {
                                 Text(
                                     text = "Seus horários:",
-                                    style = MaterialTheme.typography.bodyMedium,
+                                    style = MaterialTheme.typography.bodyMedium.copy(fontSize = 14.sp),
                                     color = MaterialTheme.colorScheme.onBackground,
                                     modifier = Modifier
                                         .fillMaxWidth()
-                                        .padding(start = 20.dp)
+                                        .padding(start = 15.dp)
                                 )
                                 Spacer(modifier = Modifier.height(10.dp))
                             }
 
-                            itemsIndexed(appointments) { index, appointment ->
+                            itemsIndexed(uiState.appointments) { index, appointment ->
                                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                                     AppointmentItem(
-                                        appointment = appointment,
+                                        appointmentData = appointment,
                                         isDarkTheme = isDarkTheme
                                     )
 
