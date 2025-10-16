@@ -130,28 +130,14 @@ fun ScheduleScreen(
                         .fillMaxSize(),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    if (appointments.isNotEmpty()) {
-                        item {
-                            Text(
-                                text = "Seus horários:",
-                                style = MaterialTheme.typography.bodyMedium,
-                                color = MaterialTheme.colorScheme.onBackground,
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(start = 15.dp)
-                            )
-                            Spacer(modifier = Modifier.height(10.dp))
-                        }
-                    }
-
                     when {
                         isLoading -> {
                             item {
-                                Spacer(modifier = Modifier.height(50.dp))
+                                Spacer(modifier = Modifier.height(100.dp))
                                 Text(
                                     text = "Carregando Agendamentos...",
-                                    style = MaterialTheme.typography.titleSmall,
-                                    color = MaterialTheme.colorScheme.primary
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    color = MaterialTheme.colorScheme.onBackground.copy(0.6f)
                                 )
                                 Spacer(modifier = Modifier.height(30.dp))
                             }
@@ -185,6 +171,18 @@ fun ScheduleScreen(
                         }
 
                         else -> {
+                            item {
+                                Text(
+                                    text = "Seus horários:",
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    color = MaterialTheme.colorScheme.onBackground,
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(start = 20.dp)
+                                )
+                                Spacer(modifier = Modifier.height(10.dp))
+                            }
+
                             itemsIndexed(appointments) { index, appointment ->
                                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                                     AppointmentItem(

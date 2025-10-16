@@ -27,12 +27,12 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.spot.ui.presentation.main_screen.schedules.Appointment
+import com.example.spot.ui.presentation.main_screen.schedules.AppointmentData
 import com.student.R
 
 @Composable
 fun AppointmentItem(
-    appointment: Appointment,
+    appointment: AppointmentData,
     isDarkTheme: Boolean,
     modifier: Modifier = Modifier
 ) {
@@ -136,7 +136,8 @@ fun AppointmentItem(
                 Text(
                     appointment.time,
                     style = MaterialTheme.typography.bodySmall.copy(
-                        fontWeight = FontWeight.SemiBold
+                        fontWeight = FontWeight.SemiBold,
+                        fontSize = 12.sp
                     ),
                     color = MaterialTheme.colorScheme.onBackground,
                 )
