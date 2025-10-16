@@ -24,6 +24,7 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.BottomSheetScaffold
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
@@ -134,10 +135,15 @@ fun ScheduleScreen(
                         isLoading -> {
                             item {
                                 Spacer(modifier = Modifier.height(100.dp))
+                                CircularProgressIndicator(
+                                    color = MaterialTheme.colorScheme.primary,
+                                    strokeWidth = 4.dp
+                                )
                                 Text(
-                                    text = "Carregando Agendamentos...",
+                                    text = "Carregando agendamentos...",
                                     style = MaterialTheme.typography.bodyMedium,
-                                    color = MaterialTheme.colorScheme.onBackground.copy(0.6f)
+                                    color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f),
+                                    modifier = Modifier.padding(top = 16.dp)
                                 )
                                 Spacer(modifier = Modifier.height(30.dp))
                             }

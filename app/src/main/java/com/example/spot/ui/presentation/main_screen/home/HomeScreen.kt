@@ -118,7 +118,7 @@ private fun LoadingScreen() {
                 strokeWidth = 4.dp
             )
             Text(
-                text = "Carregando informações...",
+                text = "Carregando barbearias...",
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f),
                 modifier = Modifier.padding(top = 16.dp)
