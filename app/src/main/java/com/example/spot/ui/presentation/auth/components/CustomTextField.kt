@@ -85,17 +85,17 @@ fun CustomTextField(
         trailingIcon = {
             if (isPassword) {
                 val imageRes = when {
-                    passwordVisible && isDarkTheme -> R.drawable.open_eye_dark
-                    passwordVisible && !isDarkTheme -> R.drawable.open_eye_light
-                    !passwordVisible && isDarkTheme -> R.drawable.closed_eye_dark
-                    else -> R.drawable.closed_eye_light
+                    passwordVisible && isDarkTheme -> R.drawable.eye_open_dark
+                    passwordVisible && !isDarkTheme -> R.drawable.eye_open_light
+                    !passwordVisible && isDarkTheme -> R.drawable.eye_closed_dark
+                    else -> R.drawable.eye_closed_light
                 }
 
                 Image(
                     painter = painterResource(id = imageRes),
                     contentDescription = if (passwordVisible) "Ocultar senha" else "Mostrar senha",
                     modifier = Modifier
-                        .size(30.dp)
+                        .size(32.dp)
                         .padding(end = 15.dp)
                         .alpha(0.5f)
                         .clickable(

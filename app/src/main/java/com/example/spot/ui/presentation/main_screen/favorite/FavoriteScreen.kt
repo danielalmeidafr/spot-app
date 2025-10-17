@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -46,12 +47,11 @@ fun FavoriteScreen(
             painter = painterResource(id = saveRes),
             contentDescription = "Save Image",
             modifier = Modifier
-                .width(80.dp)
-                .height(80.dp),
+                .size(100.dp),
             alpha = (0.7f)
         )
 
-        Spacer(modifier = Modifier.height(40.dp))
+        Spacer(modifier = Modifier.height(20.dp))
 
         Text(
             "Nenhuma barbearia favoritada",

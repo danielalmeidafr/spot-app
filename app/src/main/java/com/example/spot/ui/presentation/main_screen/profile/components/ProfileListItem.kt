@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -30,8 +31,8 @@ fun ProfileListItem(
     isLogout: Boolean = false,
     modifier: Modifier = Modifier
 ) {
-    val arrowDark = R.drawable.right_arrow_dark
-    val arrowLight = R.drawable.right_arrow_light
+    val arrowDark = R.drawable.arrow_right_dark
+    val arrowLight = R.drawable.arrow_right_light
 
     val textColor = if (isLogout) {
         MaterialTheme.colorScheme.tertiary
@@ -61,13 +62,13 @@ fun ProfileListItem(
                     if (isSystemInDarkTheme()) iconDark else iconLight
                 ),
                 contentDescription = "$text image",
-                modifier = Modifier.size(15.dp)
+                modifier = Modifier.size(20.dp)
             )
         } else if (isLogout) {
             Image(
                 painter = painterResource(R.drawable.exit),
                 contentDescription = "$text image",
-                modifier = Modifier.size(15.dp),
+                modifier = Modifier.size(17.dp),
             )
         }
 
@@ -82,12 +83,13 @@ fun ProfileListItem(
         Spacer(modifier = Modifier.weight(1f))
 
         if (!isLogout) {
-            Image(
+            Icon(
                 painter = painterResource(
                     if (isSystemInDarkTheme()) arrowDark else arrowLight
                 ),
-                contentDescription = "Arrow image",
-                modifier = Modifier.size(15.dp)
+                tint = MaterialTheme.colorScheme.onBackground.copy(0.8f),
+                contentDescription = "Seta para direita",
+                modifier = Modifier.size(20.dp)
             )
         }
     }

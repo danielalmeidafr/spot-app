@@ -16,11 +16,11 @@ data class NextScheduleData(
 
 data class EstablishmentData(
     val name: String,
-    val rating: Double,
+    val averageRating: Double,
     val totalReviews: Int,
-    val isAvailable: Boolean,
-    val nextTime: String,
-    val neighborhood: String,
+    val isOpen: Boolean,
+    val nextDate: String,
+    val location: String,
     val distance: String,
     val paymentsMethods: List<PaymentsMethods>,
 )
@@ -51,7 +51,7 @@ class HomeViewModel : ViewModel() {
                 } else {
                     establishments.filter {
                         it.name.contains(state.searchQuery, ignoreCase = true) ||
-                                it.neighborhood.contains(state.searchQuery, ignoreCase = true)
+                                it.location.contains(state.searchQuery, ignoreCase = true)
                     }
                 }
 
@@ -76,11 +76,11 @@ class HomeViewModel : ViewModel() {
             val sampleEstablishments = listOf(
                 EstablishmentData(
                     name = "Studio Barber Lux",
-                    rating = 4.8,
+                    averageRating = 4.8,
                     totalReviews = 310,
-                    isAvailable = true,
-                    nextTime = "Hoje, 16h00",
-                    neighborhood = "Moema",
+                    isOpen = true,
+                    nextDate = "Hoje, 16h00",
+                    location = "Moema",
                     distance = "3,1km",
                     paymentsMethods = listOf(
                         PaymentsMethods.PIX,
@@ -90,31 +90,31 @@ class HomeViewModel : ViewModel() {
                 ),
                 EstablishmentData(
                     name = "Salão Estilo & Beleza",
-                    rating = 4.3,
+                    averageRating = 4.3,
                     totalReviews = 78,
-                    isAvailable = false,
-                    nextTime = "Amanhã, 10h00",
-                    neighborhood = "Pinheiros",
+                    isOpen = false,
+                    nextDate = "Amanhã, 10h00",
+                    location = "Pinheiros",
                     distance = "5,4km",
                     paymentsMethods = listOf(PaymentsMethods.PIX, PaymentsMethods.CASH)
                 ),
                 EstablishmentData(
                     name = "Tattoo House SP",
-                    rating = 4.9,
+                    averageRating = 4.9,
                     totalReviews = 452,
-                    isAvailable = true,
-                    nextTime = "Hoje, 18h30",
-                    neighborhood = "Vila Madalena",
+                    isOpen = true,
+                    nextDate = "Hoje, 18h30",
+                    location = "Vila Madalena",
                     distance = "4,2km",
                     paymentsMethods = listOf(PaymentsMethods.PIX)
                 ),
                 EstablishmentData(
                     name = "Beleza Express",
-                    rating = 4.1,
+                    averageRating = 4.1,
                     totalReviews = 65,
-                    isAvailable = true,
-                    nextTime = "Hoje, 15h45",
-                    neighborhood = "Liberdade",
+                    isOpen = true,
+                    nextDate = "Hoje, 15h45",
+                    location = "Liberdade",
                     distance = "2,0km",
                     paymentsMethods = listOf(PaymentsMethods.CASH, PaymentsMethods.CARD)
                 )

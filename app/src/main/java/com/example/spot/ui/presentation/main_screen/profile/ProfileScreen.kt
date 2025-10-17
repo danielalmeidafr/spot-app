@@ -13,10 +13,8 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -46,7 +44,7 @@ fun ProfileScreen(
 ) {
     val isLogged: Boolean = true
 
-    if (isLogged) {
+    if (!isLogged) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -203,8 +201,15 @@ fun ProfileScreen(
                     horizontalArrangement = Arrangement.spacedBy(15.dp, Alignment.CenterHorizontally)
                 ) {
                     ProfileCard(
-                        iconLight = R.drawable.schedule_profile_light,
-                        iconDark = R.drawable.schedule_profile_dark,
+                        iconLight = R.drawable.star_light,
+                        iconDark = R.drawable.star_dark,
+                        value = "12",
+                        label = "Avaliações"
+                    )
+
+                    ProfileCard(
+                        iconLight = R.drawable.schedule_light,
+                        iconDark = R.drawable.schedule_dark,
                         value = "4",
                         label = "Agendamentos"
                     )
@@ -214,13 +219,6 @@ fun ProfileScreen(
                         iconDark = R.drawable.favorite_dark,
                         value = "5",
                         label = "Favoritos"
-                    )
-
-                    ProfileCard(
-                        iconLight = R.drawable.reviews_light,
-                        iconDark = R.drawable.reviews_dark,
-                        value = "12",
-                        label = "Avaliações"
                     )
                 }
             }
@@ -246,24 +244,24 @@ fun ProfileScreen(
 
                 ProfileListItem(
                     text = "Métodos de pagamentos",
-                    iconDark = R.drawable.wallet_dark,
-                    iconLight = R.drawable.wallet_light,
+                    iconDark = R.drawable.payments_dark,
+                    iconLight = R.drawable.payments_light,
                 )
 
                 Spacer(modifier = Modifier.height(30.dp))
 
                 ProfileListItem(
                     text = "Notificações",
-                    iconDark = R.drawable.user_edit_dark,
-                    iconLight = R.drawable.user_edit_light,
+                    iconDark = R.drawable.notifications_dark,
+                    iconLight = R.drawable.notifications_light,
                 )
 
                 Spacer(modifier = Modifier.height(15.dp))
 
                 ProfileListItem(
                     text = "Ajuda e suporte",
-                    iconDark = R.drawable.security_dark,
-                    iconLight = R.drawable.security_light,
+                    iconDark = R.drawable.help_dark,
+                    iconLight = R.drawable.help_light,
                 )
 
                 Spacer(modifier = Modifier.height(30.dp))

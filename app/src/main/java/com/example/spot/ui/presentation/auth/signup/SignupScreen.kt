@@ -2,6 +2,7 @@ package com.example.spot.ui.presentation.auth.signup
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -84,11 +85,17 @@ fun SignupScreen(
                     shape = CircleShape,
                     color = MaterialTheme.colorScheme.background
                 ) {
+                    val arrowRes = if (isSystemInDarkTheme()){
+                        R.drawable.arrow_back_light
+                    } else {
+                        R.drawable.arrow_back_light
+                    }
+
                     Icon(
-                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                        painter = painterResource(id = arrowRes),
                         contentDescription = "Voltar",
                         tint = MaterialTheme.colorScheme.onSurface,
-                        modifier = Modifier.padding(17.dp)
+                        modifier = Modifier.padding(16.dp)
                     )
                 }
 

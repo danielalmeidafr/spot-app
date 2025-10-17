@@ -24,8 +24,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.KeyboardArrowUp
-import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.rounded.KeyboardArrowDown
 import androidx.compose.material.icons.rounded.KeyboardArrowUp
 import androidx.compose.material.icons.rounded.LocationOn
@@ -42,7 +40,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -130,7 +127,7 @@ fun EstablishmentCard(
                     modifier = Modifier.animateContentSize(tween(durationMillis = 300))
                 ) {
                     Text(
-                        String.format("%.1f", establishmentData.rating),
+                        String.format("%.1f", establishmentData.averageRating),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onBackground
                     )
@@ -156,9 +153,9 @@ fun EstablishmentCard(
             }
 
             Text(
-                text = if (establishmentData.isAvailable) "Aberto" else "Fechado",
+                text = if (establishmentData.isOpen) "Aberto" else "Fechado",
                 style = MaterialTheme.typography.bodySmall,
-                color = if (establishmentData.isAvailable) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.tertiary
+                color = if (establishmentData.isOpen) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.tertiary
             )
 
             Spacer(modifier = Modifier.height(7.dp))
@@ -179,7 +176,7 @@ fun EstablishmentCard(
                         )
 
                         Text(
-                            establishmentData.nextTime,
+                            establishmentData.nextDate,
                             style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.Medium),
                             color = MaterialTheme.colorScheme.onBackground
                         )
@@ -193,19 +190,23 @@ fun EstablishmentCard(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 modifier = Modifier.fillMaxWidth()
             ) {
+                val locationRes = if (isSystemInDarkTheme()){
+                    R.drawable.location_dark
+                } else {
+                    R.drawable.location_light
+                }
+
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Icon(
-                        imageVector = Icons.Rounded.LocationOn,
+                        painter = painterResource(id = locationRes),
                         tint = MaterialTheme.colorScheme.onBackground.copy(0.8f),
                         contentDescription = "Imagem de localização",
                         modifier = Modifier
-                            .size(13.dp)
+                            .size(14.dp)
                     )
 
-                    Spacer(modifier = Modifier.size(3.dp))
-
                     Text(
-                        "${establishmentData.neighborhood} • ${establishmentData.distance}",
+                        "${establishmentData.location} • ${establishmentData.distance}",
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onBackground
                     )
@@ -215,8 +216,14 @@ fun EstablishmentCard(
                     IconButton(
                         onClick = { isExpanded = !isExpanded },
                     ) {
+                        val arrowRes = if (isSystemInDarkTheme()){
+                            R.drawable.arrow_down_dark
+                        } else {
+                            R.drawable.arrow_down_light
+                        }
+
                         Icon(
-                            imageVector = Icons.Rounded.KeyboardArrowDown,
+                            painter = painterResource(id = arrowRes),
                             tint = MaterialTheme.colorScheme.onBackground.copy(0.8f),
                             contentDescription = "Seta para baixo",
                             modifier = Modifier
@@ -258,19 +265,19 @@ fun EstablishmentCard(
                                     PaymentsMethods.PIX -> Image(
                                         painter = painterResource(id = R.drawable.pix),
                                         contentDescription = "Pix image",
-                                        modifier = Modifier.size(15.dp)
+                                        modifier = Modifier.size(14.dp)
                                     )
 
                                     PaymentsMethods.CASH -> Image(
                                         painter = painterResource(id = R.drawable.cash),
                                         contentDescription = "Cash image",
-                                        modifier = Modifier.size(17.dp)
+                                        modifier = Modifier.size(14.dp)
                                     )
 
                                     PaymentsMethods.CARD -> Image(
                                         painter = painterResource(id = cardRes),
                                         contentDescription = "Card image",
-                                        modifier = Modifier.size(15.dp)
+                                        modifier = Modifier.size(14.dp)
                                     )
                                 }
                             }
@@ -279,8 +286,14 @@ fun EstablishmentCard(
                         IconButton(
                             onClick = { isExpanded = false }
                         ) {
+                            val arrowRes = if (isSystemInDarkTheme()){
+                                R.drawable.arrow_up_dark
+                            } else {
+                                R.drawable.arrow_up_light
+                            }
+
                             Icon(
-                                imageVector = Icons.Rounded.KeyboardArrowUp,
+                                painter = painterResource(id = arrowRes),
                                 tint = MaterialTheme.colorScheme.onBackground.copy(0.8f),
                                 contentDescription = "Seta para cima",
                                 modifier = Modifier

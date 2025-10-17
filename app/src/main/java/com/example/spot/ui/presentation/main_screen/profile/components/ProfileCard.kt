@@ -1,16 +1,14 @@
 package com.example.spot.ui.presentation.main_screen.profile.components
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -31,7 +29,7 @@ fun ProfileCard(
 ) {
     Surface(
         modifier = modifier
-            .size(115.dp),
+            .size(117.dp),
         shape = RoundedCornerShape(10.dp),
         shadowElevation = 0.5.dp,
         color = MaterialTheme.colorScheme.surface
@@ -41,12 +39,13 @@ fun ProfileCard(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            Image(
+            Icon(
                 painter = painterResource(
                     if (isSystemInDarkTheme()) iconDark else iconLight
                 ),
+                tint = MaterialTheme.colorScheme.onBackground.copy(0.8f),
                 contentDescription = label,
-                modifier = Modifier.size(25.dp)
+                modifier = Modifier.size(40.dp)
             )
 
             Spacer(modifier = Modifier.height(10.dp))

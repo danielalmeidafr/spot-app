@@ -1,6 +1,7 @@
 package com.example.spot.ui.presentation.auth.login
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -31,6 +32,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -80,11 +82,17 @@ fun LoginScreen(
                     shape = CircleShape,
                     color = MaterialTheme.colorScheme.background
                 ) {
+                    val arrowRes = if (isSystemInDarkTheme()){
+                        R.drawable.arrow_back_light
+                    } else {
+                        R.drawable.arrow_back_light
+                    }
+
                     Icon(
-                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                        painter = painterResource(id = arrowRes),
                         contentDescription = "Voltar",
                         tint = MaterialTheme.colorScheme.onSurface,
-                        modifier = Modifier.padding(17.dp)
+                        modifier = Modifier.padding(16.dp)
                     )
                 }
 

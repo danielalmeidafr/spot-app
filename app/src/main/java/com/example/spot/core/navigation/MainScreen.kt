@@ -7,26 +7,15 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.DateRange
-import androidx.compose.material.icons.outlined.FavoriteBorder
-import androidx.compose.material.icons.outlined.Home
-import androidx.compose.material.icons.outlined.Person
-import androidx.compose.material.icons.rounded.DateRange
-import androidx.compose.material.icons.rounded.Favorite
-import androidx.compose.material.icons.rounded.Home
-import androidx.compose.material.icons.rounded.Person
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
@@ -34,7 +23,6 @@ import androidx.compose.material3.NavigationBarDefaults
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -42,22 +30,24 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.spot.ui.presentation.main_screen.favorite.FavoriteScreen
 import com.example.spot.ui.presentation.main_screen.home.HomeScreen
 import com.example.spot.ui.presentation.main_screen.profile.ProfileScreen
 import com.example.spot.ui.presentation.main_screen.schedules.ScheduleScreen
+import com.student.R
 import kotlinx.coroutines.delay
 
 class BottomAppBarItem(
-    val selectedIcon: ImageVector,
-    val unselectedIcon: ImageVector,
+    val selectedIconDark: Int,
+    val unselectedIconDark: Int,
+    val selectedIconLight: Int,
+    val unselectedIconLight: Int,
     val label: String
 )
 
@@ -66,32 +56,40 @@ sealed class ScreenItem(
 ) {
     data object Home : ScreenItem(
         bottomAppBarItem = BottomAppBarItem(
-            selectedIcon = Icons.Rounded.Home,
-            unselectedIcon = Icons.Outlined.Home,
+            selectedIconDark = R.drawable.home_filled_dark,
+            unselectedIconDark = R.drawable.home_dark,
+            selectedIconLight = R.drawable.home_filled_light,
+            unselectedIconLight = R.drawable.home_light,
             label = "Início"
         )
     )
 
     data object Favorite : ScreenItem(
         bottomAppBarItem = BottomAppBarItem(
-            selectedIcon = Icons.Rounded.Favorite,
-            unselectedIcon = Icons.Outlined.FavoriteBorder,
+            selectedIconDark = R.drawable.favorite_filled_dark,
+            unselectedIconDark = R.drawable.favorite_dark,
+            selectedIconLight = R.drawable.favorite_filled_light,
+            unselectedIconLight = R.drawable.favorite_light,
             label = "Favoritos"
         )
     )
 
     data object Schedules : ScreenItem(
         bottomAppBarItem = BottomAppBarItem(
-            selectedIcon = Icons.Rounded.DateRange,
-            unselectedIcon = Icons.Outlined.DateRange,
+            selectedIconDark = R.drawable.schedule_filled_dark,
+            unselectedIconDark = R.drawable.schedule_dark,
+            selectedIconLight = R.drawable.schedule_filled_light,
+            unselectedIconLight = R.drawable.schedule_light,
             label = "Agendamentos"
         )
     )
 
     data object Profile : ScreenItem(
         bottomAppBarItem = BottomAppBarItem(
-            selectedIcon = Icons.Rounded.Person,
-            unselectedIcon = Icons.Outlined.Person,
+            selectedIconDark = R.drawable.profile_filled_dark,
+            unselectedIconDark = R.drawable.profile_dark,
+            selectedIconLight = R.drawable.profile_filled_light,
+            unselectedIconLight = R.drawable.profile_light,
             label = "Perfil"
         )
     )
@@ -138,7 +136,7 @@ fun MainScreen(
                     animationSpec = tween(600)
                 ) + fadeOut(animationSpec = tween(600))
             ) {
-                Box(
+                /*Box(
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Surface(
@@ -153,7 +151,7 @@ fun MainScreen(
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .offset(y = 11.dp),
+                            .offset(y = 12.dp),
                         contentAlignment = Alignment.Center
                     ) {
                         Surface(
@@ -164,71 +162,76 @@ fun MainScreen(
                                 .height(55.dp)
                                 .fillMaxWidth(0.95f)
                         ) {}
-                    }
+                    }*/
+                NavigationBar(
+                    containerColor = MaterialTheme.colorScheme.surfaceContainer,
+                    windowInsets = NavigationBarDefaults.windowInsets,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    screens.forEach { navItem ->
+                        val isSelected = currentScreen == navItem
 
-                    NavigationBar(
-                        containerColor = Color.Transparent,
-                        windowInsets = NavigationBarDefaults.windowInsets,
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        screens.forEach { navItem ->
-                            val isSelected = currentScreen == navItem
+                        var shouldLift by remember { mutableStateOf(false) }
 
-                            var shouldLift by remember { mutableStateOf(false) }
-
-                            LaunchedEffect(isSelected) {
-                                if (isSelected) {
-                                    delay(100)
-                                    shouldLift = true
-                                } else {
-                                    shouldLift = false
-                                }
+                        LaunchedEffect(isSelected) {
+                            if (isSelected) {
+                                delay(100)
+                                shouldLift = true
+                            } else {
+                                shouldLift = false
                             }
-
-                            val offsetY by animateDpAsState(
-                                targetValue = if (shouldLift) (-3).dp else 0.dp,
-                                animationSpec = tween(durationMillis = 300),
-                                label = "offsetAnim"
-                            )
-
-                            NavigationBarItem(
-                                selected = currentScreen == navItem,
-                                onClick = {
-                                    currentScreen = navItem
-                                },
-                                icon = {
-                                    val isSelected = currentScreen == navItem
-                                    val iconVector = if (isSelected) {
-                                        navItem.bottomAppBarItem.selectedIcon
-                                    } else {
-                                        navItem.bottomAppBarItem.unselectedIcon
-                                    }
-
-                                    Icon(
-                                        imageVector = iconVector,
-                                        contentDescription = navItem.bottomAppBarItem.label,
-                                        modifier = Modifier
-                                            .size(22.dp)
-                                            .offset(y = offsetY)
-                                    )
-                                },
-                                label = {
-                                    Text(
-                                        navItem.bottomAppBarItem.label,
-                                        style = MaterialTheme.typography.bodySmall.copy(fontSize = 9.sp),
-                                        color = MaterialTheme.colorScheme.onBackground,
-                                        modifier = Modifier.offset(y = offsetY)
-                                    )
-                                },
-                                colors = NavigationBarItemDefaults.colors(
-                                    selectedIconColor = MaterialTheme.colorScheme.onBackground,
-                                    unselectedIconColor = MaterialTheme.colorScheme.onBackground,
-                                    selectedTextColor = MaterialTheme.colorScheme.onBackground,
-                                    unselectedTextColor = MaterialTheme.colorScheme.onBackground,
-                                    indicatorColor = Color.Transparent,
-                                )
-                            )
                         }
+
+                        val offsetY by animateDpAsState(
+                            targetValue = if (shouldLift) (-3).dp else 0.dp,
+                            animationSpec = tween(durationMillis = 350),
+                            label = "offsetAnim"
+                        )
+
+                        NavigationBarItem(
+                            selected = currentScreen == navItem,
+                            onClick = {
+                                currentScreen = navItem
+                            },
+                            icon = {
+                                val isSelected = currentScreen == navItem
+                                val isDarkTheme = isSystemInDarkTheme()
+                                val iconRes = if (isSelected) {
+                                    if (isDarkTheme) {
+                                        navItem.bottomAppBarItem.selectedIconDark
+                                    } else {
+                                        navItem.bottomAppBarItem.selectedIconLight
+                                    }
+                                } else if (isDarkTheme) {
+                                    navItem.bottomAppBarItem.unselectedIconDark
+                                } else {
+                                    navItem.bottomAppBarItem.unselectedIconLight
+                                }
+
+                                Icon(
+                                    painter = painterResource(id = iconRes),
+                                    contentDescription = navItem.bottomAppBarItem.label,
+                                    modifier = Modifier
+                                        .size(25.dp)
+                                        .offset(y = offsetY)
+                                )
+                            },
+                            label = {
+                                Text(
+                                    navItem.bottomAppBarItem.label,
+                                    style = MaterialTheme.typography.bodySmall.copy(fontSize = 9.sp),
+                                    color = MaterialTheme.colorScheme.onBackground,
+                                    modifier = Modifier.offset(y = offsetY)
+                                )
+                            },
+                            colors = NavigationBarItemDefaults.colors(
+                                selectedIconColor = MaterialTheme.colorScheme.onBackground,
+                                unselectedIconColor = MaterialTheme.colorScheme.onBackground,
+                                selectedTextColor = MaterialTheme.colorScheme.onBackground,
+                                unselectedTextColor = MaterialTheme.colorScheme.onBackground,
+                                indicatorColor = Color.Transparent,
+                            )
+                        )
                     }
                 }
             }

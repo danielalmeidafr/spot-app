@@ -68,10 +68,10 @@ fun AppointmentItem(
                     Spacer(modifier = Modifier.size(3.dp))
 
                     Icon(
-                        imageVector = Icons.Default.Check,
-                        contentDescription = "Check image",
+                        painter = painterResource(id = R.drawable.check),
+                        contentDescription = "Imagem de check",
                         tint = MaterialTheme.colorScheme.secondary,
-                        modifier = Modifier.size(12.dp)
+                        modifier = Modifier.size(17.dp)
                     )
 
                 } else {
@@ -109,11 +109,9 @@ fun AppointmentItem(
                     painter = painterResource(id = locationRes),
                     contentDescription = "Location image",
                     modifier = Modifier
-                        .size(10.dp)
+                        .size(13.dp)
                         .alpha(0.8f)
                 )
-
-                Spacer(modifier = Modifier.size(3.dp))
 
                 Text(
                     appointmentData.location,
