@@ -40,9 +40,13 @@ import com.student.R
 fun ProfileScreen(
     modifier: Modifier = Modifier,
     onNavigateToLogin: () -> Unit,
-    innerPadding: PaddingValues = PaddingValues()
+    innerPadding: PaddingValues = PaddingValues(),
+    isDarkTheme: Boolean,
+    onThemeToggle: () -> Unit
 ) {
-    val isLogged: Boolean = true
+    val isLogged = true
+
+    val iconRes = if (isDarkTheme) R.drawable.light else R.drawable.dark
 
     if (!isLogged) {
         Column(
@@ -128,6 +132,17 @@ fun ProfileScreen(
                 Box(
                     modifier = Modifier.fillMaxWidth(),
                 ) {
+                    Icon(
+                        painter = painterResource(id = iconRes),
+                        tint = MaterialTheme.colorScheme.onBackground,
+                        contentDescription = "Imagem do tema",
+                        modifier = Modifier
+                            .align(Alignment.CenterStart)
+                            .padding(start = 20.dp)
+                            .size(18.dp)
+                            .clickable { onThemeToggle() }
+                    )
+
                     Text(
                         "PERFIL",
                         style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.SemiBold),
@@ -136,14 +151,9 @@ fun ProfileScreen(
                     )
 
                     Icon(
-                        painter = painterResource(
-                            if (isSystemInDarkTheme()) {
-                                R.drawable.settings_dark
-                            } else {
-                                R.drawable.settings_light
-                            }
-                        ),
-                        contentDescription = "Settings image",
+                        painter = painterResource(id = R.drawable.settings),
+                        tint = MaterialTheme.colorScheme.onBackground,
+                        contentDescription = "Imagem de configurações",
                         modifier = Modifier
                             .align(Alignment.CenterEnd)
                             .padding(end = 20.dp)
@@ -198,79 +208,49 @@ fun ProfileScreen(
                 Row(
                     modifier = Modifier
                         .fillMaxWidth(0.95f),
-                    horizontalArrangement = Arrangement.spacedBy(15.dp, Alignment.CenterHorizontally)
+                    horizontalArrangement = Arrangement.spacedBy(
+                        15.dp,
+                        Alignment.CenterHorizontally
+                    )
                 ) {
                     ProfileCard(
-                        iconLight = R.drawable.star_light,
-                        iconDark = R.drawable.star_dark,
+                        icon = R.drawable.star,
                         value = "12",
                         label = "Avaliações"
                     )
 
                     ProfileCard(
-                        iconLight = R.drawable.schedule_light,
-                        iconDark = R.drawable.schedule_dark,
+                        icon = R.drawable.schedule,
                         value = "4",
                         label = "Agendamentos"
                     )
 
                     ProfileCard(
-                        iconLight = R.drawable.favorite_light,
-                        iconDark = R.drawable.favorite_dark,
+                        icon = R.drawable.favorite,
                         value = "5",
                         label = "Favoritos"
                     )
                 }
             }
-
             item {
                 Spacer(modifier = Modifier.height(40.dp))
 
-                ProfileListItem(
-                    text = "Editar perfil",
-                    iconDark = R.drawable.user_edit_dark,
-                    iconLight = R.drawable.user_edit_light,
-                )
-
+                ProfileListItem(text = "Segurança e senha", icon = R.drawable.security)
                 Spacer(modifier = Modifier.height(15.dp))
 
-                ProfileListItem(
-                    text = "Segurança e senha",
-                    iconDark = R.drawable.security_dark,
-                    iconLight = R.drawable.security_light,
-                )
-
+                ProfileListItem(text = "Editar perfil", icon = R.drawable.profile_edit)
                 Spacer(modifier = Modifier.height(15.dp))
 
-                ProfileListItem(
-                    text = "Métodos de pagamentos",
-                    iconDark = R.drawable.payments_dark,
-                    iconLight = R.drawable.payments_light,
-                )
-
+                ProfileListItem(text = "Métodos de pagamentos", icon = R.drawable.payments)
                 Spacer(modifier = Modifier.height(30.dp))
 
-                ProfileListItem(
-                    text = "Notificações",
-                    iconDark = R.drawable.notifications_dark,
-                    iconLight = R.drawable.notifications_light,
-                )
-
+                ProfileListItem(text = "Notificações", icon = R.drawable.notifications)
                 Spacer(modifier = Modifier.height(15.dp))
 
-                ProfileListItem(
-                    text = "Ajuda e suporte",
-                    iconDark = R.drawable.help_dark,
-                    iconLight = R.drawable.help_light,
-                )
-
+                ProfileListItem(text = "Ajuda e suporte", icon = R.drawable.help)
                 Spacer(modifier = Modifier.height(30.dp))
 
-                ProfileListItem(
-                    text = "Sair",
-                    isLogout = true
-                )
-
+                ProfileListItem(text = "Sair", icon = R.drawable.exit, isLogout = true)
                 Spacer(modifier = Modifier.height(20.dp))
             }
         }

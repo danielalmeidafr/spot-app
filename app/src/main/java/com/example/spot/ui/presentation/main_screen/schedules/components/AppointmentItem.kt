@@ -1,6 +1,5 @@
 package com.example.spot.ui.presentation.main_screen.schedules.components
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -11,8 +10,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
@@ -33,7 +30,6 @@ import com.student.R
 @Composable
 fun AppointmentItem(
     appointmentData: AppointmentData,
-    isDarkTheme: Boolean,
     modifier: Modifier = Modifier
 ) {
     Row(
@@ -102,11 +98,9 @@ fun AppointmentItem(
             Spacer(modifier = Modifier.height(1.dp))
 
             Row(verticalAlignment = Alignment.CenterVertically) {
-                val locationRes =
-                    if (isDarkTheme) R.drawable.location_dark else R.drawable.location_light
-
-                Image(
-                    painter = painterResource(id = locationRes),
+                Icon(
+                    painter = painterResource(id = R.drawable.location),
+                    tint = MaterialTheme.colorScheme.onBackground,
                     contentDescription = "Location image",
                     modifier = Modifier
                         .size(13.dp)
@@ -114,7 +108,7 @@ fun AppointmentItem(
                 )
 
                 Text(
-                    appointmentData.location,
+                    text = appointmentData.location,
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onBackground
                 )
@@ -124,7 +118,7 @@ fun AppointmentItem(
 
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(
-                    appointmentData.date,
+                    text = appointmentData.date,
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onBackground
                 )
@@ -132,7 +126,7 @@ fun AppointmentItem(
                 Spacer(modifier = Modifier.size(6.dp))
 
                 Text(
-                    appointmentData.time,
+                    text = appointmentData.time,
                     style = MaterialTheme.typography.bodySmall.copy(
                         fontWeight = FontWeight.SemiBold,
                         fontSize = 12.sp

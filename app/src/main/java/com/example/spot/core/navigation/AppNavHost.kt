@@ -13,12 +13,17 @@ import com.example.spot.ui.presentation.main_screen.home.homeScreen
 import com.example.spot.ui.presentation.main_screen.profile.profileScreen
 
 @Composable
-fun AppNavHost() {
+fun AppNavHost(
+    isDarkTheme: Boolean,
+    onThemeToggle: () -> Unit
+) {
     val navController = rememberNavController()
     NavHost(navController = navController, startDestination = MainScreenDestination){
         mainScreen(
             onNavigateToLogin = { navController.navigate(LoginDestination) },
-            onNavigateToServices = { navController.navigate(ServicesDestination) }
+            onNavigateToServices = { navController.navigate(ServicesDestination) },
+            isDarkTheme = isDarkTheme,
+            onThemeToggle = onThemeToggle
         )
 
         homeScreen(
@@ -35,7 +40,9 @@ fun AppNavHost() {
         )
 
         profileScreen(
-            onNavigateToLogin = { navController.navigate(LoginDestination) }
+            onNavigateToLogin = { navController.navigate(LoginDestination) },
+            isDarkTheme = isDarkTheme,
+            onThemeToggle = onThemeToggle
         )
 
         servicesScreen()

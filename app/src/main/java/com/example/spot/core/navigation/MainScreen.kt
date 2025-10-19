@@ -7,7 +7,6 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
@@ -94,7 +93,9 @@ sealed class ScreenItem(
 fun MainScreen(
     modifier: Modifier = Modifier,
     onNavigateToServices: () -> Unit,
-    onNavigateToLogin: () -> Unit
+    onNavigateToLogin: () -> Unit,
+    isDarkTheme: Boolean,
+    onThemeToggle: () -> Unit
 ) {
     val screens = remember {
         listOf(
@@ -199,7 +200,7 @@ fun MainScreen(
                                     contentDescription = navItem.bottomAppBarItem.label,
                                     tint = MaterialTheme.colorScheme.onBackground,
                                     modifier = Modifier
-                                        .size(20.dp)
+                                        .size(18.dp)
                                         .offset(y = offsetY)
                                 )
                             },
@@ -239,7 +240,9 @@ fun MainScreen(
                 ScreenItem.Schedules -> ScheduleScreen()
                 ScreenItem.Profile -> ProfileScreen(
                     innerPadding = innerPadding,
-                    onNavigateToLogin = onNavigateToLogin
+                    onNavigateToLogin = onNavigateToLogin,
+                    isDarkTheme = isDarkTheme,
+                    onThemeToggle = onThemeToggle
                 )
             }
         }

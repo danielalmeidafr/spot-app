@@ -1,7 +1,6 @@
 package com.example.spot.ui.presentation.auth.login
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,8 +16,6 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -39,10 +36,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.spot.core.util.clearFocusOnTap
 import com.example.spot.ui.presentation.auth.components.CustomButton
 import com.example.spot.ui.presentation.auth.components.CustomTextField
 import com.example.spot.ui.presentation.auth.components.PrimaryButton
-import com.example.spot.core.util.clearFocusOnTap
 import com.student.R
 
 @Composable
@@ -82,14 +79,8 @@ fun LoginScreen(
                     shape = CircleShape,
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    val arrowRes = if (isSystemInDarkTheme()){
-                        R.drawable.arrow_back_light
-                    } else {
-                        R.drawable.arrow_back_light
-                    }
-
                     Icon(
-                        painter = painterResource(id = arrowRes),
+                        painter = painterResource(id = R.drawable.arrow_back),
                         contentDescription = "Voltar",
                         tint = MaterialTheme.colorScheme.onSurface,
                         modifier = Modifier.padding(16.dp)

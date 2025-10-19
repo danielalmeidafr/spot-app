@@ -1,10 +1,8 @@
 package com.example.spot.ui.presentation.main_screen.home.components
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsFocusedAsState
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -13,6 +11,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -31,14 +30,6 @@ fun CustomSearchBar(
     onQueryChange: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val isDarkTheme = isSystemInDarkTheme()
-
-    val searchRes = if (isDarkTheme) {
-        R.drawable.search_dark
-    } else {
-        R.drawable.search_light
-    }
-
     val interactionSource = remember { MutableInteractionSource() }
     val isFocused = interactionSource.collectIsFocusedAsState().value
 
@@ -56,8 +47,9 @@ fun CustomSearchBar(
             .padding(horizontal = 50.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        Image(
-            painter = painterResource(id = searchRes),
+        Icon(
+            painter = painterResource(id = R.drawable.search),
+            tint = MaterialTheme.colorScheme.onBackground.copy(0.8f),
             contentDescription = null,
             modifier = Modifier.size(14.dp)
         )

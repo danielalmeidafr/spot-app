@@ -2,7 +2,6 @@ package com.example.spot.ui.presentation.details_establishment.services
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -11,18 +10,12 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.FavoriteBorder
-import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -39,7 +32,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.zIndex
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.spot.ui.presentation.details_establishment.services.components.ServiceItem
 import com.student.R
@@ -90,7 +82,7 @@ fun ServicesScreen(
                     color = MaterialTheme.colorScheme.surface
                 ) {
                     Icon(
-                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                        painter = painterResource(id = R.drawable.arrow_back),
                         contentDescription = "Voltar",
                         tint = MaterialTheme.colorScheme.onSurface,
                         modifier = Modifier.padding(10.dp)
@@ -109,7 +101,7 @@ fun ServicesScreen(
                         color = MaterialTheme.colorScheme.surface
                     ) {
                         Icon(
-                            imageVector = Icons.Default.Share,
+                            painter = painterResource(R.drawable.share),
                             contentDescription = "Compartilhar",
                             tint = MaterialTheme.colorScheme.onSurface,
                             modifier = Modifier.padding(10.dp)
@@ -122,7 +114,7 @@ fun ServicesScreen(
                         color = MaterialTheme.colorScheme.surface
                     ) {
                         Icon(
-                            imageVector = Icons.Default.FavoriteBorder,
+                            painter = painterResource(id = R.drawable.favorite),
                             contentDescription = "Favoritar",
                             tint = MaterialTheme.colorScheme.onSurface,
                             modifier = Modifier.padding(10.dp)

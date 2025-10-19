@@ -10,7 +10,6 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -23,10 +22,6 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.KeyboardArrowDown
-import androidx.compose.material.icons.rounded.KeyboardArrowUp
-import androidx.compose.material.icons.rounded.LocationOn
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -47,6 +42,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.spot.ui.presentation.main_screen.home.EstablishmentData
 import com.student.R
+import java.util.Locale
 
 @Composable
 fun EstablishmentCard(
@@ -127,7 +123,7 @@ fun EstablishmentCard(
                     modifier = Modifier.animateContentSize(tween(durationMillis = 300))
                 ) {
                     Text(
-                        String.format("%.1f", establishmentData.averageRating),
+                        String.format(Locale("pt", "BR"), "%.1f", establishmentData.averageRating),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onBackground
                     )
@@ -190,15 +186,9 @@ fun EstablishmentCard(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                val locationRes = if (isSystemInDarkTheme()){
-                    R.drawable.location_dark
-                } else {
-                    R.drawable.location_light
-                }
-
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Icon(
-                        painter = painterResource(id = locationRes),
+                        painter = painterResource(id = R.drawable.location),
                         tint = MaterialTheme.colorScheme.onBackground.copy(0.8f),
                         contentDescription = "Imagem de localização",
                         modifier = Modifier
@@ -216,14 +206,8 @@ fun EstablishmentCard(
                     IconButton(
                         onClick = { isExpanded = !isExpanded },
                     ) {
-                        val arrowRes = if (isSystemInDarkTheme()){
-                            R.drawable.arrow_down_dark
-                        } else {
-                            R.drawable.arrow_down_light
-                        }
-
                         Icon(
-                            painter = painterResource(id = arrowRes),
+                            painter = painterResource(id = R.drawable.arrow_down),
                             tint = MaterialTheme.colorScheme.onBackground.copy(0.8f),
                             contentDescription = "Seta para baixo",
                             modifier = Modifier
@@ -253,13 +237,6 @@ fun EstablishmentCard(
                                 style = MaterialTheme.typography.bodySmall,
                                 color = MaterialTheme.colorScheme.onBackground
                             )
-
-                            val cardRes = if (isSystemInDarkTheme()) {
-                                R.drawable.card_dark
-                            } else {
-                                R.drawable.card_light
-                            }
-
                             establishmentData.paymentsMethods.forEach { method ->
                                 when (method) {
                                     PaymentsMethods.PIX -> Image(
@@ -274,8 +251,9 @@ fun EstablishmentCard(
                                         modifier = Modifier.size(14.dp)
                                     )
 
-                                    PaymentsMethods.CARD -> Image(
-                                        painter = painterResource(id = cardRes),
+                                    PaymentsMethods.CARD -> Icon(
+                                        painter = painterResource(id = R.drawable.card),
+                                        tint = MaterialTheme.colorScheme.onBackground,
                                         contentDescription = "Card image",
                                         modifier = Modifier.size(14.dp)
                                     )
@@ -286,14 +264,8 @@ fun EstablishmentCard(
                         IconButton(
                             onClick = { isExpanded = false }
                         ) {
-                            val arrowRes = if (isSystemInDarkTheme()){
-                                R.drawable.arrow_up_dark
-                            } else {
-                                R.drawable.arrow_up_light
-                            }
-
                             Icon(
-                                painter = painterResource(id = arrowRes),
+                                painter = painterResource(id = R.drawable.arrow_up),
                                 tint = MaterialTheme.colorScheme.onBackground.copy(0.8f),
                                 contentDescription = "Seta para cima",
                                 modifier = Modifier

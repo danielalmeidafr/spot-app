@@ -1,15 +1,14 @@
 package com.example.spot.ui.presentation.auth.components
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
@@ -42,7 +41,6 @@ fun CustomTextField(
     modifier: Modifier = Modifier
 ) {
     var passwordVisible by remember { mutableStateOf(false) }
-    val isDarkTheme = isSystemInDarkTheme()
 
     OutlinedTextField(
         value = value,
@@ -85,14 +83,13 @@ fun CustomTextField(
         trailingIcon = {
             if (isPassword) {
                 val imageRes = when {
-                    passwordVisible && isDarkTheme -> R.drawable.eye_open_dark
-                    passwordVisible && !isDarkTheme -> R.drawable.eye_open_light
-                    !passwordVisible && isDarkTheme -> R.drawable.eye_closed_dark
-                    else -> R.drawable.eye_closed_light
+                    passwordVisible -> R.drawable.eye_open
+                    else -> R.drawable.eye_closed
                 }
 
-                Image(
+                Icon(
                     painter = painterResource(id = imageRes),
+                    tint = MaterialTheme.colorScheme.onBackground,
                     contentDescription = if (passwordVisible) "Ocultar senha" else "Mostrar senha",
                     modifier = Modifier
                         .size(32.dp)

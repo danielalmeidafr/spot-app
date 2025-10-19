@@ -1,10 +1,8 @@
 package com.example.spot.ui.presentation.main_screen.schedules
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -27,6 +25,7 @@ import androidx.compose.material3.BottomSheetScaffold
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -38,6 +37,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.res.painterResource
@@ -100,7 +100,6 @@ fun ScheduleScreen(
     modifier: Modifier = Modifier,
     viewModel: ScheduleViewModel = viewModel()
 ) {
-    val isDarkTheme = isSystemInDarkTheme()
     val uiState by viewModel.uiState.collectAsState()
 
     val calendarDays = remember(uiState.year, uiState.month) {
@@ -152,14 +151,14 @@ fun ScheduleScreen(
 
                         appointments.isEmpty() -> {
                             item {
-                                val calendarRes =
-                                    if (isDarkTheme) R.drawable.schedule_dark else R.drawable.schedule_light
-
-                                Image(
-                                    painter = painterResource(id = calendarRes),
+                                Icon(
+                                    painter = painterResource(id = R.drawable.schedule),
+                                    tint = MaterialTheme.colorScheme.onBackground,
                                     contentDescription = "Calendar Image",
-                                    modifier = Modifier.size(60.dp),
-                                    alpha = 0.7f
+                                    modifier = Modifier
+                                        .size(60.dp)
+                                        .alpha(0.7f)
+
                                 )
                                 Spacer(modifier = Modifier.height(30.dp))
                                 Text(
@@ -193,8 +192,7 @@ fun ScheduleScreen(
                             itemsIndexed(uiState.appointments) { index, appointment ->
                                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                                     AppointmentItem(
-                                        appointmentData = appointment,
-                                        isDarkTheme = isDarkTheme
+                                        appointmentData = appointment
                                     )
 
                                     if (index < appointments.lastIndex) {

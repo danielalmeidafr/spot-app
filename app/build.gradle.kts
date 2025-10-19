@@ -8,7 +8,7 @@ plugins {
 
 android {
     namespace = "com.student"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.student"
@@ -56,9 +56,9 @@ dependencies {
 
     implementation(libs.androidx.lifecycle.viewmodel.compose)
 
-    implementation("androidx.navigation:navigation-compose:2.9.1")
+    implementation(libs.androidx.navigation.compose)
 
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.8.1")
+    implementation(libs.kotlinx.serialization.json)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

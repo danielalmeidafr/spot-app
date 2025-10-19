@@ -1,6 +1,5 @@
 package com.example.spot.ui.presentation.main_screen.profile.components
 
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -21,8 +20,7 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun ProfileCard(
-    iconLight: Int,
-    iconDark: Int,
+    icon: Int,
     value: String,
     label: String,
     modifier: Modifier = Modifier
@@ -40,12 +38,10 @@ fun ProfileCard(
             verticalArrangement = Arrangement.Center
         ) {
             Icon(
-                painter = painterResource(
-                    if (isSystemInDarkTheme()) iconDark else iconLight
-                ),
+                painter = painterResource(id = icon),
                 tint = MaterialTheme.colorScheme.onBackground.copy(0.8f),
                 contentDescription = label,
-                modifier = Modifier.size(40.dp)
+                modifier = Modifier.size(25.dp)
             )
 
             Spacer(modifier = Modifier.height(10.dp))
