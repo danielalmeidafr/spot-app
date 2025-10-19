@@ -8,14 +8,17 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
@@ -23,6 +26,7 @@ import androidx.compose.material3.NavigationBarDefaults
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -30,6 +34,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLayoutDirection
@@ -44,10 +49,8 @@ import com.student.R
 import kotlinx.coroutines.delay
 
 class BottomAppBarItem(
-    val selectedIconDark: Int,
-    val unselectedIconDark: Int,
-    val selectedIconLight: Int,
-    val unselectedIconLight: Int,
+    val selectedIcon: Int,
+    val unselectedIcon: Int,
     val label: String
 )
 
@@ -56,40 +59,32 @@ sealed class ScreenItem(
 ) {
     data object Home : ScreenItem(
         bottomAppBarItem = BottomAppBarItem(
-            selectedIconDark = R.drawable.home_filled_dark,
-            unselectedIconDark = R.drawable.home_dark,
-            selectedIconLight = R.drawable.home_filled_light,
-            unselectedIconLight = R.drawable.home_light,
+            selectedIcon = R.drawable.home_filled,
+            unselectedIcon = R.drawable.home,
             label = "Início"
         )
     )
 
     data object Favorite : ScreenItem(
         bottomAppBarItem = BottomAppBarItem(
-            selectedIconDark = R.drawable.favorite_filled_dark,
-            unselectedIconDark = R.drawable.favorite_dark,
-            selectedIconLight = R.drawable.favorite_filled_light,
-            unselectedIconLight = R.drawable.favorite_light,
+            selectedIcon = R.drawable.favorite_filled,
+            unselectedIcon = R.drawable.favorite,
             label = "Favoritos"
         )
     )
 
     data object Schedules : ScreenItem(
         bottomAppBarItem = BottomAppBarItem(
-            selectedIconDark = R.drawable.schedule_filled_dark,
-            unselectedIconDark = R.drawable.schedule_dark,
-            selectedIconLight = R.drawable.schedule_filled_light,
-            unselectedIconLight = R.drawable.schedule_light,
+            selectedIcon = R.drawable.schedule_filled,
+            unselectedIcon = R.drawable.schedule,
             label = "Agendamentos"
         )
     )
 
     data object Profile : ScreenItem(
         bottomAppBarItem = BottomAppBarItem(
-            selectedIconDark = R.drawable.profile_filled_dark,
-            unselectedIconDark = R.drawable.profile_dark,
-            selectedIconLight = R.drawable.profile_filled_light,
-            unselectedIconLight = R.drawable.profile_light,
+            selectedIcon = R.drawable.profile_filled,
+            unselectedIcon = R.drawable.profile,
             label = "Perfil"
         )
     )
@@ -136,35 +131,33 @@ fun MainScreen(
                     animationSpec = tween(600)
                 ) + fadeOut(animationSpec = tween(600))
             ) {
-                /*Box(
-                    modifier = Modifier.fillMaxWidth()
+                Surface(
+                    shape = RoundedCornerShape(topStart = 15.dp, topEnd = 15.dp),
+                    color = MaterialTheme.colorScheme.surfaceContainer,
+                    modifier = Modifier
+                        .height(100.dp)
+                        .fillMaxWidth()
+                        .offset(y = 40.dp)
+                ) {}
+
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .offset(y = 10.dp),
+                    contentAlignment = Alignment.Center
                 ) {
                     Surface(
-                        shape = RoundedCornerShape(topStart = 15.dp, topEnd = 15.dp),
+                        shape = RoundedCornerShape(100.dp),
+                        shadowElevation = 0.5.dp,
                         color = MaterialTheme.colorScheme.surfaceContainer,
                         modifier = Modifier
-                            .height(100.dp)
-                            .fillMaxWidth()
-                            .offset(y = 40.dp)
+                            .height(55.dp)
+                            .fillMaxWidth(0.95f)
                     ) {}
+                }
 
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .offset(y = 12.dp),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Surface(
-                            shape = RoundedCornerShape(100.dp),
-                            shadowElevation = 0.5.dp,
-                            color = MaterialTheme.colorScheme.surfaceContainer,
-                            modifier = Modifier
-                                .height(55.dp)
-                                .fillMaxWidth(0.95f)
-                        ) {}
-                    }*/
                 NavigationBar(
-                    containerColor = MaterialTheme.colorScheme.surfaceContainer,
+                    containerColor = Color.Transparent,
                     windowInsets = NavigationBarDefaults.windowInsets,
                     modifier = Modifier.fillMaxWidth()
                 ) {
@@ -195,40 +188,30 @@ fun MainScreen(
                             },
                             icon = {
                                 val isSelected = currentScreen == navItem
-                                val isDarkTheme = isSystemInDarkTheme()
                                 val iconRes = if (isSelected) {
-                                    if (isDarkTheme) {
-                                        navItem.bottomAppBarItem.selectedIconDark
-                                    } else {
-                                        navItem.bottomAppBarItem.selectedIconLight
-                                    }
-                                } else if (isDarkTheme) {
-                                    navItem.bottomAppBarItem.unselectedIconDark
+                                    navItem.bottomAppBarItem.selectedIcon
                                 } else {
-                                    navItem.bottomAppBarItem.unselectedIconLight
+                                    navItem.bottomAppBarItem.unselectedIcon
                                 }
 
                                 Icon(
                                     painter = painterResource(id = iconRes),
                                     contentDescription = navItem.bottomAppBarItem.label,
+                                    tint = MaterialTheme.colorScheme.onBackground,
                                     modifier = Modifier
-                                        .size(25.dp)
+                                        .size(20.dp)
                                         .offset(y = offsetY)
                                 )
                             },
                             label = {
                                 Text(
                                     navItem.bottomAppBarItem.label,
-                                    style = MaterialTheme.typography.bodySmall.copy(fontSize = 9.sp),
+                                    style = MaterialTheme.typography.bodySmall.copy(fontSize = 8.sp),
                                     color = MaterialTheme.colorScheme.onBackground,
                                     modifier = Modifier.offset(y = offsetY)
                                 )
                             },
                             colors = NavigationBarItemDefaults.colors(
-                                selectedIconColor = MaterialTheme.colorScheme.onBackground,
-                                unselectedIconColor = MaterialTheme.colorScheme.onBackground,
-                                selectedTextColor = MaterialTheme.colorScheme.onBackground,
-                                unselectedTextColor = MaterialTheme.colorScheme.onBackground,
                                 indicatorColor = Color.Transparent,
                             )
                         )
