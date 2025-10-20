@@ -3,7 +3,6 @@ package com.example.spot.ui.presentation.main_screen.home
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,7 +10,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -25,6 +23,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.spot.core.util.clearFocusOnTap
 import com.example.spot.ui.presentation.main_screen.home.components.CustomSearchBar
 import com.example.spot.ui.presentation.main_screen.home.components.EstablishmentCard
+import com.example.spot.ui.presentation.main_screen.home.components.EstablishmentCardSkeleton
 import com.example.spot.ui.presentation.main_screen.home.components.NextScheduleCard
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -56,8 +55,39 @@ fun HomeScreen(
 
         when {
             uiState.isLoading -> {
-                LoadingScreen()
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(innerPadding),
+                    verticalArrangement = Arrangement.spacedBy(25.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    item {
+                        NextScheduleCard(
+                            isScheduled = uiState.nextSchedule.isScheduled,
+                            nextSchedule = uiState.nextSchedule.nextScheduleTime
+                        )
+                    }
+
+                    stickyHeader {
+                        Text(
+                            uiState.listTitle,
+                            modifier = Modifier
+                                .fillMaxWidth(0.9f)
+                                .background(MaterialTheme.colorScheme.background)
+                                .padding(bottom = 10.dp),
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onBackground,
+                            textAlign = TextAlign.Start
+                        )
+                    }
+
+                    items(5) {
+                        EstablishmentCardSkeleton()
+                    }
+                }
             }
+
             else -> {
                 LazyColumn(
                     modifier = Modifier
@@ -95,28 +125,6 @@ fun HomeScreen(
                     }
                 }
             }
-        }
-    }
-}
-
-@Composable
-private fun LoadingScreen() {
-    Box(
-        modifier = Modifier
-            .fillMaxSize(),
-        contentAlignment = Alignment.Center
-    ) {
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            CircularProgressIndicator(
-                color = MaterialTheme.colorScheme.primary,
-                strokeWidth = 4.dp
-            )
-            Text(
-                text = "Carregando barbearias...",
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f),
-                modifier = Modifier.padding(top = 16.dp)
-            )
         }
     }
 }

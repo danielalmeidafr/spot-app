@@ -71,7 +71,7 @@ class HomeViewModel : ViewModel() {
         viewModelScope.launch {
             _uiState.value = _uiState.value.copy(isLoading = true)
 
-            delay(1000)
+            delay(3000)
 
             val sampleEstablishments = listOf(
                 EstablishmentData(
