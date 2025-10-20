@@ -103,9 +103,11 @@ fun AppointmentItem(
                     tint = MaterialTheme.colorScheme.onBackground,
                     contentDescription = "Location image",
                     modifier = Modifier
-                        .size(13.dp)
-                        .alpha(0.8f)
+                        .size(11.dp)
+                        .alpha(0.6f)
                 )
+
+                Spacer(modifier = Modifier.size(3.dp))
 
                 Text(
                     text = appointmentData.location,

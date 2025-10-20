@@ -1,6 +1,6 @@
 package com.example.spot.ui.presentation.main_screen.profile.components
 
-import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -26,6 +25,8 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -41,54 +42,51 @@ fun ProfileListItem(
     isLogout: Boolean = false
 ) {
     val textColor = if (isLogout) MaterialTheme.colorScheme.tertiary else MaterialTheme.colorScheme.onBackground
+    val iconTint = if (isLogout) MaterialTheme.colorScheme.tertiary else MaterialTheme.colorScheme.onBackground
+    val shape = RoundedCornerShape(5.dp)
+
     var isPressed by remember { mutableStateOf(false) }
     val scope = rememberCoroutineScope()
 
-    val arrowOffset by animateDpAsState(
-        targetValue = if (isPressed) 5.dp else 0.dp,
+    val scale by animateFloatAsState(
+        targetValue = if (isPressed) 1.1f else 1f,
         animationSpec = tween(durationMillis = 600),
-        label = "arrowOffset"
+        label = "scaleAnim"
     )
 
     Row(
         modifier = modifier
+            .fillMaxWidth(0.95f)
+            .height(45.dp)
+            .scale(scale)
+            .shadow(0.5.dp, shape)
+            .clip(shape)
+            .background(MaterialTheme.colorScheme.surface)
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = ripple(bounded = true)
             ) {
                 isPressed = true
                 scope.launch {
-                    delay(150)
+                    delay(100)
                     isPressed = false
                 }
             }
-            .fillMaxWidth(0.95f)
-            .height(45.dp)
-            .shadow(
-                elevation = 0.5.dp,
-                shape = RoundedCornerShape(5.dp)
-            )
-            .background(
-                color = MaterialTheme.colorScheme.surface,
-                shape = RoundedCornerShape(5.dp)
-            )
-            .padding(start = 20.dp, end = 20.dp),
+            .padding(horizontal = 20.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Start
     ) {
-        val iconTint = if (isLogout) MaterialTheme.colorScheme.tertiary else MaterialTheme.colorScheme.onBackground
-
         Icon(
             painter = painterResource(id = icon),
             tint = iconTint,
-            contentDescription = "$text image",
+            contentDescription = "$text icon",
             modifier = Modifier.size(15.dp)
         )
 
         Spacer(modifier = Modifier.size(20.dp))
 
         Text(
-            text,
+            text = text,
             style = MaterialTheme.typography.bodySmall,
             color = textColor
         )
@@ -98,11 +96,9 @@ fun ProfileListItem(
         if (!isLogout) {
             Icon(
                 painter = painterResource(id = R.drawable.arrow_right),
-                tint = MaterialTheme.colorScheme.onBackground.copy(0.8f),
+                tint = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.8f),
                 contentDescription = "Seta para direita",
-                modifier = Modifier
-                    .size(20.dp)
-                    .offset(x = arrowOffset)
+                modifier = Modifier.size(20.dp)
             )
         }
     }

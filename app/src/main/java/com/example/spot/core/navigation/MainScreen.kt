@@ -149,7 +149,7 @@ fun MainScreen(
                 ) {
                     Surface(
                         shape = RoundedCornerShape(100.dp),
-                        shadowElevation = 0.5.dp,
+                        shadowElevation = 0.8.dp,
                         color = MaterialTheme.colorScheme.surfaceContainer,
                         modifier = Modifier
                             .height(55.dp)

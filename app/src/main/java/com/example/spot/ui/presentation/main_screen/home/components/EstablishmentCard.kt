@@ -194,7 +194,7 @@ fun EstablishmentCard(
                     ) {
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(6.dp),
+                            horizontalArrangement = Arrangement.spacedBy(7.dp),
                         ) {
                             Text(
                                 "Aceita:",
@@ -203,24 +203,9 @@ fun EstablishmentCard(
                             )
                             establishmentData.paymentsMethods.forEach { method ->
                                 when (method) {
-                                    PaymentsMethods.PIX -> Image(
-                                        painter = painterResource(id = R.drawable.pix),
-                                        contentDescription = "Pix image",
-                                        modifier = Modifier.size(14.dp)
-                                    )
-
-                                    PaymentsMethods.CASH -> Image(
-                                        painter = painterResource(id = R.drawable.cash),
-                                        contentDescription = "Cash image",
-                                        modifier = Modifier.size(14.dp)
-                                    )
-
-                                    PaymentsMethods.CARD -> Icon(
-                                        painter = painterResource(id = R.drawable.card),
-                                        tint = MaterialTheme.colorScheme.onBackground,
-                                        contentDescription = "Card image",
-                                        modifier = Modifier.size(14.dp)
-                                    )
+                                    PaymentsMethods.PIX -> PaymentIcon(R.drawable.pix, "Imagem de pix")
+                                    PaymentsMethods.CASH -> PaymentIcon(R.drawable.cash, "Imagem de dinheiro")
+                                    PaymentsMethods.CARD -> PaymentIcon(R.drawable.card, "Imagem de cartão")
                                 }
                             }
                         }
@@ -236,13 +221,13 @@ fun EstablishmentCard(
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Icon(
                         painter = painterResource(id = R.drawable.location),
-                        tint = MaterialTheme.colorScheme.onBackground.copy(0.8f),
+                        tint = MaterialTheme.colorScheme.onBackground.copy(0.6f),
                         contentDescription = "Imagem de localização",
                         modifier = Modifier
                             .size(11.dp)
                     )
 
-                    Spacer(modifier = Modifier.size(1.dp))
+                    Spacer(modifier = Modifier.size(3.dp))
 
                     Text(
                         "${establishmentData.location} • ${establishmentData.distance}",
@@ -254,31 +239,39 @@ fun EstablishmentCard(
                 if (!isExpanded) {
                     IconButton(
                         onClick = { isExpanded = !isExpanded },
+                        modifier = Modifier.size(30.dp)
                     ) {
                         Icon(
                             painter = painterResource(id = R.drawable.arrow_down),
                             tint = MaterialTheme.colorScheme.onBackground.copy(0.8f),
                             contentDescription = "Seta para baixo",
-                            modifier = Modifier
-                                .offset(x = 10.dp)
                         )
                     }
                 }
 
                 if (isExpanded) {
                     IconButton(
-                        onClick = { isExpanded = false }
+                        onClick = { isExpanded = false },
+                        modifier = Modifier.size(30.dp)
                     ) {
                         Icon(
                             painter = painterResource(id = R.drawable.arrow_up),
                             tint = MaterialTheme.colorScheme.onBackground.copy(0.8f),
                             contentDescription = "Seta para cima",
-                            modifier = Modifier
-                                .offset(x = 10.dp)
                         )
                     }
                 }
             }
         }
     }
+}
+
+@Composable
+private fun PaymentIcon(id: Int, contentDescription: String) {
+    Icon(
+        painter = painterResource(id = id),
+        tint = MaterialTheme.colorScheme.onBackground.copy(0.8f),
+        contentDescription = contentDescription,
+        modifier = Modifier.size(15.dp)
+    )
 }
