@@ -181,42 +181,6 @@ fun EstablishmentCard(
                 }
             }
 
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.location),
-                        tint = MaterialTheme.colorScheme.onBackground.copy(0.8f),
-                        contentDescription = "Imagem de localização",
-                        modifier = Modifier
-                            .size(14.dp)
-                    )
-
-                    Text(
-                        "${establishmentData.location} • ${establishmentData.distance}",
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onBackground
-                    )
-                }
-
-                if (!isExpanded) {
-                    IconButton(
-                        onClick = { isExpanded = !isExpanded },
-                    ) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.arrow_down),
-                            tint = MaterialTheme.colorScheme.onBackground.copy(0.8f),
-                            contentDescription = "Seta para baixo",
-                            modifier = Modifier
-                                .offset(x = 10.dp)
-                        )
-                    }
-                }
-            }
-
             AnimatedVisibility(
                 visible = isExpanded,
                 enter = fadeIn() + expandVertically(),
@@ -260,18 +224,58 @@ fun EstablishmentCard(
                                 }
                             }
                         }
+                    }
+                }
+            }
 
-                        IconButton(
-                            onClick = { isExpanded = false }
-                        ) {
-                            Icon(
-                                painter = painterResource(id = R.drawable.arrow_up),
-                                tint = MaterialTheme.colorScheme.onBackground.copy(0.8f),
-                                contentDescription = "Seta para cima",
-                                modifier = Modifier
-                                    .offset(x = 10.dp)
-                            )
-                        }
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.location),
+                        tint = MaterialTheme.colorScheme.onBackground.copy(0.8f),
+                        contentDescription = "Imagem de localização",
+                        modifier = Modifier
+                            .size(11.dp)
+                    )
+
+                    Spacer(modifier = Modifier.size(1.dp))
+
+                    Text(
+                        "${establishmentData.location} • ${establishmentData.distance}",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onBackground
+                    )
+                }
+
+                if (!isExpanded) {
+                    IconButton(
+                        onClick = { isExpanded = !isExpanded },
+                    ) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.arrow_down),
+                            tint = MaterialTheme.colorScheme.onBackground.copy(0.8f),
+                            contentDescription = "Seta para baixo",
+                            modifier = Modifier
+                                .offset(x = 10.dp)
+                        )
+                    }
+                }
+
+                if (isExpanded) {
+                    IconButton(
+                        onClick = { isExpanded = false }
+                    ) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.arrow_up),
+                            tint = MaterialTheme.colorScheme.onBackground.copy(0.8f),
+                            contentDescription = "Seta para cima",
+                            modifier = Modifier
+                                .offset(x = 10.dp)
+                        )
                     }
                 }
             }

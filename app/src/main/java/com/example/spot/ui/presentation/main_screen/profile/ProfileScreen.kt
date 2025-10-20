@@ -193,7 +193,7 @@ fun ProfileScreen(
             }
 
             item {
-                Spacer(modifier = Modifier.height(10.dp))
+                Spacer(modifier = Modifier.height(30.dp))
 
                 ProfileProgressBar(
                     currentVisits = 4,
@@ -203,7 +203,7 @@ fun ProfileScreen(
             }
 
             item {
-                Spacer(modifier = Modifier.height(5.dp))
+                Spacer(modifier = Modifier.height(20.dp))
 
                 Row(
                     modifier = Modifier
@@ -233,7 +233,7 @@ fun ProfileScreen(
                 }
             }
             item {
-                Spacer(modifier = Modifier.height(40.dp))
+                Spacer(modifier = Modifier.height(30.dp))
 
                 ProfileListItem(text = "Segurança e senha", icon = R.drawable.security)
                 Spacer(modifier = Modifier.height(15.dp))

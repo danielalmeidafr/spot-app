@@ -13,7 +13,6 @@ val DarkGray3 = Color(0xFF1E1E1E)
 val White = Color(0xFFFFFFFF)
 val White04 = Color(0x0AFFFFFF)
 val White50 = Color(0x80FFFFFF)
-val DarkGray4 = Color(0xFF2A2A2A)
 
 // LIGHT MODE
 val WhiteBack = Color(0xFFEAEAEA)
