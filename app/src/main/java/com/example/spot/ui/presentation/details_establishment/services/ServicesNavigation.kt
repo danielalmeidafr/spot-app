@@ -8,8 +8,11 @@ import kotlinx.serialization.Serializable
 object ServicesDestination
 
 fun NavGraphBuilder.servicesScreen(
+    onBack: () -> Unit
 ) {
     composable<ServicesDestination> {
-        ServicesScreen()
+        ServicesScreen(
+            onBack = onBack
+        )
     }
 }

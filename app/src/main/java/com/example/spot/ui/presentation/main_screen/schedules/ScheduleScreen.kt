@@ -22,7 +22,6 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.BottomSheetScaffold
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -46,6 +45,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.spot.ui.presentation.main_screen.schedules.components.AppointmentItem
+import com.example.spot.ui.presentation.main_screen.schedules.components.AppointmentItemSkeleton
 import com.student.R
 import java.time.LocalDate
 import java.time.YearMonth
@@ -134,18 +134,19 @@ fun ScheduleScreen(
                     when {
                         isLoading -> {
                             item {
-                                Spacer(modifier = Modifier.height(100.dp))
-                                CircularProgressIndicator(
-                                    color = MaterialTheme.colorScheme.primary,
-                                    strokeWidth = 4.dp
-                                )
                                 Text(
-                                    text = "Carregando agendamentos...",
-                                    style = MaterialTheme.typography.bodyMedium,
-                                    color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f),
-                                    modifier = Modifier.padding(top = 16.dp)
+                                    text = "Seus horários:",
+                                    style = MaterialTheme.typography.bodyMedium.copy(fontSize = 14.sp),
+                                    color = MaterialTheme.colorScheme.onBackground,
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(start = 15.dp)
                                 )
-                                Spacer(modifier = Modifier.height(30.dp))
+                                Spacer(modifier = Modifier.height(10.dp))
+                            }
+
+                            items(4) {
+                                AppointmentItemSkeleton()
                             }
                         }
 

@@ -17,6 +17,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.animation.core.LinearEasing
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.ime
+import androidx.compose.foundation.layout.imeAnimationTarget
+import androidx.compose.ui.platform.LocalDensity
 
 @Composable
 fun Modifier.clearFocusOnTap(): Modifier {
@@ -58,4 +63,15 @@ fun Modifier.shimmerEffect(): Modifier = composed {
             end = Offset(x = xTranslate + brushWidth, y = 0f)
         )
     )
+}
+
+@OptIn(ExperimentalLayoutApi::class)
+@Composable
+fun rememberKeyboardVisibility(): Boolean {
+    val ime = WindowInsets.ime
+    val imeTarget = WindowInsets.imeAnimationTarget
+    val density = LocalDensity.current
+    val imeBottom = ime.getBottom(density)
+    val imeTargetBottom = imeTarget.getBottom(density)
+    return imeBottom > 0 || imeTargetBottom > 0
 }

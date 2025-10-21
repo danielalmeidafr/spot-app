@@ -82,8 +82,8 @@ fun LoginScreen(
                     Icon(
                         painter = painterResource(id = R.drawable.arrow_back),
                         contentDescription = "Voltar",
-                        tint = MaterialTheme.colorScheme.onSurface,
-                        modifier = Modifier.padding(16.dp)
+                        tint = MaterialTheme.colorScheme.onSurface.copy(0.8f),
+                        modifier = Modifier.padding(15.dp)
                     )
                 }
 

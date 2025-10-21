@@ -48,7 +48,7 @@ fun ProfileScreen(
 
     val iconRes = if (isDarkTheme) R.drawable.light else R.drawable.dark
 
-    if (!isLogged) {
+    if (isLogged) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -59,13 +59,7 @@ fun ProfileScreen(
             verticalArrangement = Arrangement.Center
         ) {
             Image(
-                painter = painterResource(
-                    if (isSystemInDarkTheme()) {
-                        R.drawable.logo_dark
-                    } else {
-                        R.drawable.logo_light
-                    }
-                ),
+                painter = painterResource(id = R.drawable.logo_light),
                 contentDescription = "Profile image",
                 modifier = Modifier
                     .size(150.dp)

@@ -59,7 +59,6 @@ class ScheduleViewModel : ViewModel() {
                 appointments = sampleAppointments,
                 isLoading = false
             )
-
         }
     }
 }

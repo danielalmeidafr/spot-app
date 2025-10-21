@@ -45,6 +45,8 @@ fun AppNavHost(
             onThemeToggle = onThemeToggle
         )
 
-        servicesScreen()
+        servicesScreen(
+            onBack = { navController.popBackStack() }
+        )
     }
 }

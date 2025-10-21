@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.student.R
 
 @Composable
@@ -54,7 +55,7 @@ fun FavoriteScreen(
 
         Text(
             "Adicione barbearias aos favoritos para vê-las aqui",
-            style = MaterialTheme.typography.bodySmall,
+            style = MaterialTheme.typography.bodySmall.copy(fontSize = 12.sp),
             color = MaterialTheme.colorScheme.onBackground
         )
     }
