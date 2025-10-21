@@ -16,6 +16,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.animation.core.LinearEasing
 
 @Composable
 fun Modifier.clearFocusOnTap(): Modifier {
@@ -25,26 +26,36 @@ fun Modifier.clearFocusOnTap(): Modifier {
     }
 }
 
+
 fun Modifier.shimmerEffect(): Modifier = composed {
-    val infiniteTransition = rememberInfiniteTransition(label = "subtleTransition")
+    val infiniteTransition = rememberInfiniteTransition(label = "subtleShimmerTransition")
 
     val xTranslate by infiniteTransition.animateFloat(
-        initialValue = -500f,
-        targetValue = 1500f,
+        initialValue = -1000f,
+        targetValue = 2000f,
         animationSpec = infiniteRepeatable(
-            animation = tween(durationMillis = 1500),
+            animation = tween(
+                durationMillis = 3000,
+                easing = LinearEasing
+            ),
             repeatMode = RepeatMode.Restart
         ),
-        label = "xTranslate"
+        label = "shimmerXTranslate"
     )
+
+    val shimmerColors = listOf(
+        Color.LightGray.copy(alpha = 0.10f),
+        Color.Gray.copy(alpha = 0.15f),
+        Color.LightGray.copy(alpha = 0.10f),
+    )
+
+    val brushWidth = 1000f
 
     background(
         brush = Brush.linearGradient(
-            0.0f to Color.LightGray.copy(alpha = 0.5f),
-            0.5f to Color.White.copy(alpha = 0.1f),
-            1.0f to Color.LightGray.copy(alpha = 0.5f),
+            colors = shimmerColors,
             start = Offset(x = xTranslate, y = 0f),
-            end = Offset(x = xTranslate + 500f, y = 0f)
+            end = Offset(x = xTranslate + brushWidth, y = 0f)
         )
     )
 }
