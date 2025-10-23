@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -41,64 +40,64 @@ import com.student.R
 fun HomeScreen(
     modifier: Modifier = Modifier,
     onNavigateToServices: () -> Unit,
-    innerPadding: PaddingValues = PaddingValues(),
-    viewModel: HomeViewModel = viewModel()
+    innerPadding: PaddingValues = PaddingValues()
 ) {
+    val viewModel = viewModel<HomeViewModel>()
     val uiState by viewModel.uiState.collectAsState()
-    val query = uiState.searchQuery
     val isKeyboardVisible = rememberKeyboardVisibility()
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background)
-            .clearFocusOnTap(),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        CustomSearchBar(
-            query = query,
-            onQueryChange = { viewModel.updateSearchQuery(it) },
-            modifier = Modifier
-                .padding(top = 20.dp)
-        )
+    when (val state = uiState) {
+        HomeUiState.Loading -> {
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding),
+                verticalArrangement = Arrangement.spacedBy(25.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                item {
+                    NextScheduleCard(
+                        isScheduled = false
+                    )
+                }
 
-        when {
-            uiState.isLoading -> {
-                LazyColumn(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(innerPadding),
-                    verticalArrangement = Arrangement.spacedBy(25.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    item {
-                        NextScheduleCard(
-                            isScheduled = uiState.nextSchedule.isScheduled,
-                            nextSchedule = uiState.nextSchedule.nextScheduleTime
-                        )
-                    }
+                stickyHeader {
+                    Text(
+                        "Recomendadas:",
+                        modifier = Modifier
+                            .fillMaxWidth(0.9f)
+                            .background(MaterialTheme.colorScheme.background)
+                            .padding(bottom = 10.dp),
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onBackground,
+                        textAlign = TextAlign.Start
+                    )
+                }
 
-                    stickyHeader {
-                        Text(
-                            uiState.listTitle,
-                            modifier = Modifier
-                                .fillMaxWidth(0.9f)
-                                .background(MaterialTheme.colorScheme.background)
-                                .padding(bottom = 10.dp),
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.onBackground,
-                            textAlign = TextAlign.Start
-                        )
-                    }
-
-                    items(5) {
-                        EstablishmentCardSkeleton()
-                    }
+                items(5) {
+                    EstablishmentCardSkeleton()
                 }
             }
+        }
 
-            else -> {
-                if (uiState.establishments.isEmpty()) {
+        is HomeUiState.Success -> {
+            val isNotFoundScreen = state.searchQuery.isNotBlank() && state.establishments.isEmpty()
+
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(MaterialTheme.colorScheme.background)
+                    .clearFocusOnTap(),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                CustomSearchBar(
+                    query = state.searchQuery,
+                    onQueryChange = { newQuery -> viewModel.updateSearchQuery(newQuery) },
+                    modifier = Modifier
+                        .padding(top = 20.dp)
+                )
+
+                if (isNotFoundScreen) {
                     Column(
                         modifier = Modifier
                             .fillMaxSize()
@@ -143,14 +142,14 @@ fun HomeScreen(
 
                         item {
                             NextScheduleCard(
-                                isScheduled = uiState.nextSchedule.isScheduled,
-                                nextSchedule = uiState.nextSchedule.nextScheduleTime
+                                isScheduled = state.nextSchedule.isScheduled,
+                                nextScheduleTime = state.nextSchedule.nextScheduleTime
                             )
                         }
 
                         stickyHeader {
                             Text(
-                                uiState.listTitle,
+                                text = state.listTitle,
                                 modifier = Modifier
                                     .fillMaxWidth(0.9f)
                                     .background(MaterialTheme.colorScheme.background)
@@ -161,7 +160,7 @@ fun HomeScreen(
                             )
                         }
 
-                        items(uiState.establishments) { establishment ->
+                        items(state.establishments) { establishment ->
                             EstablishmentCard(
                                 establishmentData = establishment,
                                 onNavigateToServices = onNavigateToServices

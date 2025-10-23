@@ -23,7 +23,7 @@ import androidx.compose.ui.unit.dp
 fun NextScheduleCard(
     modifier: Modifier = Modifier,
     isScheduled: Boolean,
-    nextSchedule: String? = null,
+    nextScheduleTime: String? = null,
 ) {
     Surface(
         modifier = Modifier
@@ -37,7 +37,7 @@ fun NextScheduleCard(
             modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.Center
         ) {
-            if (isScheduled && nextSchedule != null) {
+            if (isScheduled && nextScheduleTime != null) {
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -52,9 +52,9 @@ fun NextScheduleCard(
                     )
 
                     Text(
-                        nextSchedule,
+                        nextScheduleTime,
                         style = MaterialTheme.typography.bodySmall,
-                        fontWeight = FontWeight.SemiBold,
+                        fontWeight = FontWeight.Medium,
                         color = MaterialTheme.colorScheme.onSurface
                     )
                 }
