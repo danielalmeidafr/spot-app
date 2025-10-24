@@ -7,7 +7,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
 data class NextScheduleData(
-    val isScheduled: Boolean,
     val nextScheduleTime: String?
 )
 
@@ -22,38 +21,36 @@ data class EstablishmentData(
     val paymentsMethods: List<PaymentsMethods>,
 )
 
-sealed class HomeUiState {
-    data object Loading : HomeUiState()
+sealed class HomeState {
+    data object Loading : HomeState()
     data class Success(
         val searchQuery: String = "",
         val nextSchedule: NextScheduleData = NextScheduleData(
-            isScheduled = false,
             nextScheduleTime = null
         ),
         val listTitle: String = "",
         val establishments: List<EstablishmentData> = emptyList(),
-    ) : HomeUiState()
+    ) : HomeState()
 }
 
 class HomeViewModel : ViewModel() {
-    private val _uiState = MutableStateFlow<HomeUiState>(HomeUiState.Loading)
-    val uiState = _uiState.asStateFlow()
+    private val _state = MutableStateFlow<HomeState>(HomeState.Loading)
+    val state = _state.asStateFlow()
     private val allEstablishments = fetchEstablishments()
 
     init {
-        val establishments = filterEstablishmentsByRating()
+        val establishments = fetchEstablishments()
         val initialTitle = if (establishments.isEmpty()) "" else "Recomendadas:"
         val nextSchedule = fetchNextSchedule()
 
-        _uiState.update {
-            HomeUiState.Success(
+        _state.update {
+            HomeState.Success(
                 nextSchedule = nextSchedule,
                 listTitle = initialTitle,
                 establishments = establishments
             )
         }
     }
-
 
     private fun fetchEstablishments(): List<EstablishmentData> {
         return listOf(
@@ -106,17 +103,8 @@ class HomeViewModel : ViewModel() {
 
     private fun fetchNextSchedule(): NextScheduleData {
         return NextScheduleData(
-            isScheduled = true,
             nextScheduleTime = "Hoje, 16h00"
         )
-    }
-
-    private fun sortEstablishments(establishments: List<EstablishmentData>): List<EstablishmentData> {
-        return establishments.sortedByDescending { it.averageRating }
-    }
-
-    private fun filterEstablishmentsByRating(): List<EstablishmentData> {
-        return sortEstablishments(allEstablishments)
     }
 
     private fun filterEstablishmentsByName(query: String): List<EstablishmentData> {
@@ -124,19 +112,18 @@ class HomeViewModel : ViewModel() {
     }
 
     fun updateSearchQuery(newQuery: String) {
-        _uiState.update { currentState ->
-            if (currentState is HomeUiState.Success) {
+        _state.update { currentState ->
+            if (currentState is HomeState.Success) {
 
                 val newTitle: String
                 val updatedEstablishments: List<EstablishmentData>
 
                 if (newQuery.isBlank()) {
                     newTitle = "Recomendadas:"
-                    updatedEstablishments = filterEstablishmentsByRating()
+                    updatedEstablishments = fetchEstablishments()
                 } else {
                     newTitle = "Resultados da busca:"
-                    val filteredByName = filterEstablishmentsByName(newQuery)
-                    updatedEstablishments = sortEstablishments(filteredByName)
+                    updatedEstablishments = filterEstablishmentsByName(newQuery)
                 }
 
                 return@update currentState.copy(

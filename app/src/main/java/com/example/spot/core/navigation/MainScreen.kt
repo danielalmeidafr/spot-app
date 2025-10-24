@@ -231,10 +231,12 @@ fun MainScreen(
         ) { page ->
             val item = screens[page]
             when (item) {
-                ScreenItem.Home -> HomeScreen(
-                    innerPadding = innerPadding,
-                    onNavigateToServices = onNavigateToServices
-                )
+                ScreenItem.Home -> {
+                    HomeScreen(
+                        innerPadding = innerPadding,
+                        onNavigateToServices = onNavigateToServices
+                    )
+                }
 
                 ScreenItem.Favorite -> FavoriteScreen(innerPadding = innerPadding)
                 ScreenItem.Schedules -> ScheduleScreen()

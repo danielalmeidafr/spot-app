@@ -43,11 +43,11 @@ fun HomeScreen(
     innerPadding: PaddingValues = PaddingValues()
 ) {
     val viewModel = viewModel<HomeViewModel>()
-    val uiState by viewModel.uiState.collectAsState()
+    val uiState by viewModel.state.collectAsState()
     val isKeyboardVisible = rememberKeyboardVisibility()
 
     when (val state = uiState) {
-        HomeUiState.Loading -> {
+        HomeState.Loading -> {
             LazyColumn(
                 modifier = Modifier
                     .fillMaxSize()
@@ -56,9 +56,7 @@ fun HomeScreen(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 item {
-                    NextScheduleCard(
-                        isScheduled = false
-                    )
+                    NextScheduleCard()
                 }
 
                 stickyHeader {
@@ -80,7 +78,7 @@ fun HomeScreen(
             }
         }
 
-        is HomeUiState.Success -> {
+        is HomeState.Success -> {
             val isNotFoundScreen = state.searchQuery.isNotBlank() && state.establishments.isEmpty()
 
             Column(
@@ -142,7 +140,6 @@ fun HomeScreen(
 
                         item {
                             NextScheduleCard(
-                                isScheduled = state.nextSchedule.isScheduled,
                                 nextScheduleTime = state.nextSchedule.nextScheduleTime
                             )
                         }

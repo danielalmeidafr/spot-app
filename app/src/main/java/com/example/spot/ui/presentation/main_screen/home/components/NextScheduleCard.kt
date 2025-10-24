@@ -22,7 +22,6 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun NextScheduleCard(
     modifier: Modifier = Modifier,
-    isScheduled: Boolean,
     nextScheduleTime: String? = null,
 ) {
     Surface(
@@ -37,7 +36,7 @@ fun NextScheduleCard(
             modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.Center
         ) {
-            if (isScheduled && nextScheduleTime != null) {
+            if (nextScheduleTime != null) {
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
