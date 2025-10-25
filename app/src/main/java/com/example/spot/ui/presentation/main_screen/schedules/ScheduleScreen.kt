@@ -46,6 +46,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.spot.ui.presentation.main_screen.schedules.components.AppointmentItem
 import com.example.spot.ui.presentation.main_screen.schedules.components.AppointmentItemSkeleton
+import com.example.spot.ui.presentation.main_screen.schedules.viewmodel.ScheduleViewModel
 import com.student.R
 import java.time.LocalDate
 import java.time.YearMonth

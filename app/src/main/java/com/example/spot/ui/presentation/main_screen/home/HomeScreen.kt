@@ -33,6 +33,8 @@ import com.example.spot.ui.presentation.main_screen.home.components.CustomSearch
 import com.example.spot.ui.presentation.main_screen.home.components.EstablishmentCard
 import com.example.spot.ui.presentation.main_screen.home.components.EstablishmentCardSkeleton
 import com.example.spot.ui.presentation.main_screen.home.components.NextScheduleCard
+import com.example.spot.ui.presentation.main_screen.home.viewmodel.HomeState
+import com.example.spot.ui.presentation.main_screen.home.viewmodel.HomeViewModel
 import com.student.R
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -43,10 +45,10 @@ fun HomeScreen(
     innerPadding: PaddingValues = PaddingValues()
 ) {
     val viewModel = viewModel<HomeViewModel>()
-    val uiState by viewModel.state.collectAsState()
+    val state by viewModel.state.collectAsState()
     val isKeyboardVisible = rememberKeyboardVisibility()
 
-    when (val state = uiState) {
+    when (val state = state) {
         HomeState.Loading -> {
             LazyColumn(
                 modifier = Modifier

@@ -1,54 +1,55 @@
-package com.example.spot.ui.presentation.main_screen.home
+package com.example.spot.ui.presentation.main_screen.home.viewmodel
 
 import androidx.lifecycle.ViewModel
 import com.example.spot.ui.presentation.main_screen.home.components.PaymentsMethods
+import com.example.spot.ui.presentation.main_screen.home.model.EstablishmentData
+import com.example.spot.ui.presentation.main_screen.home.model.HomeState
+import com.example.spot.ui.presentation.main_screen.home.model.NextScheduleData
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
-data class NextScheduleData(
-    val nextScheduleTime: String?
-)
-
-data class EstablishmentData(
-    val name: String,
-    val averageRating: Double,
-    val totalReviews: Int,
-    val isOpen: Boolean,
-    val nextDate: String,
-    val location: String,
-    val distance: String,
-    val paymentsMethods: List<PaymentsMethods>,
-)
-
-sealed class HomeState {
-    data object Loading : HomeState()
-    data class Success(
-        val searchQuery: String = "",
-        val nextSchedule: NextScheduleData = NextScheduleData(
-            nextScheduleTime = null
-        ),
-        val listTitle: String = "",
-        val establishments: List<EstablishmentData> = emptyList(),
-    ) : HomeState()
-}
-
 class HomeViewModel : ViewModel() {
     private val _state = MutableStateFlow<HomeState>(HomeState.Loading)
     val state = _state.asStateFlow()
-    private val allEstablishments = fetchEstablishments()
 
     init {
         val establishments = fetchEstablishments()
-        val initialTitle = if (establishments.isEmpty()) "" else "Recomendadas:"
+        val listTitle = if (establishments.isEmpty()) "" else "Recomendadas:"
         val nextSchedule = fetchNextSchedule()
 
         _state.update {
             HomeState.Success(
                 nextSchedule = nextSchedule,
-                listTitle = initialTitle,
+                listTitle = listTitle,
                 establishments = establishments
             )
+        }
+    }
+
+    fun updateSearchQuery(newQuery: String) {
+        _state.update { currentState ->
+            if (currentState is HomeState.Success) {
+
+                val listTitle: String
+                val updatedEstablishments: List<EstablishmentData>
+
+                if (newQuery.isBlank()) {
+                    listTitle = "Recomendadas:"
+                    updatedEstablishments = fetchEstablishments()
+                } else {
+                    listTitle = "Resultados da busca:"
+                    updatedEstablishments = filterEstablishmentsByName(newQuery)
+                }
+
+                return@update currentState.copy(
+                    searchQuery = newQuery,
+                    listTitle = listTitle,
+                    establishments = updatedEstablishments
+                )
+            } else {
+                currentState
+            }
         }
     }
 
@@ -102,38 +103,12 @@ class HomeViewModel : ViewModel() {
     }
 
     private fun fetchNextSchedule(): NextScheduleData {
-        return NextScheduleData(
-            nextScheduleTime = "Hoje, 16h00"
-        )
+        return NextScheduleData(nextScheduleTime = "Hoje, 16h00")
     }
 
     private fun filterEstablishmentsByName(query: String): List<EstablishmentData> {
+        val allEstablishments = fetchEstablishments()
         return allEstablishments.filter { it.name.contains(query, ignoreCase = true) }
     }
 
-    fun updateSearchQuery(newQuery: String) {
-        _state.update { currentState ->
-            if (currentState is HomeState.Success) {
-
-                val newTitle: String
-                val updatedEstablishments: List<EstablishmentData>
-
-                if (newQuery.isBlank()) {
-                    newTitle = "Recomendadas:"
-                    updatedEstablishments = fetchEstablishments()
-                } else {
-                    newTitle = "Resultados da busca:"
-                    updatedEstablishments = filterEstablishmentsByName(newQuery)
-                }
-
-                return@update currentState.copy(
-                    searchQuery = newQuery,
-                    listTitle = newTitle,
-                    establishments = updatedEstablishments
-                )
-            } else {
-                currentState
-            }
-        }
-    }
 }

@@ -18,11 +18,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.example.spot.ui.presentation.main_screen.home.model.NextScheduleData
 
 @Composable
 fun NextScheduleCard(
     modifier: Modifier = Modifier,
-    nextScheduleTime: String? = null,
+    nextScheduleData: NextScheduleData
 ) {
     Surface(
         modifier = Modifier
@@ -36,7 +37,7 @@ fun NextScheduleCard(
             modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.Center
         ) {
-            if (nextScheduleTime != null) {
+            if (nextScheduleData.nextScheduleTime != null) {
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -51,7 +52,7 @@ fun NextScheduleCard(
                     )
 
                     Text(
-                        nextScheduleTime,
+                        nextScheduleData.nextScheduleTime,
                         style = MaterialTheme.typography.bodySmall,
                         fontWeight = FontWeight.Medium,
                         color = MaterialTheme.colorScheme.onSurface
