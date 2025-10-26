@@ -5,8 +5,8 @@ sealed class HomeState {
 
     data class Success(
         val searchQuery: String = "",
-        val nextSchedule: NextScheduleData = NextScheduleData(nextScheduleTime = null),
+        val nextScheduleData: NextScheduleData = NextScheduleData(nextScheduleTime = null),
         val listTitle: String = "",
-        val establishments: List<EstablishmentData> = emptyList(),
+        val establishmentsData: List<EstablishmentData> = emptyList(),
     ) : HomeState()
 }

@@ -31,11 +31,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.spot.ui.presentation.details_establishment.services.ServiceItem
+import com.example.spot.ui.presentation.details_establishment.services.model.ItemData
 
 @Composable
-fun ServiceItem(
-    serviceItem: ServiceItem,
+fun ItemCard(
+    itemData: ItemData,
     modifier: Modifier = Modifier
 ) {
     var isExpanded by remember { mutableStateOf(false) }
@@ -56,7 +56,7 @@ fun ServiceItem(
 
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(
-                    text = serviceItem.title,
+                    text = itemData.title,
                     style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.SemiBold, fontSize = 12.sp),
                     color = MaterialTheme.colorScheme.onBackground
                 )
@@ -76,7 +76,7 @@ fun ServiceItem(
                     Spacer(modifier = Modifier.size(4.dp))
 
                     Text(
-                        text = serviceItem.price ?: "",
+                        text = itemData.price ?: "",
                         style = MaterialTheme.typography.bodySmall.copy(
                             fontWeight = FontWeight.ExtraBold,
                             fontSize = 12.sp
@@ -96,7 +96,7 @@ fun ServiceItem(
             }
 
             Text(
-                text = serviceItem.description,
+                text = itemData.description,
                 modifier = textModifier,
                 style = MaterialTheme.typography.bodySmall.copy(fontSize = 10.sp),
                 color = MaterialTheme.colorScheme.onBackground.copy(0.7f),

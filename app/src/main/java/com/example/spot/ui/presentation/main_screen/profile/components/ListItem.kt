@@ -35,7 +35,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @Composable
-fun ProfileListItem(
+fun ListItem(
     modifier: Modifier = Modifier,
     text: String,
     icon: Int,

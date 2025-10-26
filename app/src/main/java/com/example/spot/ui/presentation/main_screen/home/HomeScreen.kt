@@ -33,7 +33,8 @@ import com.example.spot.ui.presentation.main_screen.home.components.CustomSearch
 import com.example.spot.ui.presentation.main_screen.home.components.EstablishmentCard
 import com.example.spot.ui.presentation.main_screen.home.components.EstablishmentCardSkeleton
 import com.example.spot.ui.presentation.main_screen.home.components.NextScheduleCard
-import com.example.spot.ui.presentation.main_screen.home.viewmodel.HomeState
+import com.example.spot.ui.presentation.main_screen.home.components.NextScheduleCardSkeleton
+import com.example.spot.ui.presentation.main_screen.home.model.HomeState
 import com.example.spot.ui.presentation.main_screen.home.viewmodel.HomeViewModel
 import com.student.R
 
@@ -50,38 +51,54 @@ fun HomeScreen(
 
     when (val state = state) {
         HomeState.Loading -> {
-            LazyColumn(
+            Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(innerPadding),
-                verticalArrangement = Arrangement.spacedBy(25.dp),
+                    .background(MaterialTheme.colorScheme.background)
+                    .clearFocusOnTap(),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                item {
-                    NextScheduleCard()
-                }
+                CustomSearchBar(
+                    query = "",
+                    onQueryChange = { newQuery -> viewModel.updateSearchQuery(newQuery) },
+                    modifier = Modifier
+                        .padding(top = 20.dp)
+                )
 
-                stickyHeader {
-                    Text(
-                        "Recomendadas:",
-                        modifier = Modifier
-                            .fillMaxWidth(0.9f)
-                            .background(MaterialTheme.colorScheme.background)
-                            .padding(bottom = 10.dp),
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onBackground,
-                        textAlign = TextAlign.Start
-                    )
-                }
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(innerPadding),
+                    verticalArrangement = Arrangement.spacedBy(25.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    item {
+                        NextScheduleCardSkeleton()
+                    }
 
-                items(5) {
-                    EstablishmentCardSkeleton()
+                    stickyHeader {
+                        Text(
+                            "Recomendadas:",
+                            modifier = Modifier
+                                .fillMaxWidth(0.9f)
+                                .background(MaterialTheme.colorScheme.background)
+                                .padding(bottom = 10.dp),
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onBackground,
+                            textAlign = TextAlign.Start
+                        )
+                    }
+
+                    items(5) {
+                        EstablishmentCardSkeleton()
+                    }
                 }
             }
         }
 
         is HomeState.Success -> {
-            val isNotFoundScreen = state.searchQuery.isNotBlank() && state.establishments.isEmpty()
+            val isNotFoundScreen =
+                state.searchQuery.isNotBlank() && state.establishmentsData.isEmpty()
 
             Column(
                 modifier = Modifier
@@ -141,9 +158,7 @@ fun HomeScreen(
                     ) {
 
                         item {
-                            NextScheduleCard(
-                                nextScheduleTime = state.nextSchedule.nextScheduleTime
-                            )
+                            NextScheduleCard(nextScheduleData = state.nextScheduleData)
                         }
 
                         stickyHeader {
@@ -159,7 +174,7 @@ fun HomeScreen(
                             )
                         }
 
-                        items(state.establishments) { establishment ->
+                        items(state.establishmentsData) { establishment ->
                             EstablishmentCard(
                                 establishmentData = establishment,
                                 onNavigateToServices = onNavigateToServices

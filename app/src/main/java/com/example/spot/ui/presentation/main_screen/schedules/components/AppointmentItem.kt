@@ -120,7 +120,23 @@ fun AppointmentItem(
 
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(
-                    text = appointmentData.date,
+                    text = appointmentData.day.toString(),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onBackground
+                )
+
+                Spacer(modifier = Modifier.size(4.dp))
+
+                Text(
+                    text = "de",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onBackground
+                )
+
+                Spacer(modifier = Modifier.size(4.dp))
+
+                Text(
+                    text = appointmentData.month,
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onBackground
                 )
@@ -130,8 +146,7 @@ fun AppointmentItem(
                 Text(
                     text = appointmentData.time,
                     style = MaterialTheme.typography.bodySmall.copy(
-                        fontWeight = FontWeight.SemiBold,
-                        fontSize = 12.sp
+                        fontWeight = FontWeight.SemiBold
                     ),
                     color = MaterialTheme.colorScheme.onBackground,
                 )
@@ -186,4 +201,3 @@ fun AppointmentItem(
         }
     }
 }
-

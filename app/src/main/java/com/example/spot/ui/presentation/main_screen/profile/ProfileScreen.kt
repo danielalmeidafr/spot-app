@@ -1,40 +1,28 @@
 package com.example.spot.ui.presentation.main_screen.profile
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import com.example.spot.ui.presentation.main_screen.profile.components.ProfileCard
-import com.example.spot.ui.presentation.main_screen.profile.components.ProfileListItem
-import com.example.spot.ui.presentation.main_screen.profile.components.ProfileProgressBar
-import com.student.R
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.spot.ui.presentation.main_screen.profile.components.ProgressBar
+import com.example.spot.ui.presentation.main_screen.profile.components.sections.HeaderSection
+import com.example.spot.ui.presentation.main_screen.profile.components.sections.InfoSection
+import com.example.spot.ui.presentation.main_screen.profile.components.sections.OptionsSection
+import com.example.spot.ui.presentation.main_screen.profile.components.sections.StatsSection
+import com.example.spot.ui.presentation.main_screen.profile.components.skeletons.InfoSectionSkeleton
+import com.example.spot.ui.presentation.main_screen.profile.components.skeletons.ProgressBarSkeleton
+import com.example.spot.ui.presentation.main_screen.profile.components.skeletons.StatsCardSkeleton
+import com.example.spot.ui.presentation.main_screen.profile.components.skeletons.StatsSectionSkeleton
+import com.example.spot.ui.presentation.main_screen.profile.model.ProfileState
+import com.example.spot.ui.presentation.main_screen.profile.viewmodel.ProfileViewModel
 
 @Composable
 fun ProfileScreen(
@@ -44,233 +32,72 @@ fun ProfileScreen(
     isDarkTheme: Boolean,
     onThemeToggle: () -> Unit
 ) {
+    val viewModel = viewModel<ProfileViewModel>()
+    val state by viewModel.state.collectAsState()
+
     val isLogged = true
 
-    val iconRes = if (isDarkTheme) R.drawable.light else R.drawable.dark
-
-    if (isLogged) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(MaterialTheme.colorScheme.background)
-                .padding(horizontal = 30.dp, vertical = 50.dp)
-                .padding(innerPadding),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        ) {
-            Image(
-                painter = painterResource(id = R.drawable.logo_light),
-                contentDescription = "Profile image",
-                modifier = Modifier
-                    .size(150.dp)
-            )
-
-            Text(
-                "Bem-vindo ao Spot!",
-                style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold),
-                color = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.fillMaxWidth(),
-                textAlign = TextAlign.Center
-            )
-
-            Spacer(modifier = Modifier.height(10.dp))
-
-            Text(
-                "Crie sua conta e comece a agendar com os melhores profissionais da região em segundos.",
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onBackground
-            )
-
-            Spacer(modifier = Modifier.height(20.dp))
-
-            BenefitItem(text = "Agende 24 horas por dia, 7 dias por semana.")
-            BenefitItem(text = "Gerencie seus horários e lembretes.")
-            BenefitItem(text = "Salve seus estabelecimentos favoritos.")
-
-            Spacer(modifier = Modifier.height(30.dp))
-
-            Button(
-                onClick = { onNavigateToLogin() },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(40.dp),
-                shape = RoundedCornerShape(15.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = MaterialTheme.colorScheme.primary,
-                    contentColor = MaterialTheme.colorScheme.onPrimary
+    when (val state = state) {
+        ProfileState.Loading -> {
+            if (!isLogged) {
+                ProfileLoggedOutScreen(
+                    onNavigateToLogin = onNavigateToLogin,
+                    innerPadding = innerPadding
                 )
-            ) {
-                Text(
-                    "Entrar",
-                    style = MaterialTheme.typography.bodyMedium
-                )
-            }
-
-            Spacer(modifier = Modifier.height(15.dp))
-
-            Text(
-                "Continuar como convidado",
-                style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.SemiBold),
-                color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f),
-                modifier = Modifier.clickable { }
-            )
-        }
-    } else {
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            item {
-                Box(
-                    modifier = Modifier.fillMaxWidth(),
-                ) {
-                    Icon(
-                        painter = painterResource(id = iconRes),
-                        tint = MaterialTheme.colorScheme.onBackground,
-                        contentDescription = "Imagem do tema",
-                        modifier = Modifier
-                            .align(Alignment.CenterStart)
-                            .padding(start = 20.dp)
-                            .size(18.dp)
-                            .clickable { onThemeToggle() }
-                    )
-
-                    Text(
-                        "PERFIL",
-                        style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.SemiBold),
-                        color = MaterialTheme.colorScheme.onBackground,
-                        modifier = Modifier.align(Alignment.Center)
-                    )
-
-                    Icon(
-                        painter = painterResource(id = R.drawable.settings),
-                        tint = MaterialTheme.colorScheme.onBackground,
-                        contentDescription = "Imagem de configurações",
-                        modifier = Modifier
-                            .align(Alignment.CenterEnd)
-                            .padding(end = 20.dp)
-                            .size(18.dp)
-                    )
-                }
-            }
-
-            item {
-                Spacer(modifier = Modifier.height(20.dp))
-
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Image(
-                        painter = painterResource(R.drawable.user_image),
-                        contentDescription = "Profile image",
-                        modifier = Modifier.size(90.dp)
-                    )
-
-                    Spacer(modifier = Modifier.height(10.dp))
-
-                    Text(
-                        "Daniel Alves Almeida",
-                        style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold),
-                        color = MaterialTheme.colorScheme.onBackground
-                    )
-
-                    Spacer(modifier = Modifier.height(5.dp))
-
-                    Text(
-                        "@danielalmeidafr",
-                        style = MaterialTheme.typography.bodySmall.copy(fontSize = 12.sp),
-                        color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f)
-                    )
-                }
-            }
-
-            item {
-                Spacer(modifier = Modifier.height(30.dp))
-
-                ProfileProgressBar(
-                    currentVisits = 4,
-                    goalVisits = 5,
-                    rewardText = "10% OFF no próximo serviço",
-                )
-            }
-
-            item {
-                Spacer(modifier = Modifier.height(20.dp))
-
-                Row(
+            } else {
+                LazyColumn(
                     modifier = Modifier
-                        .fillMaxWidth(0.95f),
-                    horizontalArrangement = Arrangement.spacedBy(
-                        15.dp,
-                        Alignment.CenterHorizontally
-                    )
+                        .fillMaxSize()
+                        .padding(innerPadding),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.spacedBy(20.dp)
                 ) {
-                    ProfileCard(
-                        icon = R.drawable.star,
-                        value = "12",
-                        label = "Avaliações"
-                    )
+                    item { HeaderSection(isDarkTheme, onThemeToggle) }
 
-                    ProfileCard(
-                        icon = R.drawable.schedule,
-                        value = "4",
-                        label = "Agendamentos"
-                    )
+                    item { InfoSectionSkeleton() }
 
-                    ProfileCard(
-                        icon = R.drawable.favorite,
-                        value = "5",
-                        label = "Favoritos"
-                    )
+                    item { ProgressBarSkeleton() }
+
+                    item { StatsSectionSkeleton() }
+
+                    item {
+                        OptionsSection(
+                            onLogout = { /* TODO: implementar logout */ }
+                        )
+                    }
                 }
             }
-            item {
-                Spacer(modifier = Modifier.height(30.dp))
+        }
 
-                ProfileListItem(text = "Segurança e senha", icon = R.drawable.security)
-                Spacer(modifier = Modifier.height(15.dp))
+        is ProfileState.Success -> {
+            if (!isLogged) {
+                ProfileLoggedOutScreen(
+                    onNavigateToLogin = onNavigateToLogin,
+                    innerPadding = innerPadding
+                )
+            } else {
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(innerPadding),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.spacedBy(20.dp)
+                ) {
+                    item { HeaderSection(isDarkTheme, onThemeToggle) }
 
-                ProfileListItem(text = "Editar perfil", icon = R.drawable.profile_edit)
-                Spacer(modifier = Modifier.height(15.dp))
+                    item { InfoSection(infoData = state.infoData) }
 
-                ProfileListItem(text = "Métodos de pagamentos", icon = R.drawable.payments)
-                Spacer(modifier = Modifier.height(30.dp))
+                    item { ProgressBar(progressData = state.progressData) }
 
-                ProfileListItem(text = "Notificações", icon = R.drawable.notifications)
-                Spacer(modifier = Modifier.height(15.dp))
+                    item { StatsSection(statsData = state.statsData) }
 
-                ProfileListItem(text = "Ajuda e suporte", icon = R.drawable.help)
-                Spacer(modifier = Modifier.height(30.dp))
-
-                ProfileListItem(text = "Sair", icon = R.drawable.exit, isLogout = true)
-                Spacer(modifier = Modifier.height(20.dp))
+                    item {
+                        OptionsSection(
+                            onLogout = { /* TODO: implementar logout */ }
+                        )
+                    }
+                }
             }
         }
-    }
-}
-
-@Composable
-fun BenefitItem(text: String) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 4.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Text(
-            "•",
-            color = MaterialTheme.colorScheme.primary,
-            modifier = Modifier.width(20.dp)
-        )
-        Text(
-            text = text,
-            style = MaterialTheme.typography.bodySmall.copy(
-                fontSize = 12.sp,
-                fontWeight = FontWeight.SemiBold
-            ),
-            color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.8f)
-        )
     }
 }

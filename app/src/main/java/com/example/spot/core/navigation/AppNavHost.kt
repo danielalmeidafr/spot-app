@@ -3,14 +3,14 @@ package com.example.spot.core.navigation
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
-import com.example.spot.ui.presentation.details_establishment.services.ServicesDestination
-import com.example.spot.ui.presentation.details_establishment.services.servicesScreen
-import com.example.spot.ui.presentation.auth.login.LoginDestination
-import com.example.spot.ui.presentation.auth.login.loginScreen
-import com.example.spot.ui.presentation.auth.signup.SignupDestination
-import com.example.spot.ui.presentation.auth.signup.signupScreen
-import com.example.spot.ui.presentation.main_screen.home.homeScreen
-import com.example.spot.ui.presentation.main_screen.profile.profileScreen
+import com.example.spot.ui.presentation.details_establishment.services.navigation.ServicesDestination
+import com.example.spot.ui.presentation.details_establishment.services.navigation.servicesScreen
+import com.example.spot.ui.presentation.auth.login.navigation.LoginDestination
+import com.example.spot.ui.presentation.auth.login.navigation.loginScreen
+import com.example.spot.ui.presentation.auth.signup.navigation.SignupDestination
+import com.example.spot.ui.presentation.auth.signup.navigation.signupScreen
+import com.example.spot.ui.presentation.main_screen.home.navigation.homeScreen
+import com.example.spot.ui.presentation.main_screen.profile.navigation.profileScreen
 
 @Composable
 fun AppNavHost(

@@ -51,7 +51,7 @@ fun EstablishmentCardSkeleton(
             ) {
                 Box(
                     modifier = Modifier
-                        .width(120.dp)
+                        .width(150.dp)
                         .height(16.dp)
                         .clip(RoundedCornerShape(4.dp))
                         .shimmerEffect()
@@ -80,7 +80,7 @@ fun EstablishmentCardSkeleton(
 
             Box(
                 modifier = Modifier
-                    .fillMaxWidth(0.2f)
+                    .fillMaxWidth(0.3f)
                     .height(12.dp)
                     .clip(RoundedCornerShape(4.dp))
                     .shimmerEffect()

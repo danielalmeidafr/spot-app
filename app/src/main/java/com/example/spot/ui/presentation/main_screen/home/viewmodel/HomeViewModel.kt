@@ -1,29 +1,36 @@
 package com.example.spot.ui.presentation.main_screen.home.viewmodel
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.spot.ui.presentation.main_screen.home.components.PaymentsMethods
 import com.example.spot.ui.presentation.main_screen.home.model.EstablishmentData
 import com.example.spot.ui.presentation.main_screen.home.model.HomeState
 import com.example.spot.ui.presentation.main_screen.home.model.NextScheduleData
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
 class HomeViewModel : ViewModel() {
     private val _state = MutableStateFlow<HomeState>(HomeState.Loading)
     val state = _state.asStateFlow()
 
     init {
-        val establishments = fetchEstablishments()
-        val listTitle = if (establishments.isEmpty()) "" else "Recomendadas:"
-        val nextSchedule = fetchNextSchedule()
+        viewModelScope.launch {
+            delay(2000L)
 
-        _state.update {
-            HomeState.Success(
-                nextSchedule = nextSchedule,
-                listTitle = listTitle,
-                establishments = establishments
-            )
+            val establishments = fetchEstablishments()
+            val listTitle = if (establishments.isEmpty()) "" else "Recomendadas:"
+            val nextSchedule = fetchNextSchedule()
+
+            _state.update {
+                HomeState.Success(
+                    nextScheduleData = nextSchedule,
+                    listTitle = listTitle,
+                    establishmentsData = establishments
+                )
+            }
         }
     }
 
@@ -45,7 +52,7 @@ class HomeViewModel : ViewModel() {
                 return@update currentState.copy(
                     searchQuery = newQuery,
                     listTitle = listTitle,
-                    establishments = updatedEstablishments
+                    establishmentsData = updatedEstablishments
                 )
             } else {
                 currentState

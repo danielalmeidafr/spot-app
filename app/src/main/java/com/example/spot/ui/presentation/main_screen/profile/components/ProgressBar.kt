@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ProgressIndicatorDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -22,16 +23,15 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
+import com.example.spot.ui.presentation.main_screen.profile.model.ProgressData
 
 @Composable
-fun ProfileProgressBar(
-    currentVisits: Int,
-    goalVisits: Int,
-    rewardText: String,
+fun ProgressBar(
+    progressData: ProgressData
 ) {
-    val progress = currentVisits.toFloat() / goalVisits.toFloat()
+    val progress = progressData.currentVisits.toFloat() / progressData.goalVisits.toFloat()
 
-    val remainingVisits = goalVisits - currentVisits
+    val remainingVisits = progressData.goalVisits - progressData.currentVisits
 
     val incentiveMessage = buildAnnotatedString {
         append("Falta")
@@ -40,7 +40,7 @@ fun ProfileProgressBar(
         append(if (remainingVisits == 1) " " else "s ")
         append("para você ganhar ")
         withStyle(style = SpanStyle(fontWeight = FontWeight.SemiBold)) {
-            append(rewardText)
+            append(progressData.rewardText)
         }
         append("!")
     }
@@ -65,7 +65,7 @@ fun ProfileProgressBar(
                 color = MaterialTheme.colorScheme.onBackground
             )
             Text(
-                text = "$currentVisits de $goalVisits",
+                text = "${progressData.currentVisits} de ${progressData.goalVisits}",
                 style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.SemiBold),
                 color = MaterialTheme.colorScheme.onBackground
             )
@@ -74,13 +74,14 @@ fun ProfileProgressBar(
         Spacer(modifier = Modifier.height(8.dp))
 
         LinearProgressIndicator(
-            progress = progress,
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(6.dp)
-                .clip(RoundedCornerShape(50)),
-            color = MaterialTheme.colorScheme.primary,
-            trackColor = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.3f)
+        progress = { progress },
+        modifier = Modifier
+                        .fillMaxWidth()
+                        .height(6.dp)
+                        .clip(RoundedCornerShape(50)),
+        color = MaterialTheme.colorScheme.primary,
+        trackColor = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.3f),
+        strokeCap = ProgressIndicatorDefaults.LinearStrokeCap,
         )
 
         Spacer(modifier = Modifier.height(10.dp))

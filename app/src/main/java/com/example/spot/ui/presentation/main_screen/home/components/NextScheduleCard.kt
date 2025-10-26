@@ -23,7 +23,7 @@ import com.example.spot.ui.presentation.main_screen.home.model.NextScheduleData
 @Composable
 fun NextScheduleCard(
     modifier: Modifier = Modifier,
-    nextScheduleData: NextScheduleData
+    nextScheduleData: NextScheduleData = NextScheduleData(nextScheduleTime = null)
 ) {
     Surface(
         modifier = Modifier
@@ -52,7 +52,7 @@ fun NextScheduleCard(
                     )
 
                     Text(
-                        nextScheduleData.nextScheduleTime,
+                        text = nextScheduleData.nextScheduleTime,
                         style = MaterialTheme.typography.bodySmall,
                         fontWeight = FontWeight.Medium,
                         color = MaterialTheme.colorScheme.onSurface
@@ -60,7 +60,7 @@ fun NextScheduleCard(
                 }
             } else {
                 Text(
-                    "Marque agora seu próximo horário!",
+                    text = "Marque agora seu próximo horário!",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurface,
                     textAlign = TextAlign.Center
