@@ -56,7 +56,7 @@ fun ScheduleScreen(
         sheetShape = RoundedCornerShape(topStart = 30.dp, topEnd = 30.dp),
         sheetContainerColor = MaterialTheme.colorScheme.surface,
         sheetContent = {
-            when (state) {
+            when (val state = state) {
                 is ScheduleState.Loading -> {
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
                         repeat(4) { AppointmentItemSkeleton() }
@@ -64,7 +64,7 @@ fun ScheduleScreen(
                 }
 
                 is ScheduleState.Success -> {
-                    val appointments = (state as ScheduleState.Success).appointmentsData
+                    val appointments = state.appointmentsData
                     if (appointments.isEmpty()) {
                         Box(
                             modifier = Modifier
