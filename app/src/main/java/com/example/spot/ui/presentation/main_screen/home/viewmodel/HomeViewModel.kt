@@ -2,7 +2,8 @@ package com.example.spot.ui.presentation.main_screen.home.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.spot.ui.presentation.main_screen.home.components.PaymentsMethods
+import com.example.spot.data.dtos.home.establishment.EstablishmentRepository
+import com.example.spot.data.dtos.home.establishment.toEstablishmentData
 import com.example.spot.ui.presentation.main_screen.home.model.EstablishmentData
 import com.example.spot.ui.presentation.main_screen.home.model.HomeState
 import com.example.spot.ui.presentation.main_screen.home.model.NextScheduleData
@@ -11,111 +12,85 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import okio.IOException
+import retrofit2.HttpException
 
 class HomeViewModel : ViewModel() {
+
+    private val repository = EstablishmentRepository()
+
     private val _state = MutableStateFlow<HomeState>(HomeState.Loading)
     val state = _state.asStateFlow()
 
+    private var cachedEstablishments: List<EstablishmentData> = emptyList()
+
     init {
         viewModelScope.launch {
-            delay(2000L)
+            try {
+                val establishments = fetchEstablishments()
+                cachedEstablishments = establishments
 
-            val establishments = fetchEstablishments()
-            val listTitle = if (establishments.isEmpty()) "" else "Recomendadas:"
-            val nextSchedule = fetchNextSchedule()
+                val listTitle = if (establishments.isEmpty()) "" else "Recomendadas:"
+                val nextSchedule = fetchNextSchedule()
 
-            _state.update {
-                HomeState.Success(
-                    nextScheduleData = nextSchedule,
-                    listTitle = listTitle,
-                    establishmentsData = establishments
-                )
+                _state.update {
+                    HomeState.Success(
+                        nextScheduleData = nextSchedule,
+                        listTitle = listTitle,
+                        establishmentsData = establishments
+                    )
+                }
+            } catch (e: IOException) {
+                _state.update { HomeState.Error("Falha na conexão") }
+            } catch (e: HttpException) {
+                _state.update { HomeState.Error("Erro no servidor") }
+            } catch (e: Exception) {
+                _state.update { HomeState.Error("Ocorreu um erro: ${e.message}") }
             }
         }
+    }
+
+    private suspend fun fetchEstablishments(searchQuery: String? = null): List<EstablishmentData> {
+        val establishmentsDto = repository.getAllEstablishments(name = searchQuery)
+        return establishmentsDto.map { it.toEstablishmentData() }
     }
 
     fun updateSearchQuery(newQuery: String) {
         _state.update { currentState ->
             if (currentState is HomeState.Success) {
-
-                val listTitle: String
-                val updatedEstablishments: List<EstablishmentData>
-
-                if (newQuery.isBlank()) {
-                    listTitle = "Recomendadas:"
-                    updatedEstablishments = fetchEstablishments()
-                } else {
-                    listTitle = "Resultados da busca:"
-                    updatedEstablishments = filterEstablishmentsByName(newQuery)
-                }
-
-                return@update currentState.copy(
-                    searchQuery = newQuery,
-                    listTitle = listTitle,
-                    establishmentsData = updatedEstablishments
-                )
+                return@update currentState.copy(searchQuery = newQuery)
             } else {
                 currentState
             }
         }
-    }
 
-    private fun fetchEstablishments(): List<EstablishmentData> {
-        return listOf(
-            EstablishmentData(
-                name = "Studio Barber Lux",
-                averageRating = 4.8,
-                totalReviews = 310,
-                isOpen = true,
-                nextDate = "Hoje, 16h00",
-                location = "Moema",
-                distance = "3,1km",
-                paymentsMethods = listOf(
-                    PaymentsMethods.PIX,
-                    PaymentsMethods.CASH,
-                    PaymentsMethods.CARD
-                )
-            ),
-            EstablishmentData(
-                name = "Salão Estilo & Beleza",
-                averageRating = 4.3,
-                totalReviews = 78,
-                isOpen = false,
-                nextDate = "Amanhã, 10h00",
-                location = "Pinheiros",
-                distance = "5,4km",
-                paymentsMethods = listOf(PaymentsMethods.PIX, PaymentsMethods.CASH)
-            ),
-            EstablishmentData(
-                name = "Tattoo House SP",
-                averageRating = 4.9,
-                totalReviews = 452,
-                isOpen = true,
-                nextDate = "Hoje, 18h30",
-                location = "Vila Madalena",
-                distance = "4,2km",
-                paymentsMethods = listOf(PaymentsMethods.PIX)
-            ),
-            EstablishmentData(
-                name = "Beleza Express",
-                averageRating = 4.1,
-                totalReviews = 65,
-                isOpen = true,
-                nextDate = "Hoje, 15h45",
-                location = "Liberdade",
-                distance = "2,0km",
-                paymentsMethods = listOf(PaymentsMethods.CASH, PaymentsMethods.CARD)
-            )
-        )
-    }
+        viewModelScope.launch {
+            try {
+                delay(300)
 
+                val establishments = if (newQuery.isBlank()) cachedEstablishments else fetchEstablishments(newQuery)
+                val listTitle = if (newQuery.isBlank()) "Recomendadas:" else "Resultados da busca:"
+
+                _state.update { currentState ->
+                    if (currentState is HomeState.Success) {
+                        currentState.copy(
+                            listTitle = listTitle,
+                            establishmentsData = establishments
+                        )
+                    } else {
+                        currentState
+                    }
+                }
+            } catch (e: IOException) {
+                _state.update { HomeState.Error("Falha na conexão ao buscar estabelecimentos") }
+            } catch (e: HttpException) {
+                _state.update { HomeState.Error("Erro no servidor ao buscar estabelecimentos") }
+            } catch (e: Exception) {
+                _state.update { HomeState.Error("Ocorreu um erro ao buscar: ${e.message}") }
+            }
+        }
+    }
     private fun fetchNextSchedule(): NextScheduleData {
         return NextScheduleData(nextScheduleTime = "Hoje, 16h00")
     }
-
-    private fun filterEstablishmentsByName(query: String): List<EstablishmentData> {
-        val allEstablishments = fetchEstablishments()
-        return allEstablishments.filter { it.name.contains(query, ignoreCase = true) }
-    }
-
 }

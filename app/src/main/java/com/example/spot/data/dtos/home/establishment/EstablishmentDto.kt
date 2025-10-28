@@ -1,4 +1,4 @@
-package com.example.spot.data.dtos
+package com.example.spot.data.dtos.home.establishment
 
 data class EstablishmentDto(
     val id: String,
@@ -7,7 +7,7 @@ data class EstablishmentDto(
     val isOpen: Boolean,
     val nextDate: String,
     val location: String,
-    val distance: String,
+    val distance: String?,
     val paymentMethods: List<String>
     // val totalReviews: String
 )

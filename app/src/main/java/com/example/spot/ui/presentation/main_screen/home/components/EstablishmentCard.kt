@@ -271,6 +271,6 @@ private fun PaymentIcon(id: Int, contentDescription: String) {
         painter = painterResource(id = id),
         tint = MaterialTheme.colorScheme.onBackground.copy(0.8f),
         contentDescription = contentDescription,
-        modifier = Modifier.size(15.dp)
+        modifier = Modifier.size(13.dp)
     )
 }

@@ -47,7 +47,8 @@ android {
 dependencies {
     implementation(libs.logging.interceptor)
     implementation(libs.retrofit)
-    implementation(libs.converter.kotlinx.serialization)
+    implementation("com.squareup.retrofit2:converter-moshi:3.0.0")
+    implementation(libs.moshi.kotlin)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)

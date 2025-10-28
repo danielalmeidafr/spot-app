@@ -96,6 +96,58 @@ fun HomeScreen(
             }
         }
 
+        is HomeState.Error -> {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(MaterialTheme.colorScheme.background)
+                    .clearFocusOnTap(),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                CustomSearchBar(
+                    query = "",
+                    onQueryChange = { newQuery -> viewModel.updateSearchQuery(newQuery) },
+                    modifier = Modifier
+                        .padding(top = 20.dp)
+                )
+
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(innerPadding)
+                        .padding(bottom = if (isKeyboardVisible) 250.dp else 0.dp),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.signal),
+                        tint = MaterialTheme.colorScheme.onBackground,
+                        contentDescription = "Imagem de sem sinal",
+                        modifier = Modifier
+                            .size(60.dp)
+                            .alpha(0.7f)
+                    )
+
+                    Spacer(modifier = Modifier.height(50.dp))
+
+                    Text(
+                        state.message,
+                        style = MaterialTheme.typography.titleSmall,
+                        color = MaterialTheme.colorScheme.onBackground
+                    )
+
+                    Spacer(modifier = Modifier.height(15.dp))
+
+                    Text(
+                        "Puxe para atualizar ou verifique sua rede",
+                        style = MaterialTheme.typography.bodySmall.copy(fontSize = 12.sp),
+                        color = MaterialTheme.colorScheme.onBackground
+                    )
+                }
+            }
+        }
+
+
         is HomeState.Success -> {
             val isNotFoundScreen =
                 state.searchQuery.isNotBlank() && state.establishmentsData.isEmpty()
