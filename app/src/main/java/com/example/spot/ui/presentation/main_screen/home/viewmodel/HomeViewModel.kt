@@ -82,14 +82,15 @@ class HomeViewModel : ViewModel() {
                     }
                 }
             } catch (e: IOException) {
-                _state.update { HomeState.Error("Falha na conexão ao buscar estabelecimentos") }
+                _state.update { HomeState.Error("Falha na conexão") }
             } catch (e: HttpException) {
-                _state.update { HomeState.Error("Erro no servidor ao buscar estabelecimentos") }
+                _state.update { HomeState.Error("Erro no servidor") }
             } catch (e: Exception) {
-                _state.update { HomeState.Error("Ocorreu um erro ao buscar: ${e.message}") }
+                _state.update { HomeState.Error("Ocorreu um erro: ${e.message}") }
             }
         }
     }
+
     private fun fetchNextSchedule(): NextScheduleData {
         return NextScheduleData(nextScheduleTime = "Hoje, 16h00")
     }
