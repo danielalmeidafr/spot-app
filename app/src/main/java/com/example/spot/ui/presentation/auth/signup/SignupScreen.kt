@@ -1,5 +1,6 @@
 package com.example.spot.ui.presentation.auth.signup
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -22,6 +23,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -29,6 +31,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -36,25 +39,52 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.spot.core.util.clearFocusOnTap
 import com.example.spot.ui.presentation.auth.components.CustomButton
 import com.example.spot.ui.presentation.auth.components.CustomTextField
 import com.example.spot.ui.presentation.auth.components.PrimaryButton
+import com.example.spot.ui.presentation.auth.signup.model.SignupState
+import com.example.spot.ui.presentation.auth.signup.viewmodel.SignupViewModel
 import com.student.R
 
 @Composable
 fun SignupScreen(
-    onBack: () -> Unit
+    onBack: () -> Unit,
+    onNavigateToMain: () -> Unit
 ) {
+    val viewModel = viewModel<SignupViewModel>()
+    val state by viewModel.state.collectAsState()
+    val context = LocalContext.current
+
+    when (state) {
+        SignupState.Idle -> {
+
+        }
+
+        SignupState.Loading -> {
+
+        }
+
+        is SignupState.Error -> {
+            Toast.makeText(context, (state as SignupState.Error).message, Toast.LENGTH_LONG).show()
+        }
+
+        is SignupState.Success -> {
+            onNavigateToMain()
+        }
+    }
+
+
+    var username by remember {
+        mutableStateOf("")
+    }
+
     var email by remember {
         mutableStateOf("")
     }
 
     var password by remember {
-        mutableStateOf("")
-    }
-
-    var confirmPassword by remember {
         mutableStateOf("")
     }
 
@@ -122,6 +152,14 @@ fun SignupScreen(
                 Spacer(modifier = Modifier.height(40.dp))
 
                 CustomTextField(
+                    value = username,
+                    onValueChange = { username = it },
+                    placeholderText = "Nome de usuário:"
+                )
+
+                Spacer(modifier = Modifier.height(30.dp))
+
+                CustomTextField(
                     value = email,
                     onValueChange = { email = it },
                     placeholderText = "E-mail:"
@@ -133,15 +171,6 @@ fun SignupScreen(
                     value = password,
                     onValueChange = { password = it },
                     placeholderText = "Senha:",
-                    isPassword = true
-                )
-
-                Spacer(modifier = Modifier.height(30.dp))
-
-                CustomTextField(
-                    value = confirmPassword,
-                    onValueChange = { confirmPassword = it },
-                    placeholderText = "Confirme sua senha:",
                     isPassword = true
                 )
 
@@ -188,8 +217,17 @@ fun SignupScreen(
 
                 PrimaryButton(
                     text = "Cadastrar",
+                    isLoading = state is SignupState.Loading,
                     onClick = {
-
+                        if (username.isNotBlank() && email.isNotBlank() && password.isNotBlank() && agreed) {
+                            viewModel.onSignupClicked(username, email, password)
+                        } else {
+                            Toast.makeText(
+                                context,
+                                "Preencha todos os campos e concorde com os termos.",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
                     }
                 )
 

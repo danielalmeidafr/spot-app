@@ -9,6 +9,7 @@ import com.example.spot.ui.presentation.auth.login.navigation.LoginDestination
 import com.example.spot.ui.presentation.auth.login.navigation.loginScreen
 import com.example.spot.ui.presentation.auth.signup.navigation.SignupDestination
 import com.example.spot.ui.presentation.auth.signup.navigation.signupScreen
+import com.example.spot.ui.presentation.main_screen.home.navigation.HomeDestination
 import com.example.spot.ui.presentation.main_screen.home.navigation.homeScreen
 import com.example.spot.ui.presentation.main_screen.profile.navigation.profileScreen
 
@@ -36,7 +37,8 @@ fun AppNavHost(
         )
 
         signupScreen(
-            onBack = { navController.popBackStack() }
+            onBack = { navController.popBackStack() },
+            onNavigateToMain = { navController.navigate(MainScreenDestination) }
         )
 
         profileScreen(

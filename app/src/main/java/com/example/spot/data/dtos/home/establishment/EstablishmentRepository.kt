@@ -3,7 +3,6 @@ package com.example.spot.data.dtos.home.establishment
 import com.example.spot.data.di.SpotApi
 
 class EstablishmentRepository {
-
     suspend fun getAllEstablishments(
         page: Int = 0,
         size: Int = 10,

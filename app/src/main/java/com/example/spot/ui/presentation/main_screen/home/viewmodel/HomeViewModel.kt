@@ -16,7 +16,6 @@ import okio.IOException
 import retrofit2.HttpException
 
 class HomeViewModel : ViewModel() {
-
     private val repository = EstablishmentRepository()
 
     private val _state = MutableStateFlow<HomeState>(HomeState.Loading)

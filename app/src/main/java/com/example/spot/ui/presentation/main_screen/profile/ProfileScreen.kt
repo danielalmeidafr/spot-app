@@ -39,7 +39,7 @@ fun ProfileScreen(
 
     when (val state = state) {
         ProfileState.Loading -> {
-            if (!isLogged) {
+            if (isLogged) {
                 ProfileLoggedOutScreen(
                     onNavigateToLogin = onNavigateToLogin,
                     innerPadding = innerPadding
@@ -70,7 +70,7 @@ fun ProfileScreen(
         }
 
         is ProfileState.Success -> {
-            if (!isLogged) {
+            if (isLogged) {
                 ProfileLoggedOutScreen(
                     onNavigateToLogin = onNavigateToLogin,
                     innerPadding = innerPadding

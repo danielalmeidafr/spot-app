@@ -2,9 +2,11 @@ package com.example.spot.ui.presentation.auth.components
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -16,11 +18,11 @@ import androidx.compose.ui.unit.dp
 fun PrimaryButton(
     text: String,
     onClick: () -> Unit,
-    modifier: Modifier = Modifier
+    isLoading: Boolean = false
 ) {
     Button(
-        onClick = onClick,
-        modifier = modifier
+        onClick = { if (!isLoading) onClick() },
+        modifier = Modifier
             .fillMaxWidth(0.85f)
             .height(45.dp),
         shape = CircleShape,
@@ -29,10 +31,18 @@ fun PrimaryButton(
             contentColor = MaterialTheme.colorScheme.onPrimary
         )
     ) {
-        Text(
-            text,
-            style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.Bold),
-            color = MaterialTheme.colorScheme.onPrimary
-        )
+        if (isLoading) {
+            CircularProgressIndicator(
+                color = MaterialTheme.colorScheme.onPrimary,
+                strokeWidth = 2.dp,
+                modifier = Modifier.size(24.dp)
+            )
+        } else {
+            Text(
+                text,
+                style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.Bold),
+                color = MaterialTheme.colorScheme.onPrimary
+            )
+        }
     }
 }
