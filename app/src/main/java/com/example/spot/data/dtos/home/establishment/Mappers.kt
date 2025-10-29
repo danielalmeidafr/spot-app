@@ -11,7 +11,7 @@ fun EstablishmentDto.toEstablishmentData(): EstablishmentData {
         isOpen = this.isOpen,
         nextDate = this.nextDate,
         location = this.location,
-        distance = this.distance ?: "N/D",
+        distance = this.distance ?: "",
         paymentsMethods = this.paymentMethods.toPaymentsMethods()
     )
 }

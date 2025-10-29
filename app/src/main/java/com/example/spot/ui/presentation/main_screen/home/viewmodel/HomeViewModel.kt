@@ -73,10 +73,15 @@ class HomeViewModel : ViewModel() {
 
                 _state.update { currentState ->
                     if (currentState is HomeState.Success) {
-                        currentState.copy(
-                            listTitle = listTitle,
-                            establishmentsData = establishments
-                        )
+                        if (currentState.searchQuery == newQuery) {
+                            currentState.copy(
+                                listTitle = listTitle,
+                                establishmentsData = establishments
+                            )
+                        } else {
+                            currentState
+                        }
+
                     } else {
                         currentState
                     }
