@@ -10,14 +10,14 @@ object MainScreenDestination
 
 fun NavGraphBuilder.mainScreen(
     onNavigateToServices: () -> Unit,
-    onNavigateToLogin: () -> Unit,
+    onNavigateToSignIn: () -> Unit,
     isDarkTheme: Boolean,
     onThemeToggle: () -> Unit
 ) {
     composable<MainScreenDestination> {
         MainScreen(
             onNavigateToServices = onNavigateToServices,
-            onNavigateToLogin = onNavigateToLogin,
+            onNavigateToSignIn = onNavigateToSignIn,
             isDarkTheme = isDarkTheme,
             onThemeToggle = onThemeToggle
         )

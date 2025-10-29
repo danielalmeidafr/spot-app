@@ -1,4 +1,4 @@
-package com.example.spot.data.dtos.auth.signup
+package com.example.spot.data.dtos.auth
 
 class TokenManagerImpl : TokenManager {
 

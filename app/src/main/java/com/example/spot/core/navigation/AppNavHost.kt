@@ -5,11 +5,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import com.example.spot.ui.presentation.details_establishment.services.navigation.ServicesDestination
 import com.example.spot.ui.presentation.details_establishment.services.navigation.servicesScreen
-import com.example.spot.ui.presentation.auth.login.navigation.LoginDestination
-import com.example.spot.ui.presentation.auth.login.navigation.loginScreen
-import com.example.spot.ui.presentation.auth.signup.navigation.SignupDestination
-import com.example.spot.ui.presentation.auth.signup.navigation.signupScreen
-import com.example.spot.ui.presentation.main_screen.home.navigation.HomeDestination
+import com.example.spot.ui.presentation.auth.signin.navigation.SignInDestination
+import com.example.spot.ui.presentation.auth.signin.navigation.signInScreen
+import com.example.spot.ui.presentation.auth.signup.navigation.SignUpDestination
+import com.example.spot.ui.presentation.auth.signup.navigation.signUpScreen
 import com.example.spot.ui.presentation.main_screen.home.navigation.homeScreen
 import com.example.spot.ui.presentation.main_screen.profile.navigation.profileScreen
 
@@ -21,7 +20,7 @@ fun AppNavHost(
     val navController = rememberNavController()
     NavHost(navController = navController, startDestination = MainScreenDestination){
         mainScreen(
-            onNavigateToLogin = { navController.navigate(LoginDestination) },
+            onNavigateToSignIn = { navController.navigate(SignInDestination) },
             onNavigateToServices = { navController.navigate(ServicesDestination) },
             isDarkTheme = isDarkTheme,
             onThemeToggle = onThemeToggle
@@ -31,18 +30,19 @@ fun AppNavHost(
             onNavigateToServices = { navController.navigate(ServicesDestination) }
         )
 
-        loginScreen(
-            onNavigateToSignup = { navController.navigate(SignupDestination) },
-            onBack = { navController.popBackStack() }
+        signInScreen(
+            onBack = { navController.popBackStack() },
+            onNavigateToMain = { navController.navigate(MainScreenDestination) },
+            onNavigateToSignup = { navController.navigate(SignUpDestination) },
         )
 
-        signupScreen(
+        signUpScreen(
             onBack = { navController.popBackStack() },
             onNavigateToMain = { navController.navigate(MainScreenDestination) }
         )
 
         profileScreen(
-            onNavigateToLogin = { navController.navigate(LoginDestination) },
+            onNavigateToSignIn = { navController.navigate(SignInDestination) },
             isDarkTheme = isDarkTheme,
             onThemeToggle = onThemeToggle
         )

@@ -93,7 +93,7 @@ sealed class ScreenItem(
 fun MainScreen(
     modifier: Modifier = Modifier,
     onNavigateToServices: () -> Unit,
-    onNavigateToLogin: () -> Unit,
+    onNavigateToSignIn: () -> Unit,
     isDarkTheme: Boolean,
     onThemeToggle: () -> Unit
 ) {
@@ -242,7 +242,7 @@ fun MainScreen(
                 ScreenItem.Schedules -> ScheduleScreen()
                 ScreenItem.Profile -> ProfileScreen(
                     innerPadding = innerPadding,
-                    onNavigateToLogin = onNavigateToLogin,
+                    onNavigateToSignIn = onNavigateToSignIn,
                     isDarkTheme = isDarkTheme,
                     onThemeToggle = onThemeToggle
                 )

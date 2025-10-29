@@ -30,7 +30,7 @@ import com.student.R
 @Composable
 fun ProfileLoggedOutScreen(
     modifier: Modifier = Modifier,
-    onNavigateToLogin: () -> Unit,
+    onNavigateToSignIn: () -> Unit,
     innerPadding: PaddingValues = PaddingValues()
 ) {
     Column(
@@ -74,7 +74,7 @@ fun ProfileLoggedOutScreen(
         Spacer(modifier = Modifier.height(30.dp))
 
         Button(
-            onClick = { onNavigateToLogin() },
+            onClick = { onNavigateToSignIn() },
             modifier = Modifier
                 .fillMaxWidth()
                 .height(40.dp),

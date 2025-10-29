@@ -9,13 +9,13 @@ import kotlinx.serialization.Serializable
 object ProfileDestination
 
 fun NavGraphBuilder.profileScreen(
-    onNavigateToLogin: () -> Unit,
+    onNavigateToSignIn: () -> Unit,
     isDarkTheme: Boolean,
     onThemeToggle: () -> Unit
 ) {
     composable<ProfileDestination> {
         ProfileScreen(
-            onNavigateToLogin = onNavigateToLogin,
+            onNavigateToSignIn = onNavigateToSignIn,
             isDarkTheme = isDarkTheme,
             onThemeToggle = onThemeToggle
         )

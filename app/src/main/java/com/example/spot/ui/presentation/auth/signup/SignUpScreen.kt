@@ -1,6 +1,8 @@
-package com.example.spot.ui.presentation.auth.login
+package com.example.spot.ui.presentation.auth.signup
 
+import android.widget.Toast
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -13,7 +15,6 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
@@ -22,6 +23,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -29,6 +31,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -36,17 +39,47 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.spot.core.util.clearFocusOnTap
 import com.example.spot.ui.presentation.auth.components.CustomButton
 import com.example.spot.ui.presentation.auth.components.CustomTextField
 import com.example.spot.ui.presentation.auth.components.PrimaryButton
+import com.example.spot.ui.presentation.auth.model.AuthState
+import com.example.spot.ui.presentation.auth.viewmodel.AuthViewModel
 import com.student.R
 
 @Composable
-fun LoginScreen(
-    onNavigateToSignup: () -> Unit,
-    onBack: () -> Unit
+fun SignUpScreen(
+    onBack: () -> Unit,
+    onNavigateToMain: () -> Unit
 ) {
+    val viewModel = viewModel<AuthViewModel>()
+    val state by viewModel.state.collectAsState()
+    val context = LocalContext.current
+
+    when (state) {
+        AuthState.Idle -> {
+
+        }
+
+        AuthState.Loading -> {
+
+        }
+
+        is AuthState.Error -> {
+            Toast.makeText(context, (state as AuthState.Error).message, Toast.LENGTH_LONG).show()
+        }
+
+        is AuthState.Success -> {
+            onNavigateToMain()
+        }
+    }
+
+
+    var username by remember {
+        mutableStateOf("")
+    }
+
     var email by remember {
         mutableStateOf("")
     }
@@ -82,15 +115,15 @@ fun LoginScreen(
                     Icon(
                         painter = painterResource(id = R.drawable.arrow_back),
                         contentDescription = "Voltar",
-                        tint = MaterialTheme.colorScheme.onSurface.copy(0.8f),
-                        modifier = Modifier.padding(15.dp)
+                        tint = MaterialTheme.colorScheme.onSurface,
+                        modifier = Modifier.padding(16.dp)
                     )
                 }
 
                 Spacer(modifier = Modifier.height(30.dp))
 
                 Text(
-                    "Entre na sua conta",
+                    "Crie sua conta",
                     style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.onBackground
                 )
@@ -98,7 +131,7 @@ fun LoginScreen(
                 Spacer(modifier = Modifier.height(8.dp))
 
                 Text(
-                    "Digite seu e-mail e senha para entrar.",
+                    "Digite seu e-mail e senha para cadastrar-se.",
                     style = MaterialTheme.typography.bodySmall.copy(fontSize = 12.sp),
                     color = MaterialTheme.colorScheme.onBackground.copy(0.7f)
                 )
@@ -119,6 +152,14 @@ fun LoginScreen(
                 Spacer(modifier = Modifier.height(40.dp))
 
                 CustomTextField(
+                    value = username,
+                    onValueChange = { username = it },
+                    placeholderText = "Nome de usuário:"
+                )
+
+                Spacer(modifier = Modifier.height(30.dp))
+
+                CustomTextField(
                     value = email,
                     onValueChange = { email = it },
                     placeholderText = "E-mail:"
@@ -133,37 +174,60 @@ fun LoginScreen(
                     isPassword = true
                 )
 
-                TextButton(
-                    onClick = {
+                Spacer(modifier = Modifier.height(5.dp))
 
-                    },
+                var agreed by remember { mutableStateOf(false) }
+
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier
-                        .fillMaxWidth(0.95f)
-                        .wrapContentWidth(Alignment.End),
+                        .clickable { agreed = !agreed }
                 ) {
-                    Text(
-                        buildAnnotatedString {
-                            append("Esqueceu sua ")
-                            withStyle(
-                                style = SpanStyle(
-                                    color = MaterialTheme.colorScheme.primary
-                                )
-                            ) {
-                                append("senha")
-                            }
-                            append("?")
-                        },
-                        style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.Bold),
-                        color = MaterialTheme.colorScheme.onBackground,
+                    Icon(
+                        painter = painterResource(
+                            id = if (agreed) R.drawable.check_filled else R.drawable.check_outlined
+                        ),
+                        contentDescription = "Check",
+                        tint = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.size(14.dp),
                     )
+                    TextButton(
+                        onClick = {
+
+                        }
+                    ) {
+                        Text(
+                            buildAnnotatedString {
+                                append("Eu concordo com os ")
+                                withStyle(
+                                    style = SpanStyle(
+                                        color = MaterialTheme.colorScheme.primary
+                                    )
+                                ) {
+                                    append("termos de privacidade")
+                                }
+                            },
+                            style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.Bold),
+                            color = MaterialTheme.colorScheme.onBackground
+                        )
+                    }
                 }
 
                 Spacer(modifier = Modifier.height(20.dp))
 
                 PrimaryButton(
-                    text = "Entrar",
+                    text = "Cadastrar",
+                    isLoading = state is AuthState.Loading,
                     onClick = {
-
+                        if (username.isNotBlank() && email.isNotBlank() && password.isNotBlank() && agreed) {
+                            viewModel.onSignUpClicked(username, email, password)
+                        } else {
+                            Toast.makeText(
+                                context,
+                                "Preencha todos os campos e concorde com os termos.",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
                     }
                 )
 
@@ -182,10 +246,7 @@ fun LoginScreen(
 
                     Text(
                         "ou",
-                        style = MaterialTheme.typography.bodySmall.copy(
-                            fontSize = 12.sp,
-                            fontWeight = FontWeight.Bold
-                        ),
+                        style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.Bold, fontSize = 12.sp),
                         color = MaterialTheme.colorScheme.onBackground,
                         modifier = Modifier.padding(horizontal = 20.dp)
                     )
@@ -209,25 +270,6 @@ fun LoginScreen(
                         onClick = {},
                         text = "Continuar com Google",
                         imagePainter = R.drawable.google_logo
-                    )
-                }
-
-                Spacer(modifier = Modifier.height(15.dp))
-
-                TextButton(
-                    onClick = onNavigateToSignup
-                ) {
-                    Text(
-                        buildAnnotatedString {
-                            append("Não tem uma conta? ")
-                            withStyle(
-                                style = SpanStyle(color = MaterialTheme.colorScheme.primary)
-                            ) {
-                                append("Cadastre-se")
-                            }
-                        },
-                        style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.Bold),
-                        color = MaterialTheme.colorScheme.onBackground
                     )
                 }
             }

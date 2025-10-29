@@ -19,7 +19,6 @@ import com.example.spot.ui.presentation.main_screen.profile.components.sections.
 import com.example.spot.ui.presentation.main_screen.profile.components.sections.StatsSection
 import com.example.spot.ui.presentation.main_screen.profile.components.skeletons.InfoSectionSkeleton
 import com.example.spot.ui.presentation.main_screen.profile.components.skeletons.ProgressBarSkeleton
-import com.example.spot.ui.presentation.main_screen.profile.components.skeletons.StatsCardSkeleton
 import com.example.spot.ui.presentation.main_screen.profile.components.skeletons.StatsSectionSkeleton
 import com.example.spot.ui.presentation.main_screen.profile.model.ProfileState
 import com.example.spot.ui.presentation.main_screen.profile.viewmodel.ProfileViewModel
@@ -27,7 +26,7 @@ import com.example.spot.ui.presentation.main_screen.profile.viewmodel.ProfileVie
 @Composable
 fun ProfileScreen(
     modifier: Modifier = Modifier,
-    onNavigateToLogin: () -> Unit,
+    onNavigateToSignIn: () -> Unit,
     innerPadding: PaddingValues = PaddingValues(),
     isDarkTheme: Boolean,
     onThemeToggle: () -> Unit
@@ -41,7 +40,7 @@ fun ProfileScreen(
         ProfileState.Loading -> {
             if (isLogged) {
                 ProfileLoggedOutScreen(
-                    onNavigateToLogin = onNavigateToLogin,
+                    onNavigateToSignIn = onNavigateToSignIn,
                     innerPadding = innerPadding
                 )
             } else {
@@ -72,7 +71,7 @@ fun ProfileScreen(
         is ProfileState.Success -> {
             if (isLogged) {
                 ProfileLoggedOutScreen(
-                    onNavigateToLogin = onNavigateToLogin,
+                    onNavigateToSignIn = onNavigateToSignIn,
                     innerPadding = innerPadding
                 )
             } else {

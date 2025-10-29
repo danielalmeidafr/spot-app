@@ -1,6 +1,6 @@
 package com.example.spot.data.dtos.auth.signup
 
-data class SignupResponse(
+data class SignUpResponse(
     val id: String,
     val username: String,
     val email: String,

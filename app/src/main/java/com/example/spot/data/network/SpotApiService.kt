@@ -1,7 +1,9 @@
 package com.example.spot.data.network
 
-import com.example.spot.data.dtos.auth.signup.SignupRequest
-import com.example.spot.data.dtos.auth.signup.SignupResponse
+import com.example.spot.data.dtos.auth.login.SignInRequest
+import com.example.spot.data.dtos.auth.login.SignInResponse
+import com.example.spot.data.dtos.auth.signup.SignUpRequest
+import com.example.spot.data.dtos.auth.signup.SignUpResponse
 import com.example.spot.data.dtos.home.establishment.PagedEstablishmentsResponse
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -19,5 +21,8 @@ interface SpotApiService {
     ): PagedEstablishmentsResponse
 
     @POST("api/authentication/signup")
-    suspend fun signup(@Body request: SignupRequest): SignupResponse
+    suspend fun signUp(@Body request: SignUpRequest): SignUpResponse
+
+    @POST("api/authentication/signin")
+    suspend fun signIn(@Body request: SignInRequest): SignInResponse
 }
