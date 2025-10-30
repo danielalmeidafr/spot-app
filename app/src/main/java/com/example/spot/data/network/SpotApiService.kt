@@ -5,6 +5,7 @@ import com.example.spot.data.dtos.auth.login.SignInResponse
 import com.example.spot.data.dtos.auth.signup.SignUpRequest
 import com.example.spot.data.dtos.auth.signup.SignUpResponse
 import com.example.spot.data.dtos.home.establishment.PagedEstablishmentsResponse
+import com.example.spot.data.dtos.home.nextschedule.NextScheduleResponse
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
@@ -25,4 +26,7 @@ interface SpotApiService {
 
     @POST("api/authentication/signin")
     suspend fun signIn(@Body request: SignInRequest): SignInResponse
+
+    @GET("api/appointments/me/next")
+    suspend fun getNextSchedule() : NextScheduleResponse
 }

@@ -71,15 +71,13 @@ class ProfileViewModel(
         return StatsData(
             reviews = 12,
             schedules = 4,
-            favorites = 5
+                favorites = 5
         )
     }
 
     fun logout() {
         viewModelScope.launch {
-            println("→ Logout iniciado")
             authRepository.clearToken()
-            println("→ Token removido")
             _isLoggedIn.value = false
             _state.value = ProfileState.Loading
         }

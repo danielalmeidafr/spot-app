@@ -4,6 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.spot.data.dtos.home.establishment.EstablishmentRepository
 import com.example.spot.data.dtos.home.establishment.toEstablishmentData
+import com.example.spot.data.dtos.home.nextschedule.NextScheduleRepository
+import com.example.spot.data.dtos.home.nextschedule.toNextScheduleData
 import com.example.spot.ui.presentation.main_screen.home.model.EstablishmentData
 import com.example.spot.ui.presentation.main_screen.home.model.HomeState
 import com.example.spot.ui.presentation.main_screen.home.model.NextScheduleData
@@ -16,7 +18,8 @@ import okio.IOException
 import retrofit2.HttpException
 
 class HomeViewModel(
-    private val repository: EstablishmentRepository
+    private val establishmentRepository: EstablishmentRepository,
+    private val nextScheduleRepository: NextScheduleRepository,
 ) : ViewModel() {
     private val _state = MutableStateFlow<HomeState>(HomeState.Loading)
     val state = _state.asStateFlow()
@@ -49,8 +52,13 @@ class HomeViewModel(
         }
     }
 
+    private suspend fun fetchNextSchedule(): NextScheduleData {
+        val nextScheduleDto = nextScheduleRepository.getNextSchedule()
+        return nextScheduleDto.toNextScheduleData()
+    }
+
     private suspend fun fetchEstablishments(searchQuery: String? = null): List<EstablishmentData> {
-        val establishmentsDto = repository.getAllEstablishments(name = searchQuery)
+        val establishmentsDto = establishmentRepository.getAllEstablishments(name = searchQuery)
         return establishmentsDto.map { it.toEstablishmentData() }
     }
 
@@ -93,9 +101,5 @@ class HomeViewModel(
                 _state.update { HomeState.Error("Ocorreu um erro: ${e.message}") }
             }
         }
-    }
-
-    private fun fetchNextSchedule(): NextScheduleData {
-        return NextScheduleData(nextScheduleTime = "Hoje, 16h00")
     }
 }

@@ -3,13 +3,11 @@ package com.example.spot.ui.presentation.auth.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.spot.data.dtos.auth.AuthRepository
-import com.example.spot.data.dtos.auth.TokenManagerImpl
 import com.example.spot.data.dtos.auth.login.SignInRequest
 import com.example.spot.data.dtos.auth.signup.SignUpRequest
 import com.example.spot.ui.presentation.auth.model.AuthState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import okio.IOException
@@ -18,8 +16,6 @@ import retrofit2.HttpException
 class AuthViewModel(
     private val repository: AuthRepository
 ) : ViewModel() {
-    private val tokenManager = TokenManagerImpl()
-
     private val _state = MutableStateFlow<AuthState>(AuthState.Idle)
     val state = _state.asStateFlow()
 
