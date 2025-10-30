@@ -1,8 +1,10 @@
 package com.example.spot.data.dtos.home.establishment
 
-import com.example.spot.data.di.SpotApi
+import com.example.spot.data.network.SpotApiService
 
-class EstablishmentRepository {
+class EstablishmentRepository(
+    private val api: SpotApiService
+) {
     suspend fun getAllEstablishments(
         page: Int = 0,
         size: Int = 10,
@@ -10,7 +12,7 @@ class EstablishmentRepository {
         sortDir: String = "desc",
         name: String? = null
     ): List<EstablishmentDto> {
-        val response = SpotApi.retrofitService.getAllEstablishments(page, size, sortBy, sortDir, name)
+        val response = api.getAllEstablishments(page, size, sortBy, sortDir, name)
         return response.establishments
     }
 }

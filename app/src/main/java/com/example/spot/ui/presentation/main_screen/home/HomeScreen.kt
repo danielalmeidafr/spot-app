@@ -26,7 +26,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.spot.core.util.clearFocusOnTap
 import com.example.spot.core.util.rememberKeyboardVisibility
 import com.example.spot.ui.presentation.main_screen.home.components.CustomSearchBar
@@ -37,6 +36,7 @@ import com.example.spot.ui.presentation.main_screen.home.components.NextSchedule
 import com.example.spot.ui.presentation.main_screen.home.model.HomeState
 import com.example.spot.ui.presentation.main_screen.home.viewmodel.HomeViewModel
 import com.student.R
+import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -45,7 +45,7 @@ fun HomeScreen(
     onNavigateToServices: () -> Unit,
     innerPadding: PaddingValues = PaddingValues()
 ) {
-    val viewModel = viewModel<HomeViewModel>()
+    val viewModel = koinViewModel<HomeViewModel>()
     val state by viewModel.state.collectAsState()
     val isKeyboardVisible = rememberKeyboardVisibility()
 

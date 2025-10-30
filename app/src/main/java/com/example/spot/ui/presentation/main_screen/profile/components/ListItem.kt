@@ -39,7 +39,8 @@ fun ListItem(
     modifier: Modifier = Modifier,
     text: String,
     icon: Int,
-    isLogout: Boolean = false
+    isLogout: Boolean = false,
+    onClick: (() -> Unit)? = null
 ) {
     val textColor = if (isLogout) MaterialTheme.colorScheme.tertiary else MaterialTheme.colorScheme.onBackground
     val iconTint = if (isLogout) MaterialTheme.colorScheme.tertiary else MaterialTheme.colorScheme.onBackground
@@ -70,6 +71,7 @@ fun ListItem(
                 scope.launch {
                     delay(100)
                     isPressed = false
+                    onClick?.invoke()
                 }
             }
             .padding(horizontal = 20.dp),

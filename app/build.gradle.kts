@@ -45,9 +45,14 @@ android {
 }
 
 dependencies {
+    implementation(libs.androidx.datastore.preferences)
+
+    implementation(libs.koin.android)
+    implementation(libs.koin.androidx.compose)
+
     implementation(libs.logging.interceptor)
     implementation(libs.retrofit)
-    implementation("com.squareup.retrofit2:converter-moshi:3.0.0")
+    implementation(libs.retrofit2.converter.moshi)
     implementation(libs.moshi.kotlin)
 
     implementation(libs.androidx.core.ktx)

@@ -29,6 +29,6 @@ fun OptionsSection(
     ListItem(text = "Ajuda e suporte", icon = R.drawable.help)
     Spacer(modifier = Modifier.height(30.dp))
 
-    ListItem(text = "Sair", icon = R.drawable.exit, isLogout = true)
+    ListItem(text = "Sair", icon = R.drawable.exit, isLogout = true, onClick = onLogout)
     Spacer(modifier = Modifier.height(20.dp))
 }

@@ -39,7 +39,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.spot.core.util.clearFocusOnTap
 import com.example.spot.ui.presentation.auth.components.CustomButton
 import com.example.spot.ui.presentation.auth.components.CustomTextField
@@ -47,13 +46,14 @@ import com.example.spot.ui.presentation.auth.components.PrimaryButton
 import com.example.spot.ui.presentation.auth.model.AuthState
 import com.example.spot.ui.presentation.auth.viewmodel.AuthViewModel
 import com.student.R
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun SignUpScreen(
     onBack: () -> Unit,
     onNavigateToMain: () -> Unit
 ) {
-    val viewModel = viewModel<AuthViewModel>()
+    val viewModel = koinViewModel<AuthViewModel>()
     val state by viewModel.state.collectAsState()
     val context = LocalContext.current
 

@@ -15,9 +15,9 @@ import kotlinx.coroutines.launch
 import okio.IOException
 import retrofit2.HttpException
 
-class HomeViewModel : ViewModel() {
-    private val repository = EstablishmentRepository()
-
+class HomeViewModel(
+    private val repository: EstablishmentRepository
+) : ViewModel() {
     private val _state = MutableStateFlow<HomeState>(HomeState.Loading)
     val state = _state.asStateFlow()
 

@@ -9,13 +9,15 @@ import com.example.spot.data.dtos.auth.signup.SignUpRequest
 import com.example.spot.ui.presentation.auth.model.AuthState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import okio.IOException
 import retrofit2.HttpException
 
-class AuthViewModel : ViewModel() {
-    private val repository = AuthRepository()
+class AuthViewModel(
+    private val repository: AuthRepository
+) : ViewModel() {
     private val tokenManager = TokenManagerImpl()
 
     private val _state = MutableStateFlow<AuthState>(AuthState.Idle)
@@ -29,10 +31,7 @@ class AuthViewModel : ViewModel() {
                 val request = SignUpRequest(username, email, password)
                 val response = repository.signUp(request)
 
-                tokenManager.saveTokens(
-                    accessToken = response.accessToken,
-                    refreshToken = response.refreshToken
-                )
+                repository.saveToken(response.accessToken)
 
                 _state.update { AuthState.Success }
 
@@ -54,10 +53,7 @@ class AuthViewModel : ViewModel() {
                 val request = SignInRequest(email, password)
                 val response = repository.signIn(request)
 
-                tokenManager.saveTokens(
-                    accessToken = response.accessToken,
-                    refreshToken = response.refreshToken
-                )
+                repository.saveToken(response.accessToken)
 
                 _state.update { AuthState.Success }
 

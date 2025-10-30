@@ -2,35 +2,52 @@ package com.example.spot.ui.presentation.main_screen.profile.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.spot.ui.presentation.main_screen.profile.model.ProfileState
+import com.example.spot.data.dtos.auth.AuthRepository
 import com.example.spot.ui.presentation.main_screen.profile.model.InfoData
+import com.example.spot.ui.presentation.main_screen.profile.model.ProfileState
 import com.example.spot.ui.presentation.main_screen.profile.model.ProgressData
 import com.example.spot.ui.presentation.main_screen.profile.model.StatsData
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class ProfileViewModel : ViewModel() {
+class ProfileViewModel(
+    private val authRepository: AuthRepository
+) : ViewModel() {
     private val _state = MutableStateFlow<ProfileState>(ProfileState.Loading)
     val state = _state.asStateFlow()
 
+    private val _isLoggedIn = MutableStateFlow(false)
+    val isLoggedIn = _isLoggedIn.asStateFlow()
+
+    private val _isCheckingLogin = MutableStateFlow(true)
+    val isCheckingLogin = _isCheckingLogin.asStateFlow()
+
     init {
         viewModelScope.launch {
-            delay(2000L)
+            authRepository.token.collect { token ->
+                val logged = token.isNotEmpty()
+                _isLoggedIn.value = logged
+                _isCheckingLogin.value = false
 
-            val profileInfo = fetchProfileInfo()
-            val profileProgress = fetchProfileProgress()
-            val profileStats = fetchProfileStats()
+                if (logged && _state.value is ProfileState.Loading) {
+                    _state.update { ProfileState.Loading }
 
-            _state.update {
-                ProfileState.Success(
-                    infoData = profileInfo,
-                    progressData = profileProgress,
-                    statsData = profileStats
-                )
+                    val profileInfo = fetchProfileInfo()
+                    val profileProgress = fetchProfileProgress()
+                    val profileStats = fetchProfileStats()
+
+                    _state.update {
+                        ProfileState.Success(
+                            infoData = profileInfo,
+                            progressData = profileProgress,
+                            statsData = profileStats
+                        )
+                    }
+                } else if (!logged) {
+                    _state.value = ProfileState.Loading
+                }
             }
         }
     }
@@ -56,5 +73,15 @@ class ProfileViewModel : ViewModel() {
             schedules = 4,
             favorites = 5
         )
+    }
+
+    fun logout() {
+        viewModelScope.launch {
+            println("→ Logout iniciado")
+            authRepository.clearToken()
+            println("→ Token removido")
+            _isLoggedIn.value = false
+            _state.value = ProfileState.Loading
+        }
     }
 }
