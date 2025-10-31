@@ -3,6 +3,7 @@ package com.example.spot.data.di
 import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.preferencesDataStoreFile
 import com.example.spot.data.dtos.auth.AuthRepository
+import com.example.spot.data.dtos.auth.UserPreferencesRepository
 import com.example.spot.data.dtos.home.establishment.EstablishmentRepository
 import com.example.spot.data.dtos.home.nextschedule.NextScheduleRepository
 import com.example.spot.data.network.AuthInterceptor
@@ -37,7 +38,7 @@ val networkModule = module {
                 level = HttpLoggingInterceptor.Level.BODY
             })
             .addInterceptor(AuthInterceptor(
-                "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI1NDBiMDBkMC1kZTJjLTRkOTgtOGVkNy1lYTRlMDY4YzVjYjEiLCJpYXQiOjE3NjE4MzA5NDgsImlzcyI6InNwb3Qtc2VydmVyIiwiZXhwIjoxNzYxODMyMTQ4LCJlbWFpbCI6ImpvYW9ndWlsaGVybWVtZ3VzbWFvQGdtYWlsLmNvbSIsInJvbGUiOiJDVVNUT01FUiJ9.ji0wHt_J814Qjlv71eBoXBiwe-mpmPBc40VnlcDyN6Q"
+                get()
             ))
             .build()
     }
@@ -58,6 +59,7 @@ val networkModule = module {
 val repositoryModule = module {
     singleOf(::EstablishmentRepository)
     singleOf(::NextScheduleRepository)
+    singleOf(::UserPreferencesRepository)
     singleOf(::AuthRepository)
 }
 

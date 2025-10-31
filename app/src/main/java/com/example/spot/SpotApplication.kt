@@ -18,10 +18,10 @@ class SpotApplication : Application() {
             androidContext(this@SpotApplication)
             modules(
                 listOf(
-                    networkModule,
+                    storageModule,
                     repositoryModule,
-                    viewModelModule,
-                    storageModule
+                    networkModule,
+                    viewModelModule
                 )
             )
         }

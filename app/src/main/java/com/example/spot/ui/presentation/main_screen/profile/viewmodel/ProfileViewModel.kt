@@ -2,7 +2,8 @@ package com.example.spot.ui.presentation.main_screen.profile.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.spot.data.dtos.auth.AuthRepository
+// 1. Importe o novo repositório
+import com.example.spot.data.dtos.auth.UserPreferencesRepository
 import com.example.spot.ui.presentation.main_screen.profile.model.InfoData
 import com.example.spot.ui.presentation.main_screen.profile.model.ProfileState
 import com.example.spot.ui.presentation.main_screen.profile.model.ProgressData
@@ -13,7 +14,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class ProfileViewModel(
-    private val authRepository: AuthRepository
+    private val userPrefs: UserPreferencesRepository
 ) : ViewModel() {
     private val _state = MutableStateFlow<ProfileState>(ProfileState.Loading)
     val state = _state.asStateFlow()
@@ -26,7 +27,7 @@ class ProfileViewModel(
 
     init {
         viewModelScope.launch {
-            authRepository.token.collect { token ->
+            userPrefs.token.collect { token ->
                 val logged = token.isNotEmpty()
                 _isLoggedIn.value = logged
                 _isCheckingLogin.value = false
@@ -71,13 +72,13 @@ class ProfileViewModel(
         return StatsData(
             reviews = 12,
             schedules = 4,
-                favorites = 5
+            favorites = 5
         )
     }
 
     fun logout() {
         viewModelScope.launch {
-            authRepository.clearToken()
+            userPrefs.clearToken()
             _isLoggedIn.value = false
             _state.value = ProfileState.Loading
         }
