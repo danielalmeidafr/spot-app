@@ -1,4 +1,4 @@
-package com.example.spot.ui.presentation.auth.components
+package com.example.spot.ui.presentation.components
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable

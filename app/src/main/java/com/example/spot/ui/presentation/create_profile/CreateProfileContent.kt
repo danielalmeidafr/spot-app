@@ -1,6 +1,6 @@
 package com.example.spot.ui.presentation.create_profile
 
-import android.widget.Toast
+import DateTextField
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -18,43 +18,34 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.spot.core.theme.SpotTheme
 import com.example.spot.core.util.clearFocusOnTap
-import com.example.spot.ui.presentation.auth.components.CustomTextField
-import com.example.spot.ui.presentation.auth.components.PrimaryButton
+import com.example.spot.ui.presentation.components.CustomTextField
+import com.example.spot.ui.presentation.components.PrimaryButton
 import com.student.R
 
 @Composable
-fun CreateProfile(
-    onNavigateToMain: () -> Unit
+fun CreateProfileContent(
+    fullName: String,
+    nickname: String,
+    birthDate: String,
+    onFullNameChange: (String) -> Unit,
+    onNicknameChange: (String) -> Unit,
+    onBirthDateChange: (String) -> Unit,
+    onFinishClick: () -> Unit,
+    isLoading: Boolean,
+    fullNameFocusRequester: FocusRequester = remember { FocusRequester() },
+    nicknameFocusRequester: FocusRequester = remember { FocusRequester() },
+    birthDateFocusRequester: FocusRequester = remember { FocusRequester() }
 ) {
-    val context = LocalContext.current
-
-
-    var fullName by remember {
-        mutableStateOf("")
-    }
-
-    var username by remember {
-        mutableStateOf("")
-    }
-
-    var birthDate by remember {
-        mutableStateOf("")
-    }
-
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -82,14 +73,13 @@ fun CreateProfile(
                 Spacer(modifier = Modifier.height(8.dp))
 
                 Text(
-                    "Digite suas informa",
+                    "Digite suas informações pessoais para criação da conta.",
                     style = MaterialTheme.typography.bodySmall.copy(fontSize = 12.sp),
                     color = MaterialTheme.colorScheme.onBackground.copy(0.7f)
                 )
 
                 Spacer(modifier = Modifier.height(30.dp))
             }
-
 
             Column(
                 modifier = Modifier
@@ -112,53 +102,38 @@ fun CreateProfile(
 
                 CustomTextField(
                     value = fullName,
-                    onValueChange = { fullName = it },
-                    placeholderText = "Nome completo:"
+                    onValueChange = onFullNameChange,
+                    placeholderText = "Nome completo:",
+                    modifier = Modifier.focusRequester(fullNameFocusRequester)
                 )
 
                 Spacer(modifier = Modifier.height(30.dp))
 
                 CustomTextField(
-                    value = username,
-                    onValueChange = { username = it },
-                    placeholderText = "Nome de usuário:"
+                    value = nickname,
+                    onValueChange = onNicknameChange,
+                    placeholderText = "Nome de usuário:",
+                    modifier = Modifier.focusRequester(nicknameFocusRequester)
                 )
 
                 Spacer(modifier = Modifier.height(30.dp))
 
-                CustomTextField(
+                DateTextField(
                     value = birthDate,
-                    onValueChange = { birthDate = it },
-                    placeholderText = "Data de nascimento:",
+                    onValueChange = onBirthDateChange,
+                    modifier = Modifier.focusRequester(birthDateFocusRequester)
                 )
 
                 Spacer(modifier = Modifier.weight(1f))
 
                 PrimaryButton(
                     text = "Finalizar",
-                    onClick = {
-                        if (fullName.isNotBlank() && username.isNotBlank() && birthDate.isNotBlank()) {
-
-                        } else {
-                            Toast.makeText(
-                                context,
-                                "Preencha todos os campos e concorde com os termos.",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
-                    }
+                    isLoading = isLoading,
+                    onClick = onFinishClick
                 )
+
+                Spacer(modifier = Modifier.height(30.dp))
             }
         }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun CreateProfilePreview() {
-    SpotTheme {
-        CreateProfile(
-            onNavigateToMain = {}
-        )
     }
 }

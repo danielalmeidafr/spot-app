@@ -2,13 +2,16 @@ package com.example.spot.data.di
 
 import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.preferencesDataStoreFile
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.spot.data.dtos.auth.AuthRepository
 import com.example.spot.data.dtos.auth.UserPreferencesRepository
+import com.example.spot.data.dtos.create_profile.CreateProfileRepository
 import com.example.spot.data.dtos.home.establishment.EstablishmentRepository
 import com.example.spot.data.dtos.home.nextschedule.NextScheduleRepository
 import com.example.spot.data.network.AuthInterceptor
 import com.example.spot.data.network.SpotApiService
 import com.example.spot.ui.presentation.auth.viewmodel.AuthViewModel
+import com.example.spot.ui.presentation.create_profile.viewmodel.CreateProfileViewModel
 import com.example.spot.ui.presentation.main_screen.home.viewmodel.HomeViewModel
 import com.example.spot.ui.presentation.main_screen.profile.viewmodel.ProfileViewModel
 import com.squareup.moshi.Moshi
@@ -37,9 +40,11 @@ val networkModule = module {
             .addInterceptor(HttpLoggingInterceptor().apply {
                 level = HttpLoggingInterceptor.Level.BODY
             })
-            .addInterceptor(AuthInterceptor(
-                get()
-            ))
+            .addInterceptor(
+                AuthInterceptor(
+                    get()
+                )
+            )
             .build()
     }
 
@@ -61,12 +66,14 @@ val repositoryModule = module {
     singleOf(::NextScheduleRepository)
     singleOf(::UserPreferencesRepository)
     singleOf(::AuthRepository)
+    singleOf(::CreateProfileRepository)
 }
 
 val viewModelModule = module {
     viewModelOf(::HomeViewModel)
     viewModelOf(::AuthViewModel)
     viewModelOf(::ProfileViewModel)
+    viewModelOf(::CreateProfileViewModel)
 }
 
 val storageModule = module {

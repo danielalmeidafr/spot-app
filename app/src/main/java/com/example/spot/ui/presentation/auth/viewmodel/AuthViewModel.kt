@@ -3,8 +3,7 @@ package com.example.spot.ui.presentation.auth.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.spot.data.dtos.auth.AuthRepository
-import com.example.spot.data.dtos.auth.login.SignInRequest
-import com.example.spot.data.dtos.auth.signup.SignUpRequest
+import com.example.spot.data.dtos.auth.AuthRequest
 import com.example.spot.ui.presentation.auth.model.AuthState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -24,7 +23,7 @@ class AuthViewModel(
 
         viewModelScope.launch {
             try {
-                val request = SignUpRequest(email, password)
+                val request = AuthRequest(email, password, "CUSTOMER")
                 val response = repository.signUp(request)
 
                 repository.saveToken(response.accessToken)
@@ -46,7 +45,7 @@ class AuthViewModel(
 
         viewModelScope.launch {
             try {
-                val request = SignInRequest(email, password)
+                val request = AuthRequest(email, password)
                 val response = repository.signIn(request)
 
                 repository.saveToken(response.accessToken)

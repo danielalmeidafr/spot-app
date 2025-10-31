@@ -25,6 +25,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -45,9 +46,9 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.spot.core.util.clearFocusOnTap
-import com.example.spot.ui.presentation.auth.components.CustomButton
-import com.example.spot.ui.presentation.auth.components.CustomTextField
-import com.example.spot.ui.presentation.auth.components.PrimaryButton
+import com.example.spot.ui.presentation.components.CustomButton
+import com.example.spot.ui.presentation.components.CustomTextField
+import com.example.spot.ui.presentation.components.PrimaryButton
 import com.example.spot.ui.presentation.auth.model.AuthState
 import com.example.spot.ui.presentation.auth.viewmodel.AuthViewModel
 import com.student.R
@@ -82,13 +83,16 @@ fun SignInScreen(
         }
     }
 
-    when (state) {
-        AuthState.Idle -> Unit
-        AuthState.Loading -> Unit
-        is AuthState.Error -> {
-            Toast.makeText(context, (state as AuthState.Error).message, Toast.LENGTH_LONG).show()
+    LaunchedEffect(state) {
+        when (val a = state) {
+            is AuthState.Error -> {
+                Toast.makeText(context, a.message, Toast.LENGTH_LONG).show()
+            }
+            is AuthState.Success -> {
+                onNavigateToMain()
+            }
+            else -> Unit
         }
-        is AuthState.Success -> onNavigateToMain()
     }
 
     Box(

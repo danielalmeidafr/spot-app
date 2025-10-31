@@ -26,11 +26,12 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.spot.core.util.clearFocusOnTap
-import com.example.spot.ui.presentation.auth.components.CustomButton
-import com.example.spot.ui.presentation.auth.components.CustomTextField
-import com.example.spot.ui.presentation.auth.components.PrimaryButton
+import com.example.spot.ui.presentation.components.CustomButton
+import com.example.spot.ui.presentation.components.CustomTextField
+import com.example.spot.ui.presentation.components.PrimaryButton
 import com.example.spot.ui.presentation.auth.model.AuthState
 import com.example.spot.ui.presentation.auth.viewmodel.AuthViewModel
+import com.example.spot.ui.presentation.create_profile.model.CreateProfileState
 import com.student.R
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
@@ -73,13 +74,16 @@ fun SignUpScreen(
         }
     }
 
-    when (state) {
-        AuthState.Idle -> Unit
-        AuthState.Loading -> Unit
-        is AuthState.Error -> {
-            Toast.makeText(context, (state as AuthState.Error).message, Toast.LENGTH_LONG).show()
+    LaunchedEffect(state) {
+        when (val a = state) {
+            is AuthState.Error -> {
+                Toast.makeText(context, a.message, Toast.LENGTH_LONG).show()
+            }
+            is AuthState.Success -> {
+                onNavigateToCreateProfile()
+            }
+            else -> Unit
         }
-        is AuthState.Success -> onNavigateToCreateProfile()
     }
 
     Box(

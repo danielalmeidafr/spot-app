@@ -1,4 +1,4 @@
-package com.example.spot.ui.presentation.auth.components
+package com.example.spot.ui.presentation.components
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image

@@ -1,9 +1,8 @@
 package com.example.spot.data.network
 
-import com.example.spot.data.dtos.auth.login.SignInRequest
-import com.example.spot.data.dtos.auth.login.SignInResponse
-import com.example.spot.data.dtos.auth.signup.SignUpRequest
-import com.example.spot.data.dtos.auth.signup.SignUpResponse
+import com.example.spot.data.dtos.auth.AuthRequest
+import com.example.spot.data.dtos.auth.AuthResponse
+import com.example.spot.data.dtos.create_profile.CreateProfileRequest
 import com.example.spot.data.dtos.home.establishment.PagedEstablishmentsResponse
 import com.example.spot.data.dtos.home.nextschedule.NextScheduleResponse
 import retrofit2.http.Body
@@ -22,10 +21,13 @@ interface SpotApiService {
     ): PagedEstablishmentsResponse
 
     @POST("api/authentication/signup")
-    suspend fun signUp(@Body request: SignUpRequest): SignUpResponse
+    suspend fun signUp(@Body request: AuthRequest): AuthResponse
 
     @POST("api/authentication/signin")
-    suspend fun signIn(@Body request: SignInRequest): SignInResponse
+    suspend fun signIn(@Body request: AuthRequest): AuthResponse
+
+    @POST("")
+    suspend fun createProfile(@Body request: CreateProfileRequest)
 
     @GET("api/appointments/me/next")
     suspend fun getNextSchedule() : NextScheduleResponse
