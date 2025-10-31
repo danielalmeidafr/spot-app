@@ -1,6 +1,8 @@
 package com.example.spot.ui.presentation.auth.signin
 
 import android.widget.Toast
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -27,10 +29,13 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
@@ -46,6 +51,7 @@ import com.example.spot.ui.presentation.auth.components.PrimaryButton
 import com.example.spot.ui.presentation.auth.model.AuthState
 import com.example.spot.ui.presentation.auth.viewmodel.AuthViewModel
 import com.student.R
+import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -58,30 +64,31 @@ fun SignInScreen(
     val state by viewModel.state.collectAsState()
     val context = LocalContext.current
 
+    var email by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
+
+    val emailFocusRequester = remember { FocusRequester() }
+    val passwordFocusRequester = remember { FocusRequester() }
+
+    val coroutineScope = rememberCoroutineScope()
+
+    fun shake(anim: Animatable<Float, *>, intensity: Float = 10f) {
+        coroutineScope.launch {
+            repeat(3) {
+                anim.animateTo(intensity, tween(50))
+                anim.animateTo(-intensity, tween(50))
+            }
+            anim.animateTo(0f, tween(50))
+        }
+    }
+
     when (state) {
-        AuthState.Idle -> {
-
-        }
-
-        AuthState.Loading -> {
-
-        }
-
+        AuthState.Idle -> Unit
+        AuthState.Loading -> Unit
         is AuthState.Error -> {
             Toast.makeText(context, (state as AuthState.Error).message, Toast.LENGTH_LONG).show()
         }
-
-        is AuthState.Success -> {
-            onNavigateToMain()
-        }
-    }
-
-    var email by remember {
-        mutableStateOf("")
-    }
-
-    var password by remember {
-        mutableStateOf("")
+        is AuthState.Success -> onNavigateToMain()
     }
 
     Box(
@@ -150,7 +157,8 @@ fun SignInScreen(
                 CustomTextField(
                     value = email,
                     onValueChange = { email = it },
-                    placeholderText = "E-mail:"
+                    placeholderText = "E-mail:",
+                    modifier = Modifier.focusRequester(emailFocusRequester)
                 )
 
                 Spacer(modifier = Modifier.height(30.dp))
@@ -159,7 +167,8 @@ fun SignInScreen(
                     value = password,
                     onValueChange = { password = it },
                     placeholderText = "Senha:",
-                    isPassword = true
+                    isPassword = true,
+                    modifier = Modifier.focusRequester(passwordFocusRequester)
                 )
 
                 TextButton(
@@ -193,14 +202,10 @@ fun SignInScreen(
                     text = "Entrar",
                     isLoading = state is AuthState.Loading,
                     onClick = {
-                        if (email.isNotBlank() && password.isNotBlank()) {
-                            viewModel.onSignInClicked(email, password)
-                        } else {
-                            Toast.makeText(
-                                context,
-                                "Preencha todos os campos.",
-                                Toast.LENGTH_SHORT
-                            ).show()
+                        when {
+                            email.isBlank() -> emailFocusRequester.requestFocus()
+                            password.isBlank() -> passwordFocusRequester.requestFocus()
+                            else -> viewModel.onSignInClicked(email, password)
                         }
                     }
                 )

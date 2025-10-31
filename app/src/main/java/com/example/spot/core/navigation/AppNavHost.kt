@@ -9,6 +9,8 @@ import com.example.spot.ui.presentation.auth.signin.navigation.SignInDestination
 import com.example.spot.ui.presentation.auth.signin.navigation.signInScreen
 import com.example.spot.ui.presentation.auth.signup.navigation.SignUpDestination
 import com.example.spot.ui.presentation.auth.signup.navigation.signUpScreen
+import com.example.spot.ui.presentation.create_profile.navigation.CreateProfileDestination
+import com.example.spot.ui.presentation.create_profile.navigation.createProfileScreen
 import com.example.spot.ui.presentation.main_screen.home.navigation.homeScreen
 import com.example.spot.ui.presentation.main_screen.profile.navigation.profileScreen
 
@@ -18,7 +20,7 @@ fun AppNavHost(
     onThemeToggle: () -> Unit
 ) {
     val navController = rememberNavController()
-    NavHost(navController = navController, startDestination = MainScreenDestination){
+    NavHost(navController = navController, startDestination = MainScreenDestination) {
         mainScreen(
             onNavigateToSignIn = { navController.navigate(SignInDestination) },
             onNavigateToServices = { navController.navigate(ServicesDestination) },
@@ -38,6 +40,10 @@ fun AppNavHost(
 
         signUpScreen(
             onBack = { navController.popBackStack() },
+            onNavigateToCreateProfile = { navController.navigate(CreateProfileDestination) }
+        )
+
+        createProfileScreen(
             onNavigateToMain = { navController.navigate(MainScreenDestination) }
         )
 

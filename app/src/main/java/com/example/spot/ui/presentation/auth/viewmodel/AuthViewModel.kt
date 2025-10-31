@@ -19,12 +19,12 @@ class AuthViewModel(
     private val _state = MutableStateFlow<AuthState>(AuthState.Idle)
     val state = _state.asStateFlow()
 
-    fun onSignUpClicked(username: String, email: String, password: String){
+    fun onSignUpClicked(email: String, password: String){
         _state.update { AuthState.Loading }
 
         viewModelScope.launch {
             try {
-                val request = SignUpRequest(username, email, password)
+                val request = SignUpRequest(email, password)
                 val response = repository.signUp(request)
 
                 repository.saveToken(response.accessToken)

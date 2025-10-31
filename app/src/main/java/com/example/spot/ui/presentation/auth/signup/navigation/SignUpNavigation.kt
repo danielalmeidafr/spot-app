@@ -10,12 +10,12 @@ object SignUpDestination
 
 fun NavGraphBuilder.signUpScreen(
     onBack: () -> Unit,
-    onNavigateToMain: () -> Unit
+    onNavigateToCreateProfile: () -> Unit
 ) {
     composable<SignUpDestination> {
         SignUpScreen(
             onBack = onBack,
-            onNavigateToMain = onNavigateToMain
+            onNavigateToCreateProfile = onNavigateToCreateProfile
         )
     }
 }
