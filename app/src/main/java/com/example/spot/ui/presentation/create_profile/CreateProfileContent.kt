@@ -1,6 +1,6 @@
 package com.example.spot.ui.presentation.create_profile
 
-import DateTextField
+import com.example.spot.ui.presentation.create_profile.components.DateTextField
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement

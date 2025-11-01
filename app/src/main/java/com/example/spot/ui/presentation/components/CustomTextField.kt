@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions // <-- Importe este
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -25,6 +26,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType // <-- Importe este
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
@@ -38,7 +40,9 @@ fun CustomTextField(
     onValueChange: (String) -> Unit,
     placeholderText: String,
     isPassword: Boolean = false,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    visualTransformation: VisualTransformation = VisualTransformation.None,
+    keyboardType: KeyboardType = KeyboardType.Text
 ) {
     var passwordVisible by remember { mutableStateOf(false) }
 
@@ -79,7 +83,15 @@ fun CustomTextField(
             focusedBorderColor = Color.Transparent,
             cursorColor = MaterialTheme.colorScheme.primary,
         ),
-        visualTransformation = if (isPassword && !passwordVisible) PasswordVisualTransformation() else VisualTransformation.None,
+
+        visualTransformation = if (isPassword) {
+            if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation()
+        } else {
+            visualTransformation
+        },
+
+        keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
+
         trailingIcon = {
             if (isPassword) {
                 val imageRes = when {
