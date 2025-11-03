@@ -1,11 +1,12 @@
 package com.example.spot.data.network
 
 import com.example.spot.data.dtos.auth.AuthResponse
-import com.example.spot.data.dtos.auth.ConfirmCodeRequest
-import com.example.spot.data.dtos.auth.ForgotPasswordRequest
+import com.example.spot.data.dtos.auth.code.ConfirmCodeRequest
+import com.example.spot.data.dtos.auth.password.ForgotPasswordRequest
 import com.example.spot.data.dtos.auth.LogoutRequest
 import com.example.spot.data.dtos.auth.SignInRequest
 import com.example.spot.data.dtos.auth.SignUpRequest
+import com.example.spot.data.dtos.auth.password.NewPasswordRequest
 import com.example.spot.data.dtos.create_profile.CreateProfileRequest
 import com.example.spot.data.dtos.home.establishment.PagedEstablishmentsResponse
 import com.example.spot.data.dtos.home.nextschedule.NextScheduleResponse
@@ -33,6 +34,9 @@ interface SpotApiService {
 
     @POST("")
     suspend fun forgotPassword(@Body request: ForgotPasswordRequest)
+
+    @POST("")
+    suspend fun newPassword(@Body request: NewPasswordRequest)
 
     @POST("api/authentication/signup")
     suspend fun signUp(@Body request: SignUpRequest): AuthResponse

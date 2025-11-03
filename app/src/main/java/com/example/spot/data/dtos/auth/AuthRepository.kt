@@ -1,5 +1,8 @@
 package com.example.spot.data.dtos.auth
 
+import com.example.spot.data.dtos.auth.code.ConfirmCodeRequest
+import com.example.spot.data.dtos.auth.password.ForgotPasswordRequest
+import com.example.spot.data.dtos.auth.password.NewPasswordRequest
 import com.example.spot.data.network.SpotApiService
 
 class AuthRepository(
@@ -24,6 +27,10 @@ class AuthRepository(
 
     suspend fun forgotPassword(request: ForgotPasswordRequest) {
         return api.forgotPassword(request)
+    }
+
+    suspend fun newPassword(request: NewPasswordRequest){
+        return api.newPassword(request)
     }
 
     suspend fun saveTokens(accessToken: String, refreshToken: String){

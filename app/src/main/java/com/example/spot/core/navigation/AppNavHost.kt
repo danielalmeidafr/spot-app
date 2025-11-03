@@ -7,6 +7,7 @@ import com.example.spot.ui.presentation.auth.screens.confirm_code.navigation.Con
 import com.example.spot.ui.presentation.auth.screens.confirm_code.navigation.confirmCodeScreen
 import com.example.spot.ui.presentation.auth.screens.forgot_password.navigation.ForgotPasswordDestination
 import com.example.spot.ui.presentation.auth.screens.forgot_password.navigation.forgotPasswordScreen
+import com.example.spot.ui.presentation.auth.screens.new_password.navigation.newPasswordScreen
 import com.example.spot.ui.presentation.auth.screens.signin.navigation.SignInDestination
 import com.example.spot.ui.presentation.auth.screens.signin.navigation.signInScreen
 import com.example.spot.ui.presentation.auth.screens.signup.navigation.SignUpDestination
@@ -44,6 +45,11 @@ fun AppNavHost(
         )
 
         forgotPasswordScreen(
+            onBack = { navController.popBackStack() },
+            onNavigateToConfirmCode = { navController.navigate(ConfirmCodeDestination) }
+        )
+
+        newPasswordScreen(
             onBack = { navController.popBackStack() },
             onNavigateToSignIn = { navController.navigate(SignInDestination) }
         )

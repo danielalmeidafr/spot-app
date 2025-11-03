@@ -10,12 +10,12 @@ object ForgotPasswordDestination
 
 fun NavGraphBuilder.forgotPasswordScreen(
     onBack: () -> Unit,
-    onNavigateToSignIn: () -> Unit
+    onNavigateToConfirmCode: () -> Unit
 ) {
     composable<ForgotPasswordDestination> {
         ForgotPasswordScreen(
             onBack = onBack,
-            onNavigateToSignIn = onNavigateToSignIn
+            onNavigateToConfirmCode = onNavigateToConfirmCode
         )
     }
 }

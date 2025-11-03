@@ -47,7 +47,7 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun ForgotPasswordScreen(
     onBack: () -> Unit,
-    onNavigateToSignIn: () -> Unit
+    onNavigateToConfirmCode: () -> Unit
 ) {
     val viewModel = koinViewModel<AuthViewModel>()
     val state by viewModel.state.collectAsState()
@@ -67,7 +67,7 @@ fun ForgotPasswordScreen(
                     duration = SnackbarDuration.Short
                 )
             }
-            is AuthState.Success -> onNavigateToSignIn()
+            is AuthState.Success -> onNavigateToConfirmCode()
             else -> Unit
         }
     }

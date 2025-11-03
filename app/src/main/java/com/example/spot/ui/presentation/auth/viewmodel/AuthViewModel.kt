@@ -3,10 +3,11 @@ package com.example.spot.ui.presentation.auth.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.spot.data.dtos.auth.AuthRepository
-import com.example.spot.data.dtos.auth.ConfirmCodeRequest
-import com.example.spot.data.dtos.auth.ForgotPasswordRequest
+import com.example.spot.data.dtos.auth.code.ConfirmCodeRequest
+import com.example.spot.data.dtos.auth.password.ForgotPasswordRequest
 import com.example.spot.data.dtos.auth.SignInRequest
 import com.example.spot.data.dtos.auth.SignUpRequest
+import com.example.spot.data.dtos.auth.password.NewPasswordRequest
 import com.example.spot.ui.presentation.auth.model.AuthState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -119,6 +120,34 @@ class AuthViewModel(
             try {
                 val request = ConfirmCodeRequest(code)
                 repository.confirmCode(request)
+
+                _state.update { AuthState.Success }
+            } catch (e: IOException) {
+                _state.update { AuthState.Error("Falha na conexão") }
+            } catch (e: HttpException) {
+                val message = try {
+                    val errorBody = e.response()?.errorBody()?.string()
+                    val json = JSONObject(errorBody ?: "")
+
+                    json.optString("message", "Erro no servidor")
+                } catch (_: Exception) {
+                    "Erro no servidor"
+                }
+
+                _state.update { AuthState.Error(message) }
+            } catch (e: Exception) {
+                _state.update { AuthState.Error("Ocorreu um erro: ${e.message}") }
+            }
+        }
+    }
+
+    fun onNewPasswordClicked(newPassword: String){
+        _state.update { AuthState.Loading }
+
+        viewModelScope.launch {
+            try {
+                val request = NewPasswordRequest(newPassword)
+                repository.newPassword(request)
 
                 _state.update { AuthState.Success }
             } catch (e: IOException) {

@@ -1,12 +1,11 @@
-package com.example.spot.ui.presentation.auth.screens.signup
+package com.example.spot.ui.presentation.auth.screens.new_password
 
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -23,7 +22,6 @@ import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -39,14 +37,12 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.spot.core.theme.SpotTheme
 import com.example.spot.core.util.clearFocusOnTap
-import com.example.spot.ui.components.CustomButton
+import com.example.spot.core.util.rememberKeyboardVisibility
 import com.example.spot.ui.components.CustomTextField
 import com.example.spot.ui.components.PrimaryButton
 import com.example.spot.ui.presentation.auth.model.AuthState
@@ -56,32 +52,26 @@ import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun SignUpScreen(
+fun NewPasswordScreen(
     onBack: () -> Unit,
-    onNavigateToConfirmCode: () -> Unit
+    onNavigateToSignIn: () -> Unit
 ) {
     val viewModel = koinViewModel<AuthViewModel>()
     val state by viewModel.state.collectAsState()
+    val isKeyboardVisible = rememberKeyboardVisibility()
     val snackbarHostState = remember { SnackbarHostState() }
 
-    var email by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
-    var confirmPassword by remember { mutableStateOf("") }
+
+    var newPassword by remember { mutableStateOf("") }
+    var confirmNewPassword by remember { mutableStateOf("") }
     var passwordMismatch by remember { mutableStateOf(false) }
-    var agreed by remember { mutableStateOf(false) }
 
-    val emailFocusRequester = remember { FocusRequester() }
     val passwordFocusRequester = remember { FocusRequester() }
-    val confirmFocusRequester = remember { FocusRequester() }
-
-    val passwordShakeOffset = remember { Animatable(0f) }
-    val termsShakeOffset = remember { Animatable(0f) }
+    val confirmPasswordFocusRequester = remember { FocusRequester() }
 
     val coroutineScope = rememberCoroutineScope()
 
-    LaunchedEffect(password, confirmPassword) {
-        passwordMismatch = confirmPassword.isNotEmpty() && (password != confirmPassword)
-    }
+    val passwordShakeOffset = remember { Animatable(0f) }
 
     fun shake(anim: Animatable<Float, *>, intensity: Float = 10f) {
         coroutineScope.launch {
@@ -93,6 +83,11 @@ fun SignUpScreen(
         }
     }
 
+    LaunchedEffect(newPassword, confirmNewPassword) {
+        passwordMismatch = confirmNewPassword.isNotEmpty() && (newPassword != confirmNewPassword)
+    }
+
+
     LaunchedEffect(state) {
         when (val a = state) {
             is AuthState.Error -> {
@@ -101,9 +96,8 @@ fun SignUpScreen(
                     duration = SnackbarDuration.Short
                 )
             }
-            is AuthState.Success -> {
-                onNavigateToConfirmCode()
-            }
+
+            is AuthState.Success -> onNavigateToSignIn()
             else -> Unit
         }
     }
@@ -117,6 +111,7 @@ fun SignUpScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .background(MaterialTheme.colorScheme.surface)
+                .padding(bottom = if (isKeyboardVisible) 320.dp else 0.dp)
                 .statusBarsPadding()
         ) {
             Column(
@@ -125,6 +120,7 @@ fun SignUpScreen(
                     .padding(horizontal = 20.dp)
             ) {
                 Spacer(modifier = Modifier.height(50.dp))
+
                 Surface(
                     onClick = onBack,
                     modifier = Modifier.size(55.dp),
@@ -134,25 +130,30 @@ fun SignUpScreen(
                     Icon(
                         painter = painterResource(id = R.drawable.arrow_back),
                         contentDescription = "Voltar",
-                        tint = MaterialTheme.colorScheme.onSurface,
-                        modifier = Modifier.padding(16.dp)
+                        tint = MaterialTheme.colorScheme.onSurface.copy(0.8f),
+                        modifier = Modifier.padding(15.dp)
                     )
                 }
 
                 Spacer(modifier = Modifier.height(30.dp))
+
                 Text(
-                    "Crie sua conta",
+                    "Redefina sua senha",
                     style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.onBackground
                 )
+
                 Spacer(modifier = Modifier.height(8.dp))
+
                 Text(
-                    "Digite seu e-mail e senha para cadastrar-se.",
+                    "Insira uma nova senha para sua conta.",
                     style = MaterialTheme.typography.bodySmall.copy(fontSize = 12.sp),
                     color = MaterialTheme.colorScheme.onBackground.copy(0.7f)
                 )
+
                 Spacer(modifier = Modifier.height(30.dp))
             }
+
 
             Column(
                 modifier = Modifier
@@ -160,23 +161,15 @@ fun SignUpScreen(
                     .clip(RoundedCornerShape(topStart = 25.dp, topEnd = 25.dp))
                     .background(MaterialTheme.colorScheme.background)
                     .navigationBarsPadding(),
-                horizontalAlignment = Alignment.CenterHorizontally
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Top
             ) {
                 Spacer(modifier = Modifier.height(40.dp))
 
                 CustomTextField(
-                    value = email,
-                    onValueChange = { email = it },
-                    placeholderText = "E-mail:",
-                    modifier = Modifier.focusRequester(emailFocusRequester)
-                )
-
-                Spacer(modifier = Modifier.height(30.dp))
-
-                CustomTextField(
-                    value = password,
-                    onValueChange = { password = it },
-                    placeholderText = "Senha:",
+                    value = newPassword,
+                    onValueChange = { newPassword = it },
+                    placeholderText = "Nova senha:",
                     isPassword = true,
                     modifier = Modifier.focusRequester(passwordFocusRequester)
                 )
@@ -184,11 +177,11 @@ fun SignUpScreen(
                 Spacer(modifier = Modifier.height(30.dp))
 
                 CustomTextField(
-                    value = confirmPassword,
-                    onValueChange = { confirmPassword = it },
-                    placeholderText = "Confirmar senha:",
+                    value = confirmNewPassword,
+                    onValueChange = { confirmNewPassword = it },
+                    placeholderText = "Confirmar nova senha:",
                     isPassword = true,
-                    modifier = Modifier.focusRequester(confirmFocusRequester)
+                    modifier = Modifier.focusRequester(confirmPasswordFocusRequester)
                 )
 
                 Spacer(modifier = Modifier.height(5.dp))
@@ -209,96 +202,22 @@ fun SignUpScreen(
                     Spacer(modifier = Modifier.height(5.dp))
                 }
 
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier
-                        .clickable { agreed = !agreed }
-                        .graphicsLayer { translationX = termsShakeOffset.value }
-                ) {
-                    Icon(
-                        painter = painterResource(
-                            id = if (agreed) R.drawable.check_filled else R.drawable.check_outlined
-                        ),
-                        contentDescription = "Check",
-                        tint = MaterialTheme.colorScheme.primary,
-                        modifier = Modifier.size(14.dp)
-                    )
-                    TextButton(onClick = {}) {
-                        Text(
-                            buildAnnotatedString {
-                                append("Eu concordo com os ")
-                                withStyle(
-                                    style = SpanStyle(
-                                        color = MaterialTheme.colorScheme.primary
-                                    )
-                                ) {
-                                    append("termos de privacidade")
-                                }
-                            },
-                            style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.Bold),
-                            color = MaterialTheme.colorScheme.onBackground
-                        )
-                    }
-                }
-
-                Spacer(modifier = Modifier.height(20.dp))
+                Spacer(modifier = Modifier.weight(1f))
 
                 PrimaryButton(
-                    text = "Cadastrar",
+                    text = "Continuar",
                     isLoading = state is AuthState.Loading,
                     onClick = {
                         when {
-                            email.isBlank() -> emailFocusRequester.requestFocus()
-                            password.isBlank() -> passwordFocusRequester.requestFocus()
-                            confirmPassword.isBlank() -> confirmFocusRequester.requestFocus()
+                            newPassword.isBlank() -> passwordFocusRequester.requestFocus()
+                            confirmNewPassword.isBlank() -> confirmPasswordFocusRequester.requestFocus()
                             passwordMismatch -> shake(passwordShakeOffset, 8f)
-                            !agreed -> shake(termsShakeOffset, 8f)
-                            else -> viewModel.onSignUpClicked(email, password)
+                            else -> viewModel.onNewPasswordClicked(newPassword)
                         }
                     }
                 )
 
-                Spacer(modifier = Modifier.height(35.dp))
-
-                Row(
-                    modifier = Modifier.fillMaxWidth(0.9f),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Spacer(
-                        modifier = Modifier
-                            .weight(1f)
-                            .height(1.dp)
-                            .background(MaterialTheme.colorScheme.onBackground.copy(alpha = 0.1f))
-                    )
-                    Text(
-                        "ou",
-                        style = MaterialTheme.typography.bodySmall.copy(
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 12.sp
-                        ),
-                        color = MaterialTheme.colorScheme.onBackground,
-                        modifier = Modifier.padding(horizontal = 20.dp)
-                    )
-                    Spacer(
-                        modifier = Modifier
-                            .weight(1f)
-                            .height(1.dp)
-                            .background(MaterialTheme.colorScheme.onBackground.copy(alpha = 0.1f))
-                    )
-                }
-
-                Spacer(modifier = Modifier.height(35.dp))
-
-                Column(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    CustomButton(
-                        onClick = {},
-                        text = "Continuar com Google",
-                        imagePainter = R.drawable.google_logo
-                    )
-                }
+                Spacer(modifier = Modifier.height(30.dp))
             }
         }
     }
