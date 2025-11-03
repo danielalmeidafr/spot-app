@@ -6,15 +6,27 @@ class AuthRepository(
     private val api: SpotApiService,
     private val userPrefs: UserPreferencesRepository
 ) {
-    suspend fun signIn(request: AuthRequest): AuthResponse {
+    suspend fun logout(request: LogoutRequest) {
+        return api.logout(request)
+    }
+
+    suspend fun signIn(request: SignInRequest): AuthResponse {
         return api.signIn(request)
     }
 
-    suspend fun signUp(request: AuthRequest): AuthResponse {
+    suspend fun signUp(request: SignUpRequest): AuthResponse {
         return api.signUp(request)
     }
 
-    suspend fun saveToken(token: String) {
-        userPrefs.saveToken(token)
+    suspend fun confirmCode(request: ConfirmCodeRequest) {
+        return api.confirmCode(request)
+    }
+
+    suspend fun forgotPassword(request: ForgotPasswordRequest) {
+        return api.forgotPassword(request)
+    }
+
+    suspend fun saveTokens(accessToken: String, refreshToken: String){
+        userPrefs.saveTokens(accessToken, refreshToken)
     }
 }

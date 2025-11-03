@@ -1,10 +1,9 @@
-package com.example.spot.ui.presentation.auth.signin
+package com.example.spot.ui.presentation.auth.screens.signup
 
-import android.widget.Toast
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -16,11 +15,12 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -37,7 +37,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -46,9 +46,9 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.spot.core.util.clearFocusOnTap
-import com.example.spot.ui.presentation.components.CustomButton
-import com.example.spot.ui.presentation.components.CustomTextField
-import com.example.spot.ui.presentation.components.PrimaryButton
+import com.example.spot.ui.components.CustomButton
+import com.example.spot.ui.components.CustomTextField
+import com.example.spot.ui.components.PrimaryButton
 import com.example.spot.ui.presentation.auth.model.AuthState
 import com.example.spot.ui.presentation.auth.viewmodel.AuthViewModel
 import com.student.R
@@ -56,22 +56,32 @@ import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun SignInScreen(
+fun SignUpScreen(
     onBack: () -> Unit,
-    onNavigateToMain: () -> Unit,
-    onNavigateToSignup: () -> Unit
+    onNavigateToConfirmCode: () -> Unit
 ) {
     val viewModel = koinViewModel<AuthViewModel>()
     val state by viewModel.state.collectAsState()
-    val context = LocalContext.current
+    val snackbarHostState = remember { SnackbarHostState() }
 
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    var confirmPassword by remember { mutableStateOf("") }
+    var passwordMismatch by remember { mutableStateOf(false) }
+    var agreed by remember { mutableStateOf(false) }
 
     val emailFocusRequester = remember { FocusRequester() }
     val passwordFocusRequester = remember { FocusRequester() }
+    val confirmFocusRequester = remember { FocusRequester() }
+
+    val passwordShakeOffset = remember { Animatable(0f) }
+    val termsShakeOffset = remember { Animatable(0f) }
 
     val coroutineScope = rememberCoroutineScope()
+
+    LaunchedEffect(password, confirmPassword) {
+        passwordMismatch = confirmPassword.isNotEmpty() && (password != confirmPassword)
+    }
 
     fun shake(anim: Animatable<Float, *>, intensity: Float = 10f) {
         coroutineScope.launch {
@@ -86,10 +96,13 @@ fun SignInScreen(
     LaunchedEffect(state) {
         when (val a = state) {
             is AuthState.Error -> {
-                Toast.makeText(context, a.message, Toast.LENGTH_LONG).show()
+                snackbarHostState.showSnackbar(
+                    message = a.message,
+                    duration = SnackbarDuration.Short
+                )
             }
             is AuthState.Success -> {
-                onNavigateToMain()
+                onNavigateToConfirmCode()
             }
             else -> Unit
         }
@@ -112,7 +125,6 @@ fun SignInScreen(
                     .padding(horizontal = 20.dp)
             ) {
                 Spacer(modifier = Modifier.height(50.dp))
-
                 Surface(
                     onClick = onBack,
                     modifier = Modifier.size(55.dp),
@@ -122,30 +134,25 @@ fun SignInScreen(
                     Icon(
                         painter = painterResource(id = R.drawable.arrow_back),
                         contentDescription = "Voltar",
-                        tint = MaterialTheme.colorScheme.onSurface.copy(0.8f),
-                        modifier = Modifier.padding(15.dp)
+                        tint = MaterialTheme.colorScheme.onSurface,
+                        modifier = Modifier.padding(16.dp)
                     )
                 }
 
                 Spacer(modifier = Modifier.height(30.dp))
-
                 Text(
-                    "Entre na sua conta",
+                    "Crie sua conta",
                     style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.onBackground
                 )
-
                 Spacer(modifier = Modifier.height(8.dp))
-
                 Text(
-                    "Digite seu e-mail e senha para entrar.",
+                    "Digite seu e-mail e senha para cadastrar-se.",
                     style = MaterialTheme.typography.bodySmall.copy(fontSize = 12.sp),
                     color = MaterialTheme.colorScheme.onBackground.copy(0.7f)
                 )
-
                 Spacer(modifier = Modifier.height(30.dp))
             }
-
 
             Column(
                 modifier = Modifier
@@ -153,8 +160,7 @@ fun SignInScreen(
                     .clip(RoundedCornerShape(topStart = 25.dp, topEnd = 25.dp))
                     .background(MaterialTheme.colorScheme.background)
                     .navigationBarsPadding(),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Top
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Spacer(modifier = Modifier.height(40.dp))
 
@@ -175,41 +181,79 @@ fun SignInScreen(
                     modifier = Modifier.focusRequester(passwordFocusRequester)
                 )
 
-                TextButton(
-                    onClick = {
+                Spacer(modifier = Modifier.height(30.dp))
 
-                    },
-                    modifier = Modifier
-                        .fillMaxWidth(0.95f)
-                        .wrapContentWidth(Alignment.End),
-                ) {
+                CustomTextField(
+                    value = confirmPassword,
+                    onValueChange = { confirmPassword = it },
+                    placeholderText = "Confirmar a senha:",
+                    isPassword = true,
+                    modifier = Modifier.focusRequester(confirmFocusRequester)
+                )
+
+                Spacer(modifier = Modifier.height(5.dp))
+
+                if (passwordMismatch) {
                     Text(
-                        buildAnnotatedString {
-                            append("Esqueceu sua ")
-                            withStyle(
-                                style = SpanStyle(
-                                    color = MaterialTheme.colorScheme.primary
-                                )
-                            ) {
-                                append("senha")
+                        text = "As senhas não coincidem",
+                        color = MaterialTheme.colorScheme.tertiary,
+                        style = MaterialTheme.typography.bodySmall,
+                        modifier = Modifier
+                            .fillMaxWidth(0.9f)
+                            .padding(start = 8.dp)
+                            .graphicsLayer {
+                                translationX = passwordShakeOffset.value
                             }
-                            append("?")
-                        },
-                        style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.Bold),
-                        color = MaterialTheme.colorScheme.onBackground,
                     )
+                } else {
+                    Spacer(modifier = Modifier.height(5.dp))
+                }
+
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier
+                        .clickable { agreed = !agreed }
+                        .graphicsLayer { translationX = termsShakeOffset.value }
+                ) {
+                    Icon(
+                        painter = painterResource(
+                            id = if (agreed) R.drawable.check_filled else R.drawable.check_outlined
+                        ),
+                        contentDescription = "Check",
+                        tint = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.size(14.dp)
+                    )
+                    TextButton(onClick = {}) {
+                        Text(
+                            buildAnnotatedString {
+                                append("Eu concordo com os ")
+                                withStyle(
+                                    style = SpanStyle(
+                                        color = MaterialTheme.colorScheme.primary
+                                    )
+                                ) {
+                                    append("termos de privacidade")
+                                }
+                            },
+                            style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.Bold),
+                            color = MaterialTheme.colorScheme.onBackground
+                        )
+                    }
                 }
 
                 Spacer(modifier = Modifier.height(20.dp))
 
                 PrimaryButton(
-                    text = "Entrar",
+                    text = "Cadastrar",
                     isLoading = state is AuthState.Loading,
                     onClick = {
                         when {
                             email.isBlank() -> emailFocusRequester.requestFocus()
                             password.isBlank() -> passwordFocusRequester.requestFocus()
-                            else -> viewModel.onSignInClicked(email, password)
+                            confirmPassword.isBlank() -> confirmFocusRequester.requestFocus()
+                            passwordMismatch -> shake(passwordShakeOffset, 8f)
+                            !agreed -> shake(termsShakeOffset, 8f)
+                            else -> viewModel.onSignUpClicked(email, password)
                         }
                     }
                 )
@@ -226,17 +270,15 @@ fun SignInScreen(
                             .height(1.dp)
                             .background(MaterialTheme.colorScheme.onBackground.copy(alpha = 0.1f))
                     )
-
                     Text(
                         "ou",
                         style = MaterialTheme.typography.bodySmall.copy(
-                            fontSize = 12.sp,
-                            fontWeight = FontWeight.Bold
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 12.sp
                         ),
                         color = MaterialTheme.colorScheme.onBackground,
                         modifier = Modifier.padding(horizontal = 20.dp)
                     )
-
                     Spacer(
                         modifier = Modifier
                             .weight(1f)
@@ -249,32 +291,12 @@ fun SignInScreen(
 
                 Column(
                     modifier = Modifier.fillMaxWidth(),
-                    verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     CustomButton(
                         onClick = {},
                         text = "Continuar com Google",
                         imagePainter = R.drawable.google_logo
-                    )
-                }
-
-                Spacer(modifier = Modifier.height(15.dp))
-
-                TextButton(
-                    onClick = onNavigateToSignup
-                ) {
-                    Text(
-                        buildAnnotatedString {
-                            append("Não tem uma conta? ")
-                            withStyle(
-                                style = SpanStyle(color = MaterialTheme.colorScheme.primary)
-                            ) {
-                                append("Cadastre-se")
-                            }
-                        },
-                        style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.Bold),
-                        color = MaterialTheme.colorScheme.onBackground
                     )
                 }
             }

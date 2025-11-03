@@ -33,7 +33,7 @@ fun InfoSection(
         Spacer(modifier = Modifier.height(10.dp))
 
         Text(
-            text = infoData.name,
+            text = infoData.fullName,
             style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold),
             color = MaterialTheme.colorScheme.onBackground
         )
@@ -41,7 +41,7 @@ fun InfoSection(
         Spacer(modifier = Modifier.height(5.dp))
 
         Text(
-            text = infoData.username,
+            text = infoData.nickname,
             style = MaterialTheme.typography.bodySmall.copy(fontSize = 12.sp),
             color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f)
         )

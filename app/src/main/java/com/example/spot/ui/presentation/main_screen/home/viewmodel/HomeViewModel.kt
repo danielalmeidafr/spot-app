@@ -7,6 +7,7 @@ import com.example.spot.data.dtos.home.establishment.EstablishmentRepository
 import com.example.spot.data.dtos.home.establishment.toEstablishmentData
 import com.example.spot.data.dtos.home.nextschedule.NextScheduleRepository
 import com.example.spot.data.dtos.home.nextschedule.toNextScheduleData
+import com.example.spot.ui.presentation.auth.model.AuthState
 import com.example.spot.ui.presentation.main_screen.home.model.EstablishmentData
 import com.example.spot.ui.presentation.main_screen.home.model.HomeState
 import com.example.spot.ui.presentation.main_screen.home.model.NextScheduleData
@@ -17,6 +18,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import okio.IOException
+import org.json.JSONObject
 import retrofit2.HttpException
 
 class HomeViewModel(
@@ -48,7 +50,16 @@ class HomeViewModel(
             } catch (e: IOException) {
                 _state.update { HomeState.Error("Falha na conexão") }
             } catch (e: HttpException) {
-                _state.update { HomeState.Error("Erro no servidor") }
+                val message = try {
+                    val errorBody = e.response()?.errorBody()?.string()
+                    val json = JSONObject(errorBody ?: "")
+
+                    json.optString("message", "Erro no servidor")
+                } catch (_: Exception) {
+                    "Erro no servidor"
+                }
+
+                _state.update { HomeState.Error(message) }
             } catch (e: Exception) {
                 _state.update { HomeState.Error("Ocorreu um erro: ${e.message}") }
             }
@@ -56,9 +67,9 @@ class HomeViewModel(
     }
 
     private suspend fun fetchNextSchedule(): NextScheduleData {
-        val token = userPreferencesRepository.token.first()
+        val accessToken = userPreferencesRepository.accessToken.first()
 
-        if (token.isEmpty()) {
+        if (accessToken.isEmpty()) {
             return NextScheduleData(nextScheduleTime = null)
         }
 
@@ -66,7 +77,7 @@ class HomeViewModel(
             val nextScheduleDto = nextScheduleRepository.getNextSchedule()
             nextScheduleDto.toNextScheduleData()
         } catch (e: HttpException) {
-            if (e.code() == 401) {
+            if (e.code() == 401 || e.code() == 404) {
                 NextScheduleData(nextScheduleTime = null)
             } else {
                 throw e
@@ -114,7 +125,16 @@ class HomeViewModel(
             } catch (e: IOException) {
                 _state.update { HomeState.Error("Falha na conexão") }
             } catch (e: HttpException) {
-                _state.update { HomeState.Error("Erro no servidor") }
+                val message = try {
+                    val errorBody = e.response()?.errorBody()?.string()
+                    val json = JSONObject(errorBody ?: "")
+
+                    json.optString("message", "Erro no servidor")
+                } catch (_: Exception) {
+                    "Erro no servidor"
+                }
+
+                _state.update { HomeState.Error(message) }
             } catch (e: Exception) {
                 _state.update { HomeState.Error("Ocorreu um erro: ${e.message}") }
             }

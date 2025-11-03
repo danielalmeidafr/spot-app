@@ -2,19 +2,27 @@ package com.example.spot.ui.presentation.main_screen.profile.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.spot.data.dtos.auth.AuthRepository
+import com.example.spot.data.dtos.auth.LogoutRequest
 // 1. Importe o novo repositório
 import com.example.spot.data.dtos.auth.UserPreferencesRepository
+import com.example.spot.ui.presentation.auth.model.AuthState
 import com.example.spot.ui.presentation.main_screen.profile.model.InfoData
 import com.example.spot.ui.presentation.main_screen.profile.model.ProfileState
 import com.example.spot.ui.presentation.main_screen.profile.model.ProgressData
 import com.example.spot.ui.presentation.main_screen.profile.model.StatsData
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import okio.IOException
+import org.json.JSONObject
+import retrofit2.HttpException
 
 class ProfileViewModel(
-    private val userPrefs: UserPreferencesRepository
+    private val authRepository: AuthRepository,
+    private val userPreferencesRepository: UserPreferencesRepository
 ) : ViewModel() {
     private val _state = MutableStateFlow<ProfileState>(ProfileState.Loading)
     val state = _state.asStateFlow()
@@ -27,7 +35,7 @@ class ProfileViewModel(
 
     init {
         viewModelScope.launch {
-            userPrefs.token.collect { token ->
+            userPreferencesRepository.accessToken.collect { token ->
                 val logged = token.isNotEmpty()
                 _isLoggedIn.value = logged
                 _isCheckingLogin.value = false
@@ -55,8 +63,8 @@ class ProfileViewModel(
 
     private fun fetchProfileInfo(): InfoData {
         return InfoData(
-            name = "Daniel Alves Almeida",
-            username = "@danielalmeidafr"
+            fullName = "Daniel Alves Almeida",
+            nickname = "@danielalmeidafr"
         )
     }
 
@@ -77,10 +85,35 @@ class ProfileViewModel(
     }
 
     fun logout() {
+        _state.update { ProfileState.Loading }
+
         viewModelScope.launch {
-            userPrefs.clearToken()
-            _isLoggedIn.value = false
-            _state.value = ProfileState.Loading
+            try {
+                val refreshToken = userPreferencesRepository.refreshToken.first()
+
+                val request = LogoutRequest(refreshToken)
+                authRepository.logout(request)
+
+            } catch (e: IOException) {
+                _state.update { ProfileState.Error("Falha na conexão") }
+            } catch (e: HttpException) {
+                val message = try {
+                    val errorBody = e.response()?.errorBody()?.string()
+                    val json = JSONObject(errorBody ?: "")
+
+                    json.optString("message", "Erro no servidor")
+                } catch (_: Exception) {
+                    "Erro no servidor"
+                }
+
+                _state.update { ProfileState.Error(message) }
+            } catch (e: Exception) {
+                _state.update { ProfileState.Error("Ocorreu um erro: ${e.message}") }
+            } finally {
+                userPreferencesRepository.clearTokens()
+                _isLoggedIn.value = false
+                _state.value = ProfileState.Loading
+            }
         }
     }
 }

@@ -27,7 +27,7 @@ fun StatsCard(
 ) {
     Surface(
         modifier = modifier
-            .size(117.dp),
+            .size(114.dp),
         shape = RoundedCornerShape(10.dp),
         shadowElevation = 0.5.dp,
         color = MaterialTheme.colorScheme.surface

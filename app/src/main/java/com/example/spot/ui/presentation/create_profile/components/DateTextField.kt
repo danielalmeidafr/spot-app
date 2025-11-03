@@ -3,7 +3,7 @@ package com.example.spot.ui.presentation.create_profile.components
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
-import com.example.spot.ui.presentation.components.CustomTextField
+import com.example.spot.ui.components.CustomTextField
 
 @Composable
 fun DateTextField(

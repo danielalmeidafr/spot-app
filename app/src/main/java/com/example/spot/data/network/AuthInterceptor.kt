@@ -12,7 +12,7 @@ class AuthInterceptor(
 ) : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
         val token = runBlocking {
-            repository.token.first()
+            repository.accessToken.first()
         }
 
         var request = chain.request()

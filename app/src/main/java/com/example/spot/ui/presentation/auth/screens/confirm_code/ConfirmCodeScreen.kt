@@ -1,7 +1,5 @@
-package com.example.spot.ui.presentation.create_profile
+package com.example.spot.ui.presentation.auth.screens.confirm_code
 
-import android.widget.Toast
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -14,8 +12,13 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -29,43 +32,41 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.spot.core.util.clearFocusOnTap
+import com.example.spot.core.util.rememberKeyboardVisibility
 import com.example.spot.ui.components.CustomTextField
 import com.example.spot.ui.components.PrimaryButton
-import com.example.spot.ui.presentation.create_profile.components.DateTextField
-import com.example.spot.ui.presentation.create_profile.model.CreateProfileState
-import com.example.spot.ui.presentation.create_profile.viewmodel.CreateProfileViewModel
+import com.example.spot.ui.presentation.auth.model.AuthState
+import com.example.spot.ui.presentation.auth.viewmodel.AuthViewModel
 import com.student.R
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun CreateProfileScreen(
-    onNavigateToMain: () -> Unit,
-    viewModel: CreateProfileViewModel = koinViewModel()
+fun ConfirmCodeScreen(
+    onBack: () -> Unit,
+    onNavigateToCreateProfile: () -> Unit
 ) {
+    val viewModel = koinViewModel<AuthViewModel>()
     val state by viewModel.state.collectAsState()
-    val context = LocalContext.current
+    val isKeyboardVisible = rememberKeyboardVisibility()
+    val snackbarHostState = remember { SnackbarHostState() }
 
-    var fullName by remember { mutableStateOf("") }
-    var nickname by remember { mutableStateOf("") }
-    var birthDate by remember { mutableStateOf("") }
+    var code by remember { mutableStateOf("") }
 
-    val fullNameFocusRequester = remember { FocusRequester() }
-    val nicknameFocusRequester = remember { FocusRequester() }
-    val birthDateFocusRequester = remember { FocusRequester() }
+    val codeFocusRequester = remember { FocusRequester() }
 
     LaunchedEffect(state) {
         when (val a = state) {
-            is CreateProfileState.Error -> {
-                Toast.makeText(context, a.message, Toast.LENGTH_LONG).show()
+            is AuthState.Error -> {
+                snackbarHostState.showSnackbar(
+                    message = a.message,
+                    duration = SnackbarDuration.Short
+                )
             }
-            is CreateProfileState.Success -> {
-                onNavigateToMain()
-            }
+            is AuthState.Success -> onNavigateToCreateProfile()
             else -> Unit
         }
     }
@@ -79,6 +80,7 @@ fun CreateProfileScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .background(MaterialTheme.colorScheme.surface)
+                .padding(bottom = if (isKeyboardVisible) 320.dp else 0.dp)
                 .statusBarsPadding()
         ) {
             Column(
@@ -86,10 +88,26 @@ fun CreateProfileScreen(
                     .fillMaxWidth()
                     .padding(horizontal = 20.dp)
             ) {
-                Spacer(modifier = Modifier.height(100.dp))
+                Spacer(modifier = Modifier.height(50.dp))
+
+                Surface(
+                    onClick = onBack,
+                    modifier = Modifier.size(55.dp),
+                    shape = CircleShape,
+                    color = MaterialTheme.colorScheme.background
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.arrow_back),
+                        contentDescription = "Voltar",
+                        tint = MaterialTheme.colorScheme.onSurface.copy(0.8f),
+                        modifier = Modifier.padding(15.dp)
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(30.dp))
 
                 Text(
-                    "Crie o seu perfil",
+                    "Confirme sua Identidade",
                     style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.onBackground
                 )
@@ -97,13 +115,14 @@ fun CreateProfileScreen(
                 Spacer(modifier = Modifier.height(8.dp))
 
                 Text(
-                    "Digite suas informações pessoais para criação da conta.",
+                    "Insira o código enviado para o seu email.",
                     style = MaterialTheme.typography.bodySmall.copy(fontSize = 12.sp),
                     color = MaterialTheme.colorScheme.onBackground.copy(0.7f)
                 )
 
                 Spacer(modifier = Modifier.height(30.dp))
             }
+
 
             Column(
                 modifier = Modifier
@@ -116,49 +135,22 @@ fun CreateProfileScreen(
             ) {
                 Spacer(modifier = Modifier.height(40.dp))
 
-                Image(
-                    painter = painterResource(R.drawable.user_image),
-                    contentDescription = "Profile image",
-                    modifier = Modifier.size(90.dp)
-                )
-
-                Spacer(modifier = Modifier.height(30.dp))
-
                 CustomTextField(
-                    value = fullName,
-                    onValueChange = { fullName = it },
-                    placeholderText = "Nome completo:",
-                    modifier = Modifier.focusRequester(fullNameFocusRequester)
-                )
-
-                Spacer(modifier = Modifier.height(30.dp))
-
-                CustomTextField(
-                    value = nickname,
-                    onValueChange = { nickname = it },
-                    placeholderText = "Nome de usuário:",
-                    modifier = Modifier.focusRequester(nicknameFocusRequester)
-                )
-
-                Spacer(modifier = Modifier.height(30.dp))
-
-                DateTextField(
-                    value = birthDate,
-                    onValueChange = { birthDate = it },
-                    modifier = Modifier.focusRequester(birthDateFocusRequester)
+                    value = code,
+                    onValueChange = { code = it },
+                    placeholderText = "Código:",
+                    modifier = Modifier.focusRequester(codeFocusRequester)
                 )
 
                 Spacer(modifier = Modifier.weight(1f))
 
                 PrimaryButton(
-                    text = "Finalizar",
-                    isLoading = state is CreateProfileState.Loading,
+                    text = "Verificar",
+                    isLoading = state is AuthState.Loading,
                     onClick = {
                         when {
-                            fullName.isBlank() -> fullNameFocusRequester.requestFocus()
-                            nickname.isBlank() -> nicknameFocusRequester.requestFocus()
-                            birthDate.isBlank() -> birthDateFocusRequester.requestFocus()
-                            else -> viewModel.onCreateProfileClicked(fullName, nickname, birthDate)
+                            code.isBlank() -> codeFocusRequester.requestFocus()
+                            else -> viewModel.onConfirmCodeClicked(code)
                         }
                     }
                 )

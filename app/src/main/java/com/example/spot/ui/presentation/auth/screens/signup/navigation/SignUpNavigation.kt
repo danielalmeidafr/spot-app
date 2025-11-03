@@ -1,8 +1,8 @@
-package com.example.spot.ui.presentation.auth.signup.navigation
+package com.example.spot.ui.presentation.auth.screens.signup.navigation
 
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import com.example.spot.ui.presentation.auth.signup.SignUpScreen
+import com.example.spot.ui.presentation.auth.screens.signup.SignUpScreen
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -10,12 +10,12 @@ object SignUpDestination
 
 fun NavGraphBuilder.signUpScreen(
     onBack: () -> Unit,
-    onNavigateToCreateProfile: () -> Unit
+    onNavigateToConfirmCode: () -> Unit
 ) {
     composable<SignUpDestination> {
         SignUpScreen(
             onBack = onBack,
-            onNavigateToCreateProfile = onNavigateToCreateProfile
+            onNavigateToConfirmCode = onNavigateToConfirmCode
         )
     }
 }
