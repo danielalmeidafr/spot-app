@@ -7,14 +7,12 @@ import com.example.spot.data.dtos.home.establishment.EstablishmentRepository
 import com.example.spot.data.dtos.home.establishment.toEstablishmentData
 import com.example.spot.data.dtos.home.nextschedule.NextScheduleRepository
 import com.example.spot.data.dtos.home.nextschedule.toNextScheduleData
-import com.example.spot.ui.presentation.auth.model.AuthState
 import com.example.spot.ui.presentation.main_screen.home.model.EstablishmentData
 import com.example.spot.ui.presentation.main_screen.home.model.HomeState
 import com.example.spot.ui.presentation.main_screen.home.model.NextScheduleData
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import okio.IOException
@@ -33,42 +31,48 @@ class HomeViewModel(
 
     init {
         viewModelScope.launch {
-            try {
-                val establishments = fetchEstablishments()
-                cachedEstablishments = establishments
+            userPreferencesRepository.accessToken.collect { accessToken ->
+                if (_state.value is HomeState.Error) return@collect
 
-                val listTitle = if (establishments.isEmpty()) "" else "Recomendadas:"
-                val nextSchedule = fetchNextSchedule()
-
-                _state.update {
-                    HomeState.Success(
-                        nextScheduleData = nextSchedule,
-                        listTitle = listTitle,
-                        establishmentsData = establishments
-                    )
-                }
-            } catch (e: IOException) {
-                _state.update { HomeState.Error("Falha na conexão") }
-            } catch (e: HttpException) {
-                val message = try {
-                    val errorBody = e.response()?.errorBody()?.string()
-                    val json = JSONObject(errorBody ?: "")
-
-                    json.optString("message", "Erro no servidor")
-                } catch (_: Exception) {
-                    "Erro no servidor"
+                if (_state.value !is HomeState.Loading) {
+                    _state.update { HomeState.Loading }
                 }
 
-                _state.update { HomeState.Error(message) }
-            } catch (e: Exception) {
-                _state.update { HomeState.Error("Ocorreu um erro: ${e.message}") }
+                try {
+                    val establishments = fetchEstablishments()
+                    cachedEstablishments = establishments
+
+                    val listTitle = if (establishments.isEmpty()) "" else "Recomendadas:"
+
+                    val nextSchedule = fetchNextSchedule(accessToken)
+
+                    _state.update {
+                        HomeState.Success(
+                            nextScheduleData = nextSchedule,
+                            listTitle = listTitle,
+                            establishmentsData = establishments
+                        )
+                    }
+                } catch (e: IOException) {
+                    _state.update { HomeState.Error("Falha na conexão") }
+                } catch (e: HttpException) {
+                    val message = try {
+                        val errorBody = e.response()?.errorBody()?.string()
+                        val json = JSONObject(errorBody ?: "")
+
+                        json.optString("message", "Erro no servidor")
+                    } catch (_: Exception) {
+                        "Erro no servidor"
+                    }
+                    _state.update { HomeState.Error(message) }
+                } catch (e: Exception) {
+                    _state.update { HomeState.Error("Ocorreu um erro: ${e.message}") }
+                }
             }
         }
     }
 
-    private suspend fun fetchNextSchedule(): NextScheduleData {
-        val accessToken = userPreferencesRepository.accessToken.first()
-
+    private suspend fun fetchNextSchedule(accessToken: String): NextScheduleData {
         if (accessToken.isEmpty()) {
             return NextScheduleData(nextScheduleTime = null)
         }
