@@ -49,6 +49,8 @@ import com.example.spot.core.util.clearFocusOnTap
 import com.example.spot.ui.components.CustomButton
 import com.example.spot.ui.components.CustomTextField
 import com.example.spot.ui.components.PrimaryButton
+import com.example.spot.ui.presentation.auth.components.emailError
+import com.example.spot.ui.presentation.auth.components.passwordError
 import com.example.spot.ui.presentation.auth.model.AuthState
 import com.example.spot.ui.presentation.auth.viewmodel.AuthViewModel
 import com.student.R
@@ -67,13 +69,17 @@ fun SignUpScreen(
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var confirmPassword by remember { mutableStateOf("") }
-    var passwordMismatch by remember { mutableStateOf(false) }
     var agreed by remember { mutableStateOf(false) }
+
+    var errorOnEmail by remember { mutableStateOf(false) }
+    var errorOnPassword by remember { mutableStateOf(false) }
+    var passwordMismatch by remember { mutableStateOf(false) }
 
     val emailFocusRequester = remember { FocusRequester() }
     val passwordFocusRequester = remember { FocusRequester() }
     val confirmFocusRequester = remember { FocusRequester() }
 
+    val emailShakeOffset = remember { Animatable(0f) }
     val passwordShakeOffset = remember { Animatable(0f) }
     val termsShakeOffset = remember { Animatable(0f) }
 
@@ -101,9 +107,11 @@ fun SignUpScreen(
                     duration = SnackbarDuration.Short
                 )
             }
+
             is AuthState.Success -> {
                 onNavigateToConfirmCode(email)
             }
+
             else -> Unit
         }
     }
@@ -125,6 +133,7 @@ fun SignUpScreen(
                     .padding(horizontal = 20.dp)
             ) {
                 Spacer(modifier = Modifier.height(50.dp))
+
                 Surface(
                     onClick = onBack,
                     modifier = Modifier.size(55.dp),
@@ -168,6 +177,7 @@ fun SignUpScreen(
                     value = email,
                     onValueChange = { email = it },
                     placeholderText = "E-mail:",
+                    isError = errorOnEmail,
                     modifier = Modifier.focusRequester(emailFocusRequester)
                 )
 
@@ -177,6 +187,7 @@ fun SignUpScreen(
                     value = password,
                     onValueChange = { password = it },
                     placeholderText = "Senha:",
+                    isError = errorOnPassword,
                     isPassword = true,
                     modifier = Modifier.focusRequester(passwordFocusRequester)
                 )
@@ -187,26 +198,49 @@ fun SignUpScreen(
                     value = confirmPassword,
                     onValueChange = { confirmPassword = it },
                     placeholderText = "Confirmar senha:",
+                    isError = errorOnPassword,
                     isPassword = true,
                     modifier = Modifier.focusRequester(confirmFocusRequester)
                 )
 
-                Spacer(modifier = Modifier.height(5.dp))
-
-                if (passwordMismatch) {
-                    Text(
+                when {
+                    passwordMismatch -> Text(
                         text = "As senhas não coincidem",
                         color = MaterialTheme.colorScheme.tertiary,
                         style = MaterialTheme.typography.bodySmall,
                         modifier = Modifier
                             .fillMaxWidth(0.9f)
-                            .padding(start = 8.dp)
+                            .padding(start = 8.dp, top = 10.dp)
                             .graphicsLayer {
                                 translationX = passwordShakeOffset.value
                             }
                     )
-                } else {
-                    Spacer(modifier = Modifier.height(5.dp))
+
+                    errorOnEmail -> Text(
+                        text = "O e-mail informado não é válido.",
+                        color = MaterialTheme.colorScheme.tertiary,
+                        style = MaterialTheme.typography.bodySmall,
+                        modifier = Modifier
+                            .fillMaxWidth(0.9f)
+                            .padding(start = 8.dp, top = 10.dp)
+                            .graphicsLayer {
+                                translationX = emailShakeOffset.value
+                            }
+                    )
+
+                    errorOnPassword -> Text(
+                        text = "A senha informada não é válida.",
+                        color = MaterialTheme.colorScheme.tertiary,
+                        style = MaterialTheme.typography.bodySmall,
+                        modifier = Modifier
+                            .fillMaxWidth(0.9f)
+                            .padding(start = 8.dp, top = 10.dp)
+                            .graphicsLayer {
+                                translationX = passwordShakeOffset.value
+                            }
+                    )
+
+                    else -> Spacer(modifier = Modifier.height(5.dp))
                 }
 
                 Row(
@@ -241,15 +275,30 @@ fun SignUpScreen(
                     }
                 }
 
-                Spacer(modifier = Modifier.height(20.dp))
+                Spacer(modifier = Modifier.height(10.dp))
 
                 PrimaryButton(
                     text = "Cadastrar",
                     isLoading = state is AuthState.Loading,
                     onClick = {
+                        email = email.trim()
+                        password = password.trim()
+
+                        val currentEmailError = emailError(email) || email.isBlank()
+                        val currentPasswordError = passwordError(password) || password.isBlank()
+
+                        errorOnEmail = currentEmailError
+                        errorOnPassword = currentPasswordError
+
                         when {
-                            email.isBlank() -> emailFocusRequester.requestFocus()
-                            password.isBlank() -> passwordFocusRequester.requestFocus()
+                            currentEmailError -> {
+                                emailFocusRequester.requestFocus()
+                                shake(emailShakeOffset, 8f)
+                            }
+                            currentPasswordError -> {
+                                passwordFocusRequester.requestFocus()
+                                shake(passwordShakeOffset, 8f)
+                            }
                             confirmPassword.isBlank() -> confirmFocusRequester.requestFocus()
                             passwordMismatch -> shake(passwordShakeOffset, 8f)
                             !agreed -> shake(termsShakeOffset, 8f)

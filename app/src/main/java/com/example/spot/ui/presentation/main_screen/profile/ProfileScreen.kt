@@ -15,7 +15,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.example.spot.ui.presentation.auth.model.AuthState
 import com.example.spot.ui.presentation.main_screen.profile.components.ProgressBar
 import com.example.spot.ui.presentation.main_screen.profile.components.sections.HeaderSection
 import com.example.spot.ui.presentation.main_screen.profile.components.sections.InfoSection
@@ -110,7 +109,7 @@ fun ProfileScreen(
 
                         item {
                             OptionsSection(
-                                onLogout = { viewModel.logout() },
+                                onLogout = { viewModel.signOut() },
                                 isLoading = isLoggingOut
                             )
                         }

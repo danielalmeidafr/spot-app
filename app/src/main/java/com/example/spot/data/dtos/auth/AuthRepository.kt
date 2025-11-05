@@ -9,8 +9,8 @@ class AuthRepository(
     private val api: SpotApiService,
     private val userPrefs: UserPreferencesRepository
 ) {
-    suspend fun logout(request: LogoutRequest) {
-        return api.logout(request)
+    suspend fun signOut(request: SignOutRequest) {
+        return api.signOut(request)
     }
 
     suspend fun signIn(request: SignInRequest): AuthResponse {

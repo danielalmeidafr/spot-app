@@ -42,6 +42,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -53,6 +54,8 @@ import com.example.spot.core.util.clearFocusOnTap
 import com.example.spot.ui.components.CustomButton
 import com.example.spot.ui.components.CustomTextField
 import com.example.spot.ui.components.PrimaryButton
+import com.example.spot.ui.presentation.auth.components.emailError
+import com.example.spot.ui.presentation.auth.components.passwordError
 import com.example.spot.ui.presentation.auth.model.AuthState
 import com.example.spot.ui.presentation.auth.viewmodel.AuthViewModel
 import com.student.R
@@ -72,6 +75,12 @@ fun SignInScreen(
 
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+
+    var errorOnEmail by remember { mutableStateOf(false) }
+    var errorOnPassword by remember { mutableStateOf(false) }
+
+    val emailShakeOffset = remember { Animatable(0f) }
+    val passwordShakeOffset = remember { Animatable(0f) }
 
     val emailFocusRequester = remember { FocusRequester() }
     val passwordFocusRequester = remember { FocusRequester() }
@@ -176,6 +185,7 @@ fun SignInScreen(
                             value = email,
                             onValueChange = { email = it },
                             placeholderText = "E-mail:",
+                            isError = errorOnEmail,
                             modifier = Modifier.focusRequester(emailFocusRequester)
                         )
 
@@ -185,9 +195,38 @@ fun SignInScreen(
                             value = password,
                             onValueChange = { password = it },
                             placeholderText = "Senha:",
+                            isError = errorOnPassword,
                             isPassword = true,
                             modifier = Modifier.focusRequester(passwordFocusRequester)
                         )
+
+                        when {
+                            errorOnEmail -> Text(
+                                text = "O e-mail informado não é válido.",
+                                color = MaterialTheme.colorScheme.tertiary,
+                                style = MaterialTheme.typography.bodySmall,
+                                modifier = Modifier
+                                    .fillMaxWidth(0.9f)
+                                    .padding(start = 8.dp, top = 10.dp)
+                                    .graphicsLayer {
+                                        translationX = emailShakeOffset.value
+                                    }
+                            )
+
+                            errorOnPassword -> Text(
+                                text = "A senha informada não é válida.",
+                                color = MaterialTheme.colorScheme.tertiary,
+                                style = MaterialTheme.typography.bodySmall,
+                                modifier = Modifier
+                                    .fillMaxWidth(0.9f)
+                                    .padding(start = 8.dp, top = 10.dp)
+                                    .graphicsLayer {
+                                        translationX = passwordShakeOffset.value
+                                    }
+                            )
+
+                            else -> Unit
+                        }
 
                         TextButton(
                             onClick = onNavigateToForgotPassword,
@@ -218,15 +257,28 @@ fun SignInScreen(
                             )
                         }
 
-                        Spacer(modifier = Modifier.height(20.dp))
-
                         PrimaryButton(
                             text = "Entrar",
                             isLoading = state is AuthState.Loading,
                             onClick = {
+                                email = email.trim()
+                                password = password.trim()
+
+                                val currentEmailError = emailError(email) || email.isBlank()
+                                val currentPasswordError = passwordError(password) || password.isBlank()
+
+                                errorOnEmail = currentEmailError
+                                errorOnPassword = currentPasswordError
+
                                 when {
-                                    email.isBlank() -> emailFocusRequester.requestFocus()
-                                    password.isBlank() -> passwordFocusRequester.requestFocus()
+                                    currentEmailError -> {
+                                        emailFocusRequester.requestFocus()
+                                        shake(emailShakeOffset, 8f)
+                                    }
+                                    currentPasswordError -> {
+                                        passwordFocusRequester.requestFocus()
+                                        shake(passwordShakeOffset, 8f)
+                                    }
                                     else -> viewModel.onSignInClicked(email, password)
                                 }
                             }

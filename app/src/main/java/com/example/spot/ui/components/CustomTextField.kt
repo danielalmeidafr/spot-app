@@ -42,7 +42,8 @@ fun CustomTextField(
     isPassword: Boolean = false,
     modifier: Modifier = Modifier,
     visualTransformation: VisualTransformation = VisualTransformation.None,
-    keyboardType: KeyboardType = KeyboardType.Text
+    keyboardType: KeyboardType = KeyboardType.Text,
+    isError: Boolean = false
 ) {
     var passwordVisible by remember { mutableStateOf(false) }
 
@@ -52,7 +53,7 @@ fun CustomTextField(
         placeholder = {
             Text(
                 placeholderText,
-                style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.Bold),
+                style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.SemiBold),
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         },
@@ -67,7 +68,7 @@ fun CustomTextField(
             .height(50.dp)
             .border(
                 width = 0.2.dp,
-                color = MaterialTheme.colorScheme.outline,
+                color = if (isError) MaterialTheme.colorScheme.tertiary else MaterialTheme.colorScheme.outline,
                 shape = RoundedCornerShape(8.dp)
             )
             .shadow(
@@ -81,7 +82,7 @@ fun CustomTextField(
             focusedContainerColor = MaterialTheme.colorScheme.surface,
             unfocusedBorderColor = Color.Transparent,
             focusedBorderColor = Color.Transparent,
-            cursorColor = MaterialTheme.colorScheme.primary,
+            cursorColor = if (isError) MaterialTheme.colorScheme.tertiary else MaterialTheme.colorScheme.primary,
         ),
 
         visualTransformation = if (isPassword) {
@@ -94,14 +95,11 @@ fun CustomTextField(
 
         trailingIcon = {
             if (isPassword) {
-                val imageRes = when {
-                    passwordVisible -> R.drawable.eye_open
-                    else -> R.drawable.eye_closed
-                }
+                val imageRes = if (passwordVisible) R.drawable.eye_open else R.drawable.eye_closed
 
                 Icon(
                     painter = painterResource(id = imageRes),
-                    tint = MaterialTheme.colorScheme.onBackground,
+                    tint = if (isError) MaterialTheme.colorScheme.tertiary else MaterialTheme.colorScheme.onBackground,
                     contentDescription = if (passwordVisible) "Ocultar senha" else "Mostrar senha",
                     modifier = Modifier
                         .size(32.dp)

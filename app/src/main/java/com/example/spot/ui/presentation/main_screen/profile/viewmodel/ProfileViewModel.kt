@@ -3,10 +3,9 @@ package com.example.spot.ui.presentation.main_screen.profile.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.spot.data.dtos.auth.AuthRepository
-import com.example.spot.data.dtos.auth.LogoutRequest
+import com.example.spot.data.dtos.auth.SignOutRequest
 // 1. Importe o novo repositório
 import com.example.spot.data.dtos.auth.UserPreferencesRepository
-import com.example.spot.ui.presentation.auth.model.AuthState
 import com.example.spot.ui.presentation.main_screen.profile.model.InfoData
 import com.example.spot.ui.presentation.main_screen.profile.model.ProfileState
 import com.example.spot.ui.presentation.main_screen.profile.model.ProgressData
@@ -87,15 +86,15 @@ class ProfileViewModel(
         )
     }
 
-    fun logout() {
+    fun signOut() {
         _isLoggingOut.value = true
 
         viewModelScope.launch {
             try {
                 val refreshToken = userPreferencesRepository.refreshToken.first()
 
-                val request = LogoutRequest(refreshToken)
-                authRepository.logout(request)
+                val request = SignOutRequest(refreshToken)
+                authRepository.signOut(request)
 
             } catch (e: IOException) {
                 _state.update { ProfileState.Error("Falha na conexão") }

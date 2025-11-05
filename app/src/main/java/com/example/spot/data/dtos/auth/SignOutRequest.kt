@@ -1,5 +1,5 @@
 package com.example.spot.data.dtos.auth
 
-data class LogoutRequest(
+data class SignOutRequest(
     val refreshToken: String
 )
