@@ -10,7 +10,8 @@ import com.student.R
 
 @Composable
 fun OptionsSection(
-    onLogout: () -> Unit
+    onLogout: () -> Unit,
+    isLoading: Boolean
 ) {
     Spacer(modifier = Modifier.height(20.dp))
 
@@ -29,6 +30,6 @@ fun OptionsSection(
     ListItem(text = "Ajuda e suporte", icon = R.drawable.help)
     Spacer(modifier = Modifier.height(30.dp))
 
-    ListItem(text = "Sair", icon = R.drawable.exit, isLogout = true, onClick = onLogout)
+    ListItem(text = "Sair", icon = R.drawable.exit, isLogout = true, onClick = onLogout, isLoading = isLoading)
     Spacer(modifier = Modifier.height(20.dp))
 }

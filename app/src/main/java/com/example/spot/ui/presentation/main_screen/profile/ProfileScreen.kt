@@ -15,6 +15,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.example.spot.ui.presentation.auth.model.AuthState
 import com.example.spot.ui.presentation.main_screen.profile.components.ProgressBar
 import com.example.spot.ui.presentation.main_screen.profile.components.sections.HeaderSection
 import com.example.spot.ui.presentation.main_screen.profile.components.sections.InfoSection
@@ -39,6 +40,9 @@ fun ProfileScreen(
     val state by viewModel.state.collectAsState()
     val isLogged by viewModel.isLoggedIn.collectAsState()
     val isChecking by viewModel.isCheckingLogin.collectAsState()
+
+    val isLoggingOut by viewModel.isLoggingOut.collectAsState()
+
     val snackbarHostState = remember { SnackbarHostState() }
 
     LaunchedEffect(state) {
@@ -80,7 +84,8 @@ fun ProfileScreen(
 
                         item {
                             OptionsSection(
-                                onLogout = { }
+                                onLogout = { },
+                                isLoading = false
                             )
                         }
                     }
@@ -105,7 +110,8 @@ fun ProfileScreen(
 
                         item {
                             OptionsSection(
-                                onLogout = { viewModel.logout() }
+                                onLogout = { viewModel.logout() },
+                                isLoading = isLoggingOut
                             )
                         }
                     }

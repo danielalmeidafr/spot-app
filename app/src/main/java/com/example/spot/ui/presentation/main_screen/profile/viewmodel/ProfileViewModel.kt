@@ -30,6 +30,9 @@ class ProfileViewModel(
     private val _isLoggedIn = MutableStateFlow(false)
     val isLoggedIn = _isLoggedIn.asStateFlow()
 
+    private val _isLoggingOut = MutableStateFlow(false)
+    val isLoggingOut = _isLoggingOut.asStateFlow()
+
     private val _isCheckingLogin = MutableStateFlow(true)
     val isCheckingLogin = _isCheckingLogin.asStateFlow()
 
@@ -85,7 +88,7 @@ class ProfileViewModel(
     }
 
     fun logout() {
-        _state.update { ProfileState.Loading }
+        _isLoggingOut.value = true
 
         viewModelScope.launch {
             try {
@@ -112,7 +115,7 @@ class ProfileViewModel(
             } finally {
                 userPreferencesRepository.clearTokens()
                 _isLoggedIn.value = false
-                _state.value = ProfileState.Loading
+                _isLoggingOut.value = false
             }
         }
     }

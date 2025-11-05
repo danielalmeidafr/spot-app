@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -40,10 +41,13 @@ fun ListItem(
     text: String,
     icon: Int,
     isLogout: Boolean = false,
+    isLoading: Boolean = false,
     onClick: (() -> Unit)? = null
 ) {
-    val textColor = if (isLogout) MaterialTheme.colorScheme.tertiary else MaterialTheme.colorScheme.onBackground
-    val iconTint = if (isLogout) MaterialTheme.colorScheme.tertiary else MaterialTheme.colorScheme.onBackground
+    val textColor =
+        if (isLogout) MaterialTheme.colorScheme.tertiary else MaterialTheme.colorScheme.onBackground
+    val iconTint =
+        if (isLogout) MaterialTheme.colorScheme.tertiary else MaterialTheme.colorScheme.onBackground
     val shape = RoundedCornerShape(5.dp)
 
     var isPressed by remember { mutableStateOf(false) }
@@ -76,32 +80,40 @@ fun ListItem(
             }
             .padding(horizontal = 20.dp),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.Start
+        horizontalArrangement = if (isLoading) Arrangement.Center else Arrangement.Start
     ) {
-        Icon(
-            painter = painterResource(id = icon),
-            tint = iconTint,
-            contentDescription = "$text icon",
-            modifier = Modifier.size(15.dp)
-        )
-
-        Spacer(modifier = Modifier.size(20.dp))
-
-        Text(
-            text = text,
-            style = MaterialTheme.typography.bodySmall,
-            color = textColor
-        )
-
-        Spacer(modifier = Modifier.weight(1f))
-
-        if (!isLogout) {
-            Icon(
-                painter = painterResource(id = R.drawable.arrow_right),
-                tint = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.8f),
-                contentDescription = "Seta para direita",
-                modifier = Modifier.size(20.dp)
+        if (isLoading) {
+            CircularProgressIndicator(
+                color = MaterialTheme.colorScheme.onBackground,
+                strokeWidth = 2.dp,
+                modifier = Modifier.size(24.dp)
             )
+        } else {
+            Icon(
+                painter = painterResource(id = icon),
+                tint = iconTint,
+                contentDescription = "$text icon",
+                modifier = Modifier.size(15.dp)
+            )
+
+            Spacer(modifier = Modifier.size(20.dp))
+
+            Text(
+                text = text,
+                style = MaterialTheme.typography.bodySmall,
+                color = textColor
+            )
+
+            Spacer(modifier = Modifier.weight(1f))
+
+            if (!isLogout) {
+                Icon(
+                    painter = painterResource(id = R.drawable.arrow_right),
+                    tint = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.8f),
+                    contentDescription = "Seta para direita",
+                    modifier = Modifier.size(20.dp)
+                )
+            }
         }
     }
 }
