@@ -37,6 +37,7 @@ import com.example.spot.core.util.clearFocusOnTap
 import com.example.spot.ui.components.CustomTextField
 import com.example.spot.ui.components.PrimaryButton
 import com.example.spot.ui.presentation.create_profile.components.DateTextField
+import com.example.spot.ui.presentation.create_profile.components.GenderDropdown
 import com.example.spot.ui.presentation.create_profile.model.CreateProfileState
 import com.example.spot.ui.presentation.create_profile.viewmodel.CreateProfileViewModel
 import com.student.R
@@ -53,6 +54,7 @@ fun CreateProfileScreen(
     var fullName by remember { mutableStateOf("") }
     var nickname by remember { mutableStateOf("") }
     var birthDate by remember { mutableStateOf("") }
+    var gender by remember { mutableStateOf("") }
 
     val fullNameFocusRequester = remember { FocusRequester() }
     val nicknameFocusRequester = remember { FocusRequester() }
@@ -146,6 +148,13 @@ fun CreateProfileScreen(
                     value = birthDate,
                     onValueChange = { birthDate = it },
                     modifier = Modifier.focusRequester(birthDateFocusRequester)
+                )
+
+                Spacer(modifier = Modifier.height(30.dp))
+
+                GenderDropdown(
+                    selectedGender = gender,
+                    onGenderSelected = { gender = it }
                 )
 
                 Spacer(modifier = Modifier.weight(1f))

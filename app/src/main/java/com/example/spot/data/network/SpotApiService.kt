@@ -32,16 +32,16 @@ interface SpotApiService {
     @POST("api/authentication/signin")
     suspend fun signIn(@Body request: SignInRequest): AuthResponse
 
-    @POST("")
+    @POST("api/authentication/password-reset/request")
     suspend fun forgotPassword(@Body request: ForgotPasswordRequest)
 
-    @POST("")
+    @POST("api/authentication/password-reset/confirm")
     suspend fun newPassword(@Body request: NewPasswordRequest)
 
     @POST("api/authentication/signup")
     suspend fun signUp(@Body request: SignUpRequest): AuthResponse
 
-    @POST("")
+    @POST("api/authentication/password-reset/verify")
     suspend fun confirmCode(@Body request: ConfirmCodeRequest)
 
     @POST("")

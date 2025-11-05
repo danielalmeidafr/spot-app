@@ -54,7 +54,9 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun NewPasswordScreen(
     onBack: () -> Unit,
-    onNavigateToSignIn: () -> Unit
+    onNavigateToSignIn: () -> Unit,
+    email: String,
+    code: String
 ) {
     val viewModel = koinViewModel<AuthViewModel>()
     val state by viewModel.state.collectAsState()
@@ -212,7 +214,7 @@ fun NewPasswordScreen(
                             newPassword.isBlank() -> passwordFocusRequester.requestFocus()
                             confirmNewPassword.isBlank() -> confirmPasswordFocusRequester.requestFocus()
                             passwordMismatch -> shake(passwordShakeOffset, 8f)
-                            else -> viewModel.onNewPasswordClicked(newPassword)
+                            else -> viewModel.onNewPasswordClicked(email, code, newPassword)
                         }
                     }
                 )

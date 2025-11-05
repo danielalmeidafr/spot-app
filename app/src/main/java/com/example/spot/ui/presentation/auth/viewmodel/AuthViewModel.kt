@@ -3,10 +3,10 @@ package com.example.spot.ui.presentation.auth.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.spot.data.dtos.auth.AuthRepository
-import com.example.spot.data.dtos.auth.code.ConfirmCodeRequest
-import com.example.spot.data.dtos.auth.password.ForgotPasswordRequest
 import com.example.spot.data.dtos.auth.SignInRequest
 import com.example.spot.data.dtos.auth.SignUpRequest
+import com.example.spot.data.dtos.auth.code.ConfirmCodeRequest
+import com.example.spot.data.dtos.auth.password.ForgotPasswordRequest
 import com.example.spot.data.dtos.auth.password.NewPasswordRequest
 import com.example.spot.ui.presentation.auth.model.AuthState
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -85,13 +85,14 @@ class AuthViewModel(
         }
     }
 
-    fun onForgotPasswordClicked(emailOrNickname: String){
+    fun onForgotPasswordClicked(email: String) {
         _state.update { AuthState.Loading }
 
         viewModelScope.launch {
             try {
-                val request = ForgotPasswordRequest(emailOrNickname)
+                val request = ForgotPasswordRequest(email)
                 repository.forgotPassword(request)
+                print(email)
 
                 _state.update { AuthState.Success }
             } catch (e: IOException) {
@@ -113,12 +114,12 @@ class AuthViewModel(
         }
     }
 
-    fun onConfirmCodeClicked(code: String){
+    fun onConfirmCodeClicked(email: String, code: String) {
         _state.update { AuthState.Loading }
 
         viewModelScope.launch {
             try {
-                val request = ConfirmCodeRequest(code)
+                val request = ConfirmCodeRequest(email, code)
                 repository.confirmCode(request)
 
                 _state.update { AuthState.Success }
@@ -141,12 +142,12 @@ class AuthViewModel(
         }
     }
 
-    fun onNewPasswordClicked(newPassword: String){
+    fun onNewPasswordClicked(email: String, code: String, newPassword: String) {
         _state.update { AuthState.Loading }
 
         viewModelScope.launch {
             try {
-                val request = NewPasswordRequest(newPassword)
+                val request = NewPasswordRequest(email, code, newPassword)
                 repository.newPassword(request)
 
                 _state.update { AuthState.Success }

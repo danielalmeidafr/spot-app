@@ -47,7 +47,8 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun ConfirmCodeScreen(
     onBack: () -> Unit,
-    onNavigateToCreateProfile: () -> Unit
+    onNavigateToNewPassword: (String, String) -> Unit,
+    email: String
 ) {
     val viewModel = koinViewModel<AuthViewModel>()
     val state by viewModel.state.collectAsState()
@@ -66,7 +67,7 @@ fun ConfirmCodeScreen(
                     duration = SnackbarDuration.Short
                 )
             }
-            is AuthState.Success -> onNavigateToCreateProfile()
+            is AuthState.Success -> onNavigateToNewPassword(email, code)
             else -> Unit
         }
     }
@@ -115,7 +116,7 @@ fun ConfirmCodeScreen(
                 Spacer(modifier = Modifier.height(8.dp))
 
                 Text(
-                    "Insira o código enviado para o seu email.",
+                    "Insira o código enviado para o email: $email",
                     style = MaterialTheme.typography.bodySmall.copy(fontSize = 12.sp),
                     color = MaterialTheme.colorScheme.onBackground.copy(0.7f)
                 )
@@ -150,7 +151,7 @@ fun ConfirmCodeScreen(
                     onClick = {
                         when {
                             code.isBlank() -> codeFocusRequester.requestFocus()
-                            else -> viewModel.onConfirmCodeClicked(code)
+                            else -> viewModel.onConfirmCodeClicked(email, code)
                         }
                     }
                 )

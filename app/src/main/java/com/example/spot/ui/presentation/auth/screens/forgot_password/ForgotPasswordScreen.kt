@@ -47,17 +47,16 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun ForgotPasswordScreen(
     onBack: () -> Unit,
-    onNavigateToConfirmCode: () -> Unit
+    onNavigateToConfirmCode: (String) -> Unit
 ) {
     val viewModel = koinViewModel<AuthViewModel>()
     val state by viewModel.state.collectAsState()
     val isKeyboardVisible = rememberKeyboardVisibility()
     val snackbarHostState = remember { SnackbarHostState() }
 
+    var email by remember { mutableStateOf("") }
 
-    var emailOrNickname by remember { mutableStateOf("") }
-
-    val emailOrNicknameFocusRequester = remember { FocusRequester() }
+    val emailFocusRequester = remember { FocusRequester() }
 
     LaunchedEffect(state) {
         when (val a = state) {
@@ -67,7 +66,7 @@ fun ForgotPasswordScreen(
                     duration = SnackbarDuration.Short
                 )
             }
-            is AuthState.Success -> onNavigateToConfirmCode()
+            is AuthState.Success -> onNavigateToConfirmCode(email)
             else -> Unit
         }
     }
@@ -116,7 +115,7 @@ fun ForgotPasswordScreen(
                 Spacer(modifier = Modifier.height(8.dp))
 
                 Text(
-                    "Insira seu email ou nome de usuário.",
+                    "Insira seu email para redefenir a senha.",
                     style = MaterialTheme.typography.bodySmall.copy(fontSize = 12.sp),
                     color = MaterialTheme.colorScheme.onBackground.copy(0.7f)
                 )
@@ -137,10 +136,10 @@ fun ForgotPasswordScreen(
                 Spacer(modifier = Modifier.height(40.dp))
 
                 CustomTextField(
-                    value = emailOrNickname,
-                    onValueChange = { emailOrNickname = it },
-                    placeholderText = "E-mail ou nome de usuário:",
-                    modifier = Modifier.focusRequester(emailOrNicknameFocusRequester)
+                    value = email,
+                    onValueChange = { email = it },
+                    placeholderText = "E-mail:",
+                    modifier = Modifier.focusRequester(emailFocusRequester)
                 )
 
                 Spacer(modifier = Modifier.weight(1f))
@@ -150,8 +149,8 @@ fun ForgotPasswordScreen(
                     isLoading = state is AuthState.Loading,
                     onClick = {
                         when {
-                            emailOrNickname.isBlank() -> emailOrNicknameFocusRequester.requestFocus()
-                            else -> viewModel.onForgotPasswordClicked(emailOrNickname)
+                            email.isBlank() -> emailFocusRequester.requestFocus()
+                            else -> viewModel.onForgotPasswordClicked(email)
                         }
                     }
                 )
