@@ -8,12 +8,14 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class ConfirmCodeDestination(
-    val email: String
+    val email: String,
+    val isSignUp: Boolean
 )
 
 fun NavGraphBuilder.confirmCodeScreen(
     onBack: () -> Unit,
-    onNavigateToNewPassword: (String, String) -> Unit
+    onNavigateToNewPassword: (String, String) -> Unit,
+    onNavigateToCreateProfile: () -> Unit,
 ) {
     composable<ConfirmCodeDestination> { backStackEntry ->
         val userEmail = backStackEntry.toRoute<ConfirmCodeDestination>()
@@ -21,7 +23,9 @@ fun NavGraphBuilder.confirmCodeScreen(
         ConfirmCodeScreen (
             onBack = onBack,
             onNavigateToNewPassword = onNavigateToNewPassword,
-            email = userEmail.email
+            onNavigateToCreateProfile = onNavigateToCreateProfile,
+            email = userEmail.email,
+            isSignUp = userEmail.isSignUp
         )
     }
 }

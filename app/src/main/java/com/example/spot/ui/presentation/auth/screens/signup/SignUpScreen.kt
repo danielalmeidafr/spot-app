@@ -58,7 +58,7 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun SignUpScreen(
     onBack: () -> Unit,
-    onNavigateToConfirmCode: () -> Unit
+    onNavigateToConfirmCode: (String) -> Unit
 ) {
     val viewModel = koinViewModel<AuthViewModel>()
     val state by viewModel.state.collectAsState()
@@ -102,7 +102,7 @@ fun SignUpScreen(
                 )
             }
             is AuthState.Success -> {
-                onNavigateToConfirmCode()
+                onNavigateToConfirmCode(email)
             }
             else -> Unit
         }

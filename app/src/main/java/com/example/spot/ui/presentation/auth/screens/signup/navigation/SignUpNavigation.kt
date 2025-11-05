@@ -10,7 +10,7 @@ object SignUpDestination
 
 fun NavGraphBuilder.signUpScreen(
     onBack: () -> Unit,
-    onNavigateToConfirmCode: () -> Unit
+    onNavigateToConfirmCode: (String) -> Unit
 ) {
     composable<SignUpDestination> {
         SignUpScreen(

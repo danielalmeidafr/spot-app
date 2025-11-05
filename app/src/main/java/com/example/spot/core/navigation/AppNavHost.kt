@@ -48,7 +48,7 @@ fun AppNavHost(
         forgotPasswordScreen(
             onBack = { navController.popBackStack() },
             onNavigateToConfirmCode = { email ->
-                navController.navigate(ConfirmCodeDestination(email))
+                navController.navigate(ConfirmCodeDestination(email, false))
             }
         )
 
@@ -59,14 +59,17 @@ fun AppNavHost(
 
         signUpScreen(
             onBack = { navController.popBackStack() },
-            onNavigateToConfirmCode = { navController.navigate(ConfirmCodeDestination) }
+            onNavigateToConfirmCode = { email ->
+                navController.navigate(ConfirmCodeDestination(email, true))
+            }
         )
 
         confirmCodeScreen(
             onBack = { navController.popBackStack() },
             onNavigateToNewPassword = { email, code ->
                 navController.navigate(NewPasswordDestination(email, code))
-            }
+            },
+            onNavigateToCreateProfile = { navController.navigate(CreateProfileDestination) }
         )
 
         createProfileScreen(
