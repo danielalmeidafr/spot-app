@@ -5,4 +5,5 @@ sealed class ScheduleState{
     data class Success(
         val appointmentsData: List<AppointmentData>
     ): ScheduleState()
+    data class Error(val message: String): ScheduleState()
 }

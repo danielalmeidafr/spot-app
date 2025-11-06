@@ -84,7 +84,7 @@ fun AppointmentItem(
                         Spacer(modifier = Modifier.size(4.dp))
 
                         Text(
-                            appointmentData.price ?: "",
+                            text = appointmentData.price.toString(),
                             style = MaterialTheme.typography.bodySmall.copy(
                                 fontWeight = FontWeight.ExtraBold,
                                 fontSize = 12.sp

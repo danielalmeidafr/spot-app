@@ -10,6 +10,7 @@ import com.example.spot.data.dtos.auth.password.NewPasswordRequest
 import com.example.spot.data.dtos.create_profile.CreateProfileRequest
 import com.example.spot.data.dtos.home.establishment.PagedEstablishmentsResponse
 import com.example.spot.data.dtos.home.nextschedule.NextScheduleResponse
+import com.example.spot.data.dtos.schedules.AppointmentResponse
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
@@ -27,6 +28,11 @@ interface SpotApiService {
         @Query("sortDir") sortDir: String,
         @Query("name") name: String? = null
     ): PagedEstablishmentsResponse
+
+    @GET("api/appointments/me")
+    suspend fun getAllAppointments(
+        @Query("month") month: Int
+    ): AppointmentResponse
 
     @POST("api/authentication/signin")
     suspend fun signIn(@Body request: SignInRequest): AuthResponse

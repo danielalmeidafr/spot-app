@@ -7,5 +7,5 @@ data class AppointmentData(
     val month: String,
     val time: String,
     val isPaid: Boolean,
-    val price: String? = null
+    val price: Float? = null
 )

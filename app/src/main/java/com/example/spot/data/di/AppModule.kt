@@ -2,18 +2,19 @@ package com.example.spot.data.di
 
 import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.preferencesDataStoreFile
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.spot.data.dtos.auth.AuthRepository
 import com.example.spot.data.dtos.auth.UserPreferencesRepository
 import com.example.spot.data.dtos.create_profile.CreateProfileRepository
 import com.example.spot.data.dtos.home.establishment.EstablishmentRepository
 import com.example.spot.data.dtos.home.nextschedule.NextScheduleRepository
+import com.example.spot.data.dtos.schedules.AppointmentRepository
 import com.example.spot.data.network.AuthInterceptor
 import com.example.spot.data.network.SpotApiService
 import com.example.spot.ui.presentation.auth.viewmodel.AuthViewModel
 import com.example.spot.ui.presentation.create_profile.viewmodel.CreateProfileViewModel
 import com.example.spot.ui.presentation.main_screen.home.viewmodel.HomeViewModel
 import com.example.spot.ui.presentation.main_screen.profile.viewmodel.ProfileViewModel
+import com.example.spot.ui.presentation.main_screen.schedules.viewmodel.ScheduleViewModel
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import okhttp3.OkHttpClient
@@ -67,6 +68,7 @@ val repositoryModule = module {
     singleOf(::UserPreferencesRepository)
     singleOf(::AuthRepository)
     singleOf(::CreateProfileRepository)
+    singleOf(::AppointmentRepository)
 }
 
 val viewModelModule = module {
@@ -74,6 +76,7 @@ val viewModelModule = module {
     viewModelOf(::AuthViewModel)
     viewModelOf(::ProfileViewModel)
     viewModelOf(::CreateProfileViewModel)
+    viewModelOf(::ScheduleViewModel)
 }
 
 val storageModule = module {
