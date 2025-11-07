@@ -1,4 +1,4 @@
-package com.example.spot.core.navigation
+package com.example.spot.ui.presentation.main_screen.main
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateDpAsState
@@ -92,7 +92,7 @@ sealed class ScreenItem(
 @Composable
 fun MainScreen(
     modifier: Modifier = Modifier,
-    onNavigateToServices: () -> Unit,
+    onNavigateToDetails: () -> Unit,
     onNavigateToSignIn: () -> Unit,
     isDarkTheme: Boolean,
     onThemeToggle: () -> Unit
@@ -234,7 +234,7 @@ fun MainScreen(
                 ScreenItem.Home -> {
                     HomeScreen(
                         innerPadding = innerPadding,
-                        onNavigateToServices = onNavigateToServices
+                        onNavigateToDetails = onNavigateToDetails
                     )
                 }
 

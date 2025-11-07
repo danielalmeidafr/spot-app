@@ -1,7 +1,8 @@
-package com.example.spot.core.navigation
+package com.example.spot.ui.presentation.main_screen.main.navigation
 
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
+import com.example.spot.ui.presentation.main_screen.main.MainScreen
 import kotlinx.serialization.Serializable
 
 
@@ -9,14 +10,14 @@ import kotlinx.serialization.Serializable
 object MainScreenDestination
 
 fun NavGraphBuilder.mainScreen(
-    onNavigateToServices: () -> Unit,
+    onNavigateToDetails: () -> Unit,
     onNavigateToSignIn: () -> Unit,
     isDarkTheme: Boolean,
     onThemeToggle: () -> Unit
 ) {
     composable<MainScreenDestination> {
         MainScreen(
-            onNavigateToServices = onNavigateToServices,
+            onNavigateToDetails = onNavigateToDetails,
             onNavigateToSignIn = onNavigateToSignIn,
             isDarkTheme = isDarkTheme,
             onThemeToggle = onThemeToggle

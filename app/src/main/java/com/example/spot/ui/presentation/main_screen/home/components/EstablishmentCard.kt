@@ -47,7 +47,7 @@ import java.util.Locale
 fun EstablishmentCard(
     establishmentData: EstablishmentData,
     modifier: Modifier = Modifier,
-    onNavigateToServices: () -> Unit
+    onNavigateToDetails: () -> Unit
 ) {
     var isExpanded by remember { mutableStateOf(false) }
 
@@ -74,7 +74,7 @@ fun EstablishmentCard(
         ),
         onClick = {
             if (isExpanded) {
-                onNavigateToServices()
+                onNavigateToDetails()
             } else {
                 isExpanded = true
             }

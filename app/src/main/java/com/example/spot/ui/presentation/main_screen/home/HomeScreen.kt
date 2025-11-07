@@ -42,7 +42,7 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
-    onNavigateToServices: () -> Unit,
+    onNavigateToDetails: () -> Unit,
     innerPadding: PaddingValues = PaddingValues()
 ) {
     val viewModel = koinViewModel<HomeViewModel>()
@@ -229,7 +229,7 @@ fun HomeScreen(
                         items(state.establishmentsData) { establishment ->
                             EstablishmentCard(
                                 establishmentData = establishment,
-                                onNavigateToServices = onNavigateToServices
+                                onNavigateToDetails = onNavigateToDetails
                             )
                         }
                     }

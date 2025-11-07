@@ -15,9 +15,13 @@ import com.example.spot.ui.presentation.auth.screens.signup.navigation.SignUpDes
 import com.example.spot.ui.presentation.auth.screens.signup.navigation.signUpScreen
 import com.example.spot.ui.presentation.create_profile.navigation.CreateProfileDestination
 import com.example.spot.ui.presentation.create_profile.navigation.createProfileScreen
+import com.example.spot.ui.presentation.details_establishment.details.navigation.DetailsDestination
+import com.example.spot.ui.presentation.details_establishment.details.navigation.detailsScreen
 import com.example.spot.ui.presentation.details_establishment.services.navigation.ServicesDestination
 import com.example.spot.ui.presentation.details_establishment.services.navigation.servicesScreen
 import com.example.spot.ui.presentation.main_screen.home.navigation.homeScreen
+import com.example.spot.ui.presentation.main_screen.main.navigation.MainScreenDestination
+import com.example.spot.ui.presentation.main_screen.main.navigation.mainScreen
 import com.example.spot.ui.presentation.main_screen.profile.navigation.profileScreen
 
 @Composable
@@ -27,15 +31,17 @@ fun AppNavHost(
 ) {
     val navController = rememberNavController()
     NavHost(navController = navController, startDestination = MainScreenDestination) {
+        detailsScreen()
+
         mainScreen(
             onNavigateToSignIn = { navController.navigate(SignInDestination) },
-            onNavigateToServices = { navController.navigate(ServicesDestination) },
+            onNavigateToDetails = { navController.navigate(DetailsDestination) },
             isDarkTheme = isDarkTheme,
             onThemeToggle = onThemeToggle
         )
 
         homeScreen(
-            onNavigateToServices = { navController.navigate(ServicesDestination) }
+            onNavigateToDetails = { navController.navigate(ServicesDestination) }
         )
 
         signInScreen(
@@ -82,8 +88,6 @@ fun AppNavHost(
             onThemeToggle = onThemeToggle
         )
 
-        servicesScreen(
-            onBack = { navController.popBackStack() }
-        )
+        servicesScreen()
     }
 }

@@ -1,4 +1,4 @@
-package com.example.spot.ui.presentation.details_establishment.services
+package com.example.spot.ui.presentation.details_establishment.reviews
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -8,9 +8,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 
-
 @Composable
-fun ServicesScreen(
+fun ReviewsScreen(
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -20,7 +19,7 @@ fun ServicesScreen(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            "Services Screen"
+            "Reviews Screen"
         )
     }
 }

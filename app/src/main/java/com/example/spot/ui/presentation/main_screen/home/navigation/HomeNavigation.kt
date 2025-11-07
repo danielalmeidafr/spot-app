@@ -9,11 +9,11 @@ import kotlinx.serialization.Serializable
 object HomeDestination
 
 fun NavGraphBuilder.homeScreen(
-    onNavigateToServices: () -> Unit
+    onNavigateToDetails: () -> Unit
 ) {
     composable<HomeDestination> {
         HomeScreen(
-            onNavigateToServices = onNavigateToServices
+            onNavigateToDetails = onNavigateToDetails
         )
     }
 }

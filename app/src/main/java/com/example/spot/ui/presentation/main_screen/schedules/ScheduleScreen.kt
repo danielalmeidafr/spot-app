@@ -110,7 +110,17 @@ fun ScheduleScreen(
                             Spacer(modifier = Modifier.height(12.dp))
 
                             Text(
-                                text = "Agende novos serviços para vê-los aqui",
+                                text = when {
+                                    selectedYear > LocalDate.now().year ||
+                                            (selectedYear == LocalDate.now().year && selectedMonth > LocalDate.now().monthValue) ->
+                                        "Agende novos serviços para vê-los aqui"
+
+                                    selectedYear == LocalDate.now().year && selectedMonth == LocalDate.now().monthValue ->
+                                        "Agende novos serviços para este mês"
+
+                                    else ->
+                                        "Você não teve nenhum agendamento neste mês"
+                                },
                                 style = MaterialTheme.typography.bodySmall,
                                 color = MaterialTheme.colorScheme.onBackground
                             )
