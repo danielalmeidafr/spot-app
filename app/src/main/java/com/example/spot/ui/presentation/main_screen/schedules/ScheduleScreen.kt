@@ -119,7 +119,7 @@ fun ScheduleScreen(
                                         "Agende novos serviços para este mês"
 
                                     else ->
-                                        "Você não teve nenhum agendamento neste mês"
+                                        "Nenhum serviço foi agendado neste mês"
                                 },
                                 style = MaterialTheme.typography.bodySmall,
                                 color = MaterialTheme.colorScheme.onBackground
