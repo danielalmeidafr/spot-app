@@ -1,7 +1,6 @@
 package com.example.spot.ui.presentation.main_screen.main
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -45,7 +44,6 @@ import com.example.spot.ui.presentation.main_screen.home.HomeScreen
 import com.example.spot.ui.presentation.main_screen.profile.ProfileScreen
 import com.example.spot.ui.presentation.main_screen.schedules.ScheduleScreen
 import com.student.R
-import kotlinx.coroutines.delay
 
 class BottomAppBarItem(
     val selectedIcon: Int,
@@ -163,25 +161,6 @@ fun MainScreen(
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     screens.forEach { navItem ->
-                        val isSelected = currentScreen == navItem
-
-                        var shouldLift by remember { mutableStateOf(false) }
-
-                        LaunchedEffect(isSelected) {
-                            if (isSelected) {
-                                delay(100)
-                                shouldLift = true
-                            } else {
-                                shouldLift = false
-                            }
-                        }
-
-                        val offsetY by animateDpAsState(
-                            targetValue = if (shouldLift) (-3).dp else 0.dp,
-                            animationSpec = tween(durationMillis = 350),
-                            label = "offsetAnim"
-                        )
-
                         NavigationBarItem(
                             selected = currentScreen == navItem,
                             onClick = {
@@ -201,7 +180,6 @@ fun MainScreen(
                                     tint = MaterialTheme.colorScheme.onBackground,
                                     modifier = Modifier
                                         .size(18.dp)
-                                        .offset(y = offsetY)
                                 )
                             },
                             label = {
@@ -209,7 +187,6 @@ fun MainScreen(
                                     navItem.bottomAppBarItem.label,
                                     style = MaterialTheme.typography.bodySmall.copy(fontSize = 8.sp),
                                     color = MaterialTheme.colorScheme.onBackground,
-                                    modifier = Modifier.offset(y = offsetY)
                                 )
                             },
                             colors = NavigationBarItemDefaults.colors(
