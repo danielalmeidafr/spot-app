@@ -4,17 +4,16 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.BottomAppBar
+import androidx.compose.material3.BottomAppBarDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarDefaults
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -25,7 +24,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import com.example.spot.ui.presentation.details_establishment.description.DescriptionScreen
 import com.example.spot.ui.presentation.details_establishment.reviews.ReviewsScreen
 import com.example.spot.ui.presentation.details_establishment.services.ServicesScreen
@@ -56,9 +55,11 @@ sealed class ScreenItem(
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DetailsScreen(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onBack: () -> Unit
 ) {
     val screens = remember {
         listOf(
@@ -80,58 +81,40 @@ fun DetailsScreen(
         currentScreen = screens[pagerState.targetPage]
     }
 
+    val scrollBehavior = BottomAppBarDefaults.exitAlwaysScrollBehavior()
+
     Scaffold(
-        modifier = modifier,
+        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         bottomBar = {
-            Surface(
-                shape = RoundedCornerShape(topStart = 15.dp, topEnd = 15.dp),
-                color = MaterialTheme.colorScheme.surfaceContainer,
-                modifier = Modifier
-                    .height(100.dp)
-                    .fillMaxWidth()
-                    .offset(y = 40.dp)
-            ) {}
-
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .offset(y = 12.dp),
-                contentAlignment = Alignment.Center
+            BottomAppBar(
+                modifier = modifier.fillMaxWidth(),
+                scrollBehavior = scrollBehavior
             ) {
-                Surface(
-                    shape = RoundedCornerShape(100.dp),
-                    shadowElevation = 0.8.dp,
-                    color = MaterialTheme.colorScheme.surfaceContainer,
-                    modifier = Modifier
-                        .height(55.dp)
-                        .fillMaxWidth(0.95f)
-                ) {}
-            }
+                NavigationBar(
+                    containerColor = Color.Transparent,
+                    windowInsets = NavigationBarDefaults.windowInsets,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    screens.forEach { navItem ->
+                        val isSelected = currentScreen == navItem
 
-            NavigationBar(
-                containerColor = Color.Transparent,
-                windowInsets = NavigationBarDefaults.windowInsets,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                screens.forEach { navItem ->
-                    val isSelected = currentScreen == navItem
-
-                    Box(
-                        modifier = Modifier
-                            .weight(1f)
-                            .clickable(
-                                interactionSource = remember { MutableInteractionSource() },
-                                indication = null
-                            ) {
-                                currentScreen = navItem
-                            },
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Text(
-                            text = navItem.bottomAppBarItem.label,
-                            style = MaterialTheme.typography.bodySmall,
-                            color = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onBackground,
-                        )
+                        Box(
+                            modifier = Modifier
+                                .weight(1f)
+                                .clickable(
+                                    interactionSource = remember { MutableInteractionSource() },
+                                    indication = null
+                                ) {
+                                    currentScreen = navItem
+                                },
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Text(
+                                text = navItem.bottomAppBarItem.label,
+                                style = MaterialTheme.typography.bodySmall,
+                                color = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onBackground,
+                            )
+                        }
                     }
                 }
             }
@@ -143,7 +126,10 @@ fun DetailsScreen(
         ) { page ->
             val item = screens[page]
             when (item) {
-                ScreenItem.Services -> ServicesScreen()
+                ScreenItem.Services -> ServicesScreen(
+                    onBack = onBack
+                )
+
                 ScreenItem.Reviews -> ReviewsScreen()
                 ScreenItem.Details -> DescriptionScreen()
             }

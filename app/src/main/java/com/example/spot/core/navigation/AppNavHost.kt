@@ -30,8 +30,10 @@ fun AppNavHost(
     onThemeToggle: () -> Unit
 ) {
     val navController = rememberNavController()
-    NavHost(navController = navController, startDestination = MainScreenDestination) {
-        detailsScreen()
+    NavHost(navController = navController, startDestination = DetailsDestination) {
+        detailsScreen(
+            onBack = { navController.popBackStack() }
+        )
 
         mainScreen(
             onNavigateToSignIn = { navController.navigate(SignInDestination) },
@@ -88,6 +90,8 @@ fun AppNavHost(
             onThemeToggle = onThemeToggle
         )
 
-        servicesScreen()
+        servicesScreen(
+            onBack = { navController.popBackStack() }
+        )
     }
 }

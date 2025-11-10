@@ -5,14 +5,22 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -24,6 +32,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.spot.core.theme.SpotTheme
 import com.example.spot.ui.presentation.details_establishment.services.components.Service
@@ -33,7 +42,8 @@ import com.student.R
 
 @Composable
 fun ServicesScreen(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onBack: () -> Unit
 ) {
     val viewModel: ServicesViewModel = viewModel()
     val state by viewModel.state.collectAsState()
@@ -52,7 +62,8 @@ fun ServicesScreen(
                 modifier = Modifier
                     .fillMaxSize()
                     .background(MaterialTheme.colorScheme.background),
-                verticalArrangement = Arrangement.Top
+                verticalArrangement = Arrangement.Top,
+                contentPadding = WindowInsets.navigationBars.asPaddingValues()
             ) {
                 item {
                     Box(
@@ -60,6 +71,24 @@ fun ServicesScreen(
                             .fillMaxWidth()
                             .height(280.dp)
                     ) {
+                        Surface(
+                            modifier = Modifier
+                                .statusBarsPadding()
+                                .padding(start = 25.dp)
+                                .size(40.dp)
+                                .zIndex(2f),
+                            color = MaterialTheme.colorScheme.surface,
+                            shape = RoundedCornerShape(100.dp),
+                            onClick = onBack
+                        ) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.arrow_back),
+                                contentDescription = "Botão de voltar",
+                                tint = MaterialTheme.colorScheme.onBackground,
+                                modifier = Modifier.padding(8.dp)
+                            )
+                        }
+
                         Image(
                             painter = painterResource(id = R.drawable.establishment_image),
                             contentDescription = "Imagens da barberia",
@@ -143,6 +172,8 @@ fun ServicesScreenPreview(
 
 ) {
     SpotTheme {
-        ServicesScreen()
+        ServicesScreen(
+            onBack = {}
+        )
     }
 }

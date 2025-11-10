@@ -11,8 +11,11 @@ import kotlinx.serialization.Serializable
 object DetailsDestination
 
 fun NavGraphBuilder.detailsScreen(
+    onBack: () -> Unit
 ) {
     composable<DetailsDestination> {
-        DetailsScreen()
+        DetailsScreen(
+            onBack = onBack
+        )
     }
 }
