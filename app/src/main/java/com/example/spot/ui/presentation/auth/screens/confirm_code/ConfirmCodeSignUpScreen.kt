@@ -1,5 +1,7 @@
 package com.example.spot.ui.presentation.auth.screens.confirm_code
 
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -16,8 +18,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.SnackbarDuration
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -26,12 +26,14 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -42,41 +44,42 @@ import com.example.spot.ui.components.PrimaryButton
 import com.example.spot.ui.presentation.auth.model.AuthState
 import com.example.spot.ui.presentation.auth.viewmodel.AuthViewModel
 import com.student.R
+import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun ConfirmCodeScreen(
+fun ConfirmCodeSignUpScreen(
     onBack: () -> Unit,
-    onNavigateToNewPassword: (String, String) -> Unit,
     onNavigateToCreateProfile: () -> Unit,
     email: String,
-    isSignUp: Boolean
+    password: String
 ) {
     val viewModel = koinViewModel<AuthViewModel>()
     val state by viewModel.state.collectAsState()
     val isKeyboardVisible = rememberKeyboardVisibility()
-    val snackbarHostState = remember { SnackbarHostState() }
 
     var code by remember { mutableStateOf("") }
 
     val codeFocusRequester = remember { FocusRequester() }
 
+    val shakeOffset = remember { Animatable(0f) }
+
+    val coroutineScope = rememberCoroutineScope()
+    fun shake(anim: Animatable<Float, *>, intensity: Float = 10f) {
+        coroutineScope.launch {
+            repeat(3) {
+                anim.animateTo(intensity, tween(50))
+                anim.animateTo(-intensity, tween(50))
+            }
+            anim.animateTo(0f, tween(50))
+        }
+    }
+
     LaunchedEffect(state) {
         when (val a = state) {
-            is AuthState.Error -> {
-                snackbarHostState.showSnackbar(
-                    message = a.message,
-                    duration = SnackbarDuration.Short
-                )
-            }
+            is AuthState.Error -> shake(shakeOffset, 8f)
 
-            is AuthState.Success -> {
-                if (isSignUp) {
-                    onNavigateToCreateProfile()
-                } else {
-                    onNavigateToNewPassword(email, code)
-                }
-            }
+            is AuthState.Success -> onNavigateToCreateProfile()
 
             else -> Unit
         }
@@ -91,7 +94,7 @@ fun ConfirmCodeScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .background(MaterialTheme.colorScheme.surface)
-                .padding(bottom = if (isKeyboardVisible) 320.dp else 0.dp)
+                .padding(bottom = if (isKeyboardVisible) 350.dp else 0.dp)
                 .statusBarsPadding()
         ) {
             Column(
@@ -126,7 +129,7 @@ fun ConfirmCodeScreen(
                 Spacer(modifier = Modifier.height(8.dp))
 
                 Text(
-                    text = if (isSignUp) "Se o e-mail digitado for válido, você receberá o código em alguns minutos." else "Se o e-mail digitado estiver cadastrado, você receberá o código em alguns minutos.",
+                    text = "Se o e-mail digitado for válido, você receberá o código em alguns minutos.",
                     style = MaterialTheme.typography.bodySmall.copy(fontSize = 12.sp),
                     color = MaterialTheme.colorScheme.onBackground.copy(0.7f)
                 )
@@ -153,15 +156,34 @@ fun ConfirmCodeScreen(
                     modifier = Modifier.focusRequester(codeFocusRequester)
                 )
 
+                when (val a = state){
+                    is AuthState.Error -> Text(
+                        text = a.message,
+                        color = MaterialTheme.colorScheme.tertiary,
+                        style = MaterialTheme.typography.bodySmall,
+                        modifier = Modifier
+                            .fillMaxWidth(0.9f)
+                            .padding(start = 8.dp, top = 10.dp)
+                            .graphicsLayer {
+                                translationX = shakeOffset.value
+                            }
+                    )
+
+                    else -> Unit
+                }
+
                 Spacer(modifier = Modifier.weight(1f))
 
                 PrimaryButton(
                     text = "Verificar",
                     isLoading = state is AuthState.Loading,
                     onClick = {
+                        val codeBlank = code.isBlank()
+
                         when {
-                            code.isBlank() -> codeFocusRequester.requestFocus()
-                            else -> viewModel.onConfirmCodeClicked(email, code)
+                            codeBlank -> codeFocusRequester.requestFocus()
+
+                            else -> viewModel.onConfirmCodeSignUpClicked(email, code, password)
                         }
                     }
                 )

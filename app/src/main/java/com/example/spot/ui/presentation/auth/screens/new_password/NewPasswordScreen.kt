@@ -18,8 +18,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.SnackbarDuration
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -43,7 +41,6 @@ import com.example.spot.core.util.clearFocusOnTap
 import com.example.spot.core.util.rememberKeyboardVisibility
 import com.example.spot.ui.components.CustomTextField
 import com.example.spot.ui.components.PrimaryButton
-import com.example.spot.ui.presentation.auth.components.passwordError
 import com.example.spot.ui.presentation.auth.model.AuthState
 import com.example.spot.ui.presentation.auth.viewmodel.AuthViewModel
 import com.student.R
@@ -60,22 +57,21 @@ fun NewPasswordScreen(
     val viewModel = koinViewModel<AuthViewModel>()
     val state by viewModel.state.collectAsState()
     val isKeyboardVisible = rememberKeyboardVisibility()
-    val snackbarHostState = remember { SnackbarHostState() }
-
 
     var newPassword by remember { mutableStateOf("") }
     var confirmNewPassword by remember { mutableStateOf("") }
 
-    var errorOnPassword by remember { mutableStateOf(false) }
+    var errorOnNewPasswordField by remember { mutableStateOf(false) }
+    var showError by remember { mutableStateOf(false) }
+
     var passwordMismatch by remember { mutableStateOf(false) }
 
     val newPasswordFocusRequester = remember { FocusRequester() }
     val confirmPasswordFocusRequester = remember { FocusRequester() }
 
+    val shakeOffset = remember { Animatable(0f) }
+
     val coroutineScope = rememberCoroutineScope()
-
-    val passwordShakeOffset = remember { Animatable(0f) }
-
     fun shake(anim: Animatable<Float, *>, intensity: Float = 10f) {
         coroutineScope.launch {
             repeat(3) {
@@ -87,20 +83,26 @@ fun NewPasswordScreen(
     }
 
     LaunchedEffect(newPassword, confirmNewPassword) {
-        passwordMismatch = confirmNewPassword.isNotEmpty() && (newPassword != confirmNewPassword)
+        passwordMismatch = confirmNewPassword.isNotBlank() && (newPassword != confirmNewPassword)
     }
 
 
     LaunchedEffect(state) {
         when (val a = state) {
             is AuthState.Error -> {
-                snackbarHostState.showSnackbar(
-                    message = a.message,
-                    duration = SnackbarDuration.Short
-                )
+                showError = true
+                errorOnNewPasswordField = false
+
+                if (a.message.contains("senha")) {
+                    errorOnNewPasswordField = true
+                    newPasswordFocusRequester.requestFocus()
+                }
+
+                shake(shakeOffset, 8f)
             }
 
             is AuthState.Success -> onNavigateToSignIn()
+
             else -> Unit
         }
     }
@@ -114,7 +116,7 @@ fun NewPasswordScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .background(MaterialTheme.colorScheme.surface)
-                .padding(bottom = if (isKeyboardVisible) 320.dp else 0.dp)
+                .padding(bottom = if (isKeyboardVisible) 350.dp else 0.dp)
                 .statusBarsPadding()
         ) {
             Column(
@@ -171,9 +173,13 @@ fun NewPasswordScreen(
 
                 CustomTextField(
                     value = newPassword,
-                    onValueChange = { newPassword = it },
+                    onValueChange = {
+                        newPassword = it
+                        errorOnNewPasswordField = false
+                        showError = false
+                    },
                     placeholderText = "Nova senha:",
-                    isError = errorOnPassword,
+                    isError = errorOnNewPasswordField,
                     isPassword = true,
                     modifier = Modifier.focusRequester(newPasswordFocusRequester)
                 )
@@ -184,13 +190,13 @@ fun NewPasswordScreen(
                     value = confirmNewPassword,
                     onValueChange = { confirmNewPassword = it },
                     placeholderText = "Confirmar nova senha:",
-                    isError = errorOnPassword,
+                    isError = passwordMismatch,
                     isPassword = true,
                     modifier = Modifier.focusRequester(confirmPasswordFocusRequester)
                 )
 
-                when {
-                    passwordMismatch -> Text(
+                if (passwordMismatch) {
+                    Text(
                         text = "As senhas não coincidem",
                         color = MaterialTheme.colorScheme.tertiary,
                         style = MaterialTheme.typography.bodySmall,
@@ -198,23 +204,23 @@ fun NewPasswordScreen(
                             .fillMaxWidth(0.9f)
                             .padding(start = 8.dp, top = 10.dp)
                             .graphicsLayer {
-                                translationX = passwordShakeOffset.value
+                                translationX = shakeOffset.value
                             }
                     )
+                }
 
-                    errorOnPassword -> Text(
-                        text = "A senha informada não é válida.",
+                if (showError && state is AuthState.Error) {
+                    Text(
+                        text = (state as AuthState.Error).message,
                         color = MaterialTheme.colorScheme.tertiary,
                         style = MaterialTheme.typography.bodySmall,
                         modifier = Modifier
                             .fillMaxWidth(0.9f)
                             .padding(start = 8.dp, top = 10.dp)
                             .graphicsLayer {
-                                translationX = passwordShakeOffset.value
+                                translationX = shakeOffset.value
                             }
                     )
-
-                    else -> Unit
                 }
 
                 Spacer(modifier = Modifier.weight(1f))
@@ -223,17 +229,21 @@ fun NewPasswordScreen(
                     text = "Continuar",
                     isLoading = state is AuthState.Loading,
                     onClick = {
+                        val newPasswordBlank = newPassword.isBlank()
+                        val confirmNewPasswordBlank = confirmNewPassword.isBlank()
+
                         newPassword = newPassword.trim()
 
-                        val currentPasswordError = passwordError(newPassword) || newPassword.isBlank()
-
-                        errorOnPassword = currentPasswordError
-
                         when {
-                            currentPasswordError -> {
-                                newPasswordFocusRequester.requestFocus()
-                                shake(passwordShakeOffset, 8f)
+                            newPasswordBlank -> newPasswordFocusRequester.requestFocus()
+
+                            confirmNewPasswordBlank -> confirmPasswordFocusRequester.requestFocus()
+
+                            passwordMismatch -> {
+                                confirmPasswordFocusRequester.requestFocus()
+                                shake(shakeOffset, 8f)
                             }
+
                             else -> viewModel.onNewPasswordClicked(email, code, newPassword)
                         }
                     }

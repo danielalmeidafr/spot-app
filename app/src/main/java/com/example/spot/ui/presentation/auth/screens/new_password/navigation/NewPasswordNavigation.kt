@@ -4,7 +4,6 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
 import com.example.spot.ui.presentation.auth.screens.new_password.NewPasswordScreen
-import com.example.spot.ui.presentation.auth.screens.signup.SignUpScreen
 import kotlinx.serialization.Serializable
 
 @Serializable

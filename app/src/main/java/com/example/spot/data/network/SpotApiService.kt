@@ -1,11 +1,12 @@
 package com.example.spot.data.network
 
 import com.example.spot.data.dtos.auth.AuthResponse
-import com.example.spot.data.dtos.auth.code.ConfirmCodeRequest
+import com.example.spot.data.dtos.auth.code.ConfirmCodePasswordRequest
+import com.example.spot.data.dtos.auth.code.ConfirmCodeSignUpRequest
 import com.example.spot.data.dtos.auth.password.ForgotPasswordRequest
-import com.example.spot.data.dtos.auth.SignOutRequest
-import com.example.spot.data.dtos.auth.SignInRequest
-import com.example.spot.data.dtos.auth.SignUpRequest
+import com.example.spot.data.dtos.auth.sign.SignOutRequest
+import com.example.spot.data.dtos.auth.sign.SignInRequest
+import com.example.spot.data.dtos.auth.sign.SignUpRequest
 import com.example.spot.data.dtos.auth.password.NewPasswordRequest
 import com.example.spot.data.dtos.create_profile.CreateProfileRequest
 import com.example.spot.data.dtos.home.establishment.PagedEstablishmentsResponse
@@ -40,17 +41,20 @@ interface SpotApiService {
     @POST("api/authentication/logout")
     suspend fun signOut(@Body request: SignOutRequest)
 
-    @POST("api/authentication/signup")
-    suspend fun signUp(@Body request: SignUpRequest): AuthResponse
+    @POST("api/authentication/sign-up/request")
+    suspend fun signUp(@Body request: SignUpRequest)
+
+    @POST("api/authentication/sign-up/confirm")
+    suspend fun confirmCodeSignUp(@Body request: ConfirmCodeSignUpRequest): AuthResponse
 
     @POST("api/authentication/password-reset/request")
     suspend fun forgotPassword(@Body request: ForgotPasswordRequest)
 
+    @POST("api/authentication/password-reset/verify")
+    suspend fun confirmCodePassword(@Body request: ConfirmCodePasswordRequest)
+
     @POST("api/authentication/password-reset/confirm")
     suspend fun newPassword(@Body request: NewPasswordRequest)
-
-    @POST("api/authentication/password-reset/verify")
-    suspend fun confirmCode(@Body request: ConfirmCodeRequest)
 
     @POST("")
     suspend fun createProfile(@Body request: CreateProfileRequest)

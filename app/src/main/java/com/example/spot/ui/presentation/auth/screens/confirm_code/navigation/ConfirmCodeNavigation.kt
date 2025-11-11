@@ -3,29 +3,48 @@ package com.example.spot.ui.presentation.auth.screens.confirm_code.navigation
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
-import com.example.spot.ui.presentation.auth.screens.confirm_code.ConfirmCodeScreen
+import com.example.spot.ui.presentation.auth.screens.confirm_code.ConfirmCodePasswordScreen
+import com.example.spot.ui.presentation.auth.screens.confirm_code.ConfirmCodeSignUpScreen
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class ConfirmCodeDestination(
-    val email: String,
-    val isSignUp: Boolean
+data class ConfirmCodePasswordDestination(
+    val email: String
 )
 
-fun NavGraphBuilder.confirmCodeScreen(
-    onBack: () -> Unit,
-    onNavigateToNewPassword: (String, String) -> Unit,
-    onNavigateToCreateProfile: () -> Unit,
-) {
-    composable<ConfirmCodeDestination> { backStackEntry ->
-        val userEmail = backStackEntry.toRoute<ConfirmCodeDestination>()
+@Serializable
+data class ConfirmCodeSignUpDestination(
+    val email: String,
+    val password: String
+)
 
-        ConfirmCodeScreen (
+fun NavGraphBuilder.confirmCodePasswordScreen(
+    onBack: () -> Unit,
+    onNavigateToNewPassword: (String, String) -> Unit
+) {
+    composable<ConfirmCodePasswordDestination> { backStackEntry ->
+        val userEmail = backStackEntry.toRoute<ConfirmCodePasswordDestination>()
+
+        ConfirmCodePasswordScreen (
             onBack = onBack,
             onNavigateToNewPassword = onNavigateToNewPassword,
-            onNavigateToCreateProfile = onNavigateToCreateProfile,
             email = userEmail.email,
-            isSignUp = userEmail.isSignUp
+        )
+    }
+}
+
+fun NavGraphBuilder.confirmCodeSingUpScreen(
+    onBack: () -> Unit,
+    onNavigateToCreateProfile: () -> Unit
+) {
+    composable<ConfirmCodeSignUpDestination> { backStackEntry ->
+        val userEmailAndPassword = backStackEntry.toRoute<ConfirmCodeSignUpDestination>()
+
+        ConfirmCodeSignUpScreen (
+            onBack = onBack,
+            onNavigateToCreateProfile = onNavigateToCreateProfile,
+            email = userEmailAndPassword.email,
+            password = userEmailAndPassword.password
         )
     }
 }

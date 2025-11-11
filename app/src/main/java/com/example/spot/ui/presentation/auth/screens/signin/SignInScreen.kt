@@ -22,7 +22,6 @@ import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
@@ -54,8 +53,6 @@ import com.example.spot.core.util.clearFocusOnTap
 import com.example.spot.ui.components.CustomButton
 import com.example.spot.ui.components.CustomTextField
 import com.example.spot.ui.components.PrimaryButton
-import com.example.spot.ui.presentation.auth.components.emailError
-import com.example.spot.ui.presentation.auth.components.passwordError
 import com.example.spot.ui.presentation.auth.model.AuthState
 import com.example.spot.ui.presentation.auth.viewmodel.AuthViewModel
 import com.student.R
@@ -71,16 +68,15 @@ fun SignInScreen(
 ) {
     val viewModel = koinViewModel<AuthViewModel>()
     val state by viewModel.state.collectAsState()
-    val snackbarHostState = remember { SnackbarHostState() }
 
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
 
-    var errorOnEmail by remember { mutableStateOf(false) }
-    var errorOnPassword by remember { mutableStateOf(false) }
+    var errorOnEmailField by remember { mutableStateOf(false) }
+    var errorOnPasswordField by remember { mutableStateOf(false) }
+    var showError by remember { mutableStateOf(false) }
 
-    val emailShakeOffset = remember { Animatable(0f) }
-    val passwordShakeOffset = remember { Animatable(0f) }
+    val shakeOffset = remember { Animatable(0f) }
 
     val emailFocusRequester = remember { FocusRequester() }
     val passwordFocusRequester = remember { FocusRequester() }
@@ -100,254 +96,241 @@ fun SignInScreen(
     LaunchedEffect(state) {
         when (val a = state) {
             is AuthState.Error -> {
-                snackbarHostState.showSnackbar(
-                    message = a.message,
-                    duration = SnackbarDuration.Short
-                )
+                showError = true
+                errorOnEmailField = false
+                errorOnPasswordField = false
+
+                if (a.message.contains("e-mail")) {
+                    errorOnEmailField = true
+                    emailFocusRequester.requestFocus()
+                } else if (a.message.contains("senha")) {
+                    errorOnPasswordField = true
+                    passwordFocusRequester.requestFocus()
+                }
+
+                shake(shakeOffset, 8f)
             }
+
             is AuthState.Success -> onNavigateToMain()
             else -> Unit
         }
     }
 
-    Scaffold(
-        snackbarHost = { SnackbarHost(snackbarHostState) }
-    ) { paddingValues ->
-        Box(
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .clearFocusOnTap()
+    ) {
+        Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(paddingValues)
+                .background(MaterialTheme.colorScheme.surface)
+                .statusBarsPadding()
         ) {
-            Box(
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 20.dp)
+            ) {
+                Spacer(modifier = Modifier.height(50.dp))
+
+                Surface(
+                    onClick = onBack,
+                    modifier = Modifier.size(55.dp),
+                    shape = CircleShape,
+                    color = MaterialTheme.colorScheme.background
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.arrow_back),
+                        contentDescription = "Voltar",
+                        tint = MaterialTheme.colorScheme.onSurface.copy(0.8f),
+                        modifier = Modifier.padding(15.dp)
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(30.dp))
+
+                Text(
+                    "Entre na sua conta",
+                    style = MaterialTheme.typography.titleMedium,
+                    color = MaterialTheme.colorScheme.onBackground
+                )
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                Text(
+                    "Digite seu e-mail e senha para entrar.",
+                    style = MaterialTheme.typography.bodySmall.copy(fontSize = 12.sp),
+                    color = MaterialTheme.colorScheme.onBackground.copy(0.7f)
+                )
+
+                Spacer(modifier = Modifier.height(30.dp))
+            }
+
+
+            Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .clearFocusOnTap()
+                    .clip(RoundedCornerShape(topStart = 25.dp, topEnd = 25.dp))
+                    .background(MaterialTheme.colorScheme.background)
+                    .navigationBarsPadding(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Top
             ) {
-                Column(
+                Spacer(modifier = Modifier.height(40.dp))
+
+                CustomTextField(
+                    value = email,
+                    onValueChange = {
+                        email = it
+                        errorOnEmailField = false
+                        showError = false
+                    },
+                    placeholderText = "E-mail:",
+                    isError = errorOnEmailField,
+                    modifier = Modifier.focusRequester(emailFocusRequester)
+                )
+
+                Spacer(modifier = Modifier.height(30.dp))
+
+                CustomTextField(
+                    value = password,
+                    onValueChange = {
+                        password = it
+                        errorOnPasswordField = false
+                        showError = false
+                    },
+                    placeholderText = "Senha:",
+                    isPassword = true,
+                    isError = errorOnPasswordField,
+                    modifier = Modifier.focusRequester(passwordFocusRequester)
+                )
+
+                if (showError && state is AuthState.Error) {
+                    Text(
+                        text = (state as AuthState.Error).message,
+                        color = MaterialTheme.colorScheme.tertiary,
+                        style = MaterialTheme.typography.bodySmall,
+                        modifier = Modifier
+                            .fillMaxWidth(0.9f)
+                            .padding(start = 8.dp, top = 10.dp)
+                            .graphicsLayer {
+                                translationX = shakeOffset.value
+                            }
+                    )
+                }
+
+                TextButton(
+                    onClick = onNavigateToForgotPassword,
                     modifier = Modifier
-                        .fillMaxSize()
-                        .background(MaterialTheme.colorScheme.surface)
-                        .statusBarsPadding()
+                        .fillMaxWidth(0.95f)
+                        .wrapContentWidth(Alignment.End),
+                    colors = ButtonColors(
+                        disabledContainerColor = Color.Transparent,
+                        containerColor = Color.Transparent,
+                        contentColor = Color.Transparent,
+                        disabledContentColor = Color.Transparent
+                    )
                 ) {
-                    Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 20.dp)
-                    ) {
-                        Spacer(modifier = Modifier.height(50.dp))
+                    Text(
+                        buildAnnotatedString {
+                            append("Esqueceu sua ")
+                            withStyle(
+                                style = SpanStyle(
+                                    color = MaterialTheme.colorScheme.primary
+                                )
+                            ) {
+                                append("senha")
+                            }
+                            append("?")
+                        },
+                        style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.Bold),
+                        color = MaterialTheme.colorScheme.onBackground,
+                    )
+                }
 
-                        Surface(
-                            onClick = onBack,
-                            modifier = Modifier.size(55.dp),
-                            shape = CircleShape,
-                            color = MaterialTheme.colorScheme.background
-                        ) {
-                            Icon(
-                                painter = painterResource(id = R.drawable.arrow_back),
-                                contentDescription = "Voltar",
-                                tint = MaterialTheme.colorScheme.onSurface.copy(0.8f),
-                                modifier = Modifier.padding(15.dp)
-                            )
-                        }
+                PrimaryButton(
+                    text = "Entrar",
+                    isLoading = state is AuthState.Loading,
+                    onClick = {
+                        val emailBlank = email.isBlank()
+                        val passwordBlank = password.isBlank()
 
-                        Spacer(modifier = Modifier.height(30.dp))
-
-                        Text(
-                            "Entre na sua conta",
-                            style = MaterialTheme.typography.titleMedium,
-                            color = MaterialTheme.colorScheme.onBackground
-                        )
-
-                        Spacer(modifier = Modifier.height(8.dp))
-
-                        Text(
-                            "Digite seu e-mail e senha para entrar.",
-                            style = MaterialTheme.typography.bodySmall.copy(fontSize = 12.sp),
-                            color = MaterialTheme.colorScheme.onBackground.copy(0.7f)
-                        )
-
-                        Spacer(modifier = Modifier.height(30.dp))
-                    }
-
-
-                    Column(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .clip(RoundedCornerShape(topStart = 25.dp, topEnd = 25.dp))
-                            .background(MaterialTheme.colorScheme.background)
-                            .navigationBarsPadding(),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.Top
-                    ) {
-                        Spacer(modifier = Modifier.height(40.dp))
-
-                        CustomTextField(
-                            value = email,
-                            onValueChange = { email = it },
-                            placeholderText = "E-mail:",
-                            isError = errorOnEmail,
-                            modifier = Modifier.focusRequester(emailFocusRequester)
-                        )
-
-                        Spacer(modifier = Modifier.height(30.dp))
-
-                        CustomTextField(
-                            value = password,
-                            onValueChange = { password = it },
-                            placeholderText = "Senha:",
-                            isError = errorOnPassword,
-                            isPassword = true,
-                            modifier = Modifier.focusRequester(passwordFocusRequester)
-                        )
+                        email = email.trim()
+                        password = password.trim()
 
                         when {
-                            errorOnEmail -> Text(
-                                text = "O e-mail informado não é válido.",
-                                color = MaterialTheme.colorScheme.tertiary,
-                                style = MaterialTheme.typography.bodySmall,
-                                modifier = Modifier
-                                    .fillMaxWidth(0.9f)
-                                    .padding(start = 8.dp, top = 10.dp)
-                                    .graphicsLayer {
-                                        translationX = emailShakeOffset.value
-                                    }
-                            )
+                            emailBlank -> emailFocusRequester.requestFocus()
 
-                            errorOnPassword -> Text(
-                                text = "A senha informada não é válida.",
-                                color = MaterialTheme.colorScheme.tertiary,
-                                style = MaterialTheme.typography.bodySmall,
-                                modifier = Modifier
-                                    .fillMaxWidth(0.9f)
-                                    .padding(start = 8.dp, top = 10.dp)
-                                    .graphicsLayer {
-                                        translationX = passwordShakeOffset.value
-                                    }
-                            )
+                            passwordBlank -> passwordFocusRequester.requestFocus()
 
-                            else -> Unit
-                        }
-
-                        TextButton(
-                            onClick = onNavigateToForgotPassword,
-                            modifier = Modifier
-                                .fillMaxWidth(0.95f)
-                                .wrapContentWidth(Alignment.End),
-                            colors = ButtonColors(
-                                disabledContainerColor = Color.Transparent,
-                                containerColor = Color.Transparent,
-                                contentColor = Color.Transparent,
-                                disabledContentColor = Color.Transparent
-                            )
-                        ) {
-                            Text(
-                                buildAnnotatedString {
-                                    append("Esqueceu sua ")
-                                    withStyle(
-                                        style = SpanStyle(
-                                            color = MaterialTheme.colorScheme.primary
-                                        )
-                                    ) {
-                                        append("senha")
-                                    }
-                                    append("?")
-                                },
-                                style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.Bold),
-                                color = MaterialTheme.colorScheme.onBackground,
-                            )
-                        }
-
-                        PrimaryButton(
-                            text = "Entrar",
-                            isLoading = state is AuthState.Loading,
-                            onClick = {
-                                email = email.trim()
-                                password = password.trim()
-
-                                val currentEmailError = emailError(email) || email.isBlank()
-                                val currentPasswordError = passwordError(password) || password.isBlank()
-
-                                errorOnEmail = currentEmailError
-                                errorOnPassword = currentPasswordError
-
-                                when {
-                                    currentEmailError -> {
-                                        emailFocusRequester.requestFocus()
-                                        shake(emailShakeOffset, 8f)
-                                    }
-                                    currentPasswordError -> {
-                                        passwordFocusRequester.requestFocus()
-                                        shake(passwordShakeOffset, 8f)
-                                    }
-                                    else -> viewModel.onSignInClicked(email, password)
-                                }
-                            }
-                        )
-
-                        Spacer(modifier = Modifier.height(35.dp))
-
-                        Row(
-                            modifier = Modifier.fillMaxWidth(0.9f),
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Spacer(
-                                modifier = Modifier
-                                    .weight(1f)
-                                    .height(1.dp)
-                                    .background(MaterialTheme.colorScheme.onBackground.copy(alpha = 0.1f))
-                            )
-
-                            Text(
-                                "ou",
-                                style = MaterialTheme.typography.bodySmall.copy(
-                                    fontSize = 12.sp,
-                                    fontWeight = FontWeight.Bold
-                                ),
-                                color = MaterialTheme.colorScheme.onBackground,
-                                modifier = Modifier.padding(horizontal = 20.dp)
-                            )
-
-                            Spacer(
-                                modifier = Modifier
-                                    .weight(1f)
-                                    .height(1.dp)
-                                    .background(MaterialTheme.colorScheme.onBackground.copy(alpha = 0.1f))
-                            )
-                        }
-
-                        Spacer(modifier = Modifier.height(35.dp))
-
-                        Column(
-                            modifier = Modifier.fillMaxWidth(),
-                            verticalArrangement = Arrangement.Center,
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
-                            CustomButton(
-                                onClick = {},
-                                text = "Continuar com Google",
-                                imagePainter = R.drawable.google_logo
-                            )
-                        }
-
-                        Spacer(modifier = Modifier.height(15.dp))
-
-                        TextButton(
-                            onClick = onNavigateToSignup
-                        ) {
-                            Text(
-                                buildAnnotatedString {
-                                    append("Não tem uma conta? ")
-                                    withStyle(
-                                        style = SpanStyle(color = MaterialTheme.colorScheme.primary)
-                                    ) {
-                                        append("Cadastre-se")
-                                    }
-                                },
-                                style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.Bold),
-                                color = MaterialTheme.colorScheme.onBackground
-                            )
+                            else -> viewModel.onSignInClicked(email, password)
                         }
                     }
+                )
+
+                Spacer(modifier = Modifier.height(35.dp))
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(0.9f),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Spacer(
+                        modifier = Modifier
+                            .weight(1f)
+                            .height(1.dp)
+                            .background(MaterialTheme.colorScheme.onBackground.copy(alpha = 0.1f))
+                    )
+
+                    Text(
+                        "ou",
+                        style = MaterialTheme.typography.bodySmall.copy(
+                            fontSize = 12.sp,
+                            fontWeight = FontWeight.Bold
+                        ),
+                        color = MaterialTheme.colorScheme.onBackground,
+                        modifier = Modifier.padding(horizontal = 20.dp)
+                    )
+
+                    Spacer(
+                        modifier = Modifier
+                            .weight(1f)
+                            .height(1.dp)
+                            .background(MaterialTheme.colorScheme.onBackground.copy(alpha = 0.1f))
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(35.dp))
+
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    CustomButton(
+                        onClick = {},
+                        text = "Continuar com Google",
+                        imagePainter = R.drawable.google_logo
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(15.dp))
+
+                TextButton(
+                    onClick = onNavigateToSignup
+                ) {
+                    Text(
+                        buildAnnotatedString {
+                            append("Não tem uma conta? ")
+                            withStyle(
+                                style = SpanStyle(color = MaterialTheme.colorScheme.primary)
+                            ) {
+                                append("Cadastre-se")
+                            }
+                        },
+                        style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.Bold),
+                        color = MaterialTheme.colorScheme.onBackground
+                    )
                 }
             }
         }

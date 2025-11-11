@@ -3,8 +3,10 @@ package com.example.spot.core.navigation
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
-import com.example.spot.ui.presentation.auth.screens.confirm_code.navigation.ConfirmCodeDestination
-import com.example.spot.ui.presentation.auth.screens.confirm_code.navigation.confirmCodeScreen
+import com.example.spot.ui.presentation.auth.screens.confirm_code.navigation.ConfirmCodePasswordDestination
+import com.example.spot.ui.presentation.auth.screens.confirm_code.navigation.ConfirmCodeSignUpDestination
+import com.example.spot.ui.presentation.auth.screens.confirm_code.navigation.confirmCodePasswordScreen
+import com.example.spot.ui.presentation.auth.screens.confirm_code.navigation.confirmCodeSingUpScreen
 import com.example.spot.ui.presentation.auth.screens.forgot_password.navigation.ForgotPasswordDestination
 import com.example.spot.ui.presentation.auth.screens.forgot_password.navigation.forgotPasswordScreen
 import com.example.spot.ui.presentation.auth.screens.new_password.navigation.NewPasswordDestination
@@ -30,7 +32,7 @@ fun AppNavHost(
     onThemeToggle: () -> Unit
 ) {
     val navController = rememberNavController()
-    NavHost(navController = navController, startDestination = DetailsDestination) {
+    NavHost(navController = navController, startDestination = MainScreenDestination) {
         detailsScreen(
             onBack = { navController.popBackStack() }
         )
@@ -55,8 +57,15 @@ fun AppNavHost(
 
         forgotPasswordScreen(
             onBack = { navController.popBackStack() },
-            onNavigateToConfirmCode = { email ->
-                navController.navigate(ConfirmCodeDestination(email, false))
+            onNavigateToConfirmCodePassword = { email ->
+                navController.navigate(ConfirmCodePasswordDestination(email))
+            }
+        )
+
+        confirmCodePasswordScreen(
+            onBack = { navController.popBackStack() },
+            onNavigateToNewPassword = { email, code ->
+                navController.navigate(NewPasswordDestination(email, code))
             }
         )
 
@@ -67,16 +76,13 @@ fun AppNavHost(
 
         signUpScreen(
             onBack = { navController.popBackStack() },
-            onNavigateToConfirmCode = { email ->
-                navController.navigate(ConfirmCodeDestination(email, true))
+            onNavigateToConfirmCodeSignUp = { email, password ->
+                navController.navigate(ConfirmCodeSignUpDestination(email, password))
             }
         )
 
-        confirmCodeScreen(
+        confirmCodeSingUpScreen(
             onBack = { navController.popBackStack() },
-            onNavigateToNewPassword = { email, code ->
-                navController.navigate(NewPasswordDestination(email, code))
-            },
             onNavigateToCreateProfile = { navController.navigate(CreateProfileDestination) }
         )
 

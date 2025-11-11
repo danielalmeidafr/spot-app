@@ -4,6 +4,7 @@ import android.app.Application
 import com.example.spot.data.di.networkModule
 import com.example.spot.data.di.repositoryModule
 import com.example.spot.data.di.storageModule
+import com.example.spot.data.di.useCaseModule
 import com.example.spot.data.di.viewModelModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
@@ -21,7 +22,8 @@ class SpotApplication : Application() {
                     storageModule,
                     repositoryModule,
                     networkModule,
-                    viewModelModule
+                    viewModelModule,
+                    useCaseModule
                 )
             )
         }

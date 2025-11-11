@@ -19,8 +19,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.SnackbarDuration
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -49,8 +47,6 @@ import com.example.spot.core.util.clearFocusOnTap
 import com.example.spot.ui.components.CustomButton
 import com.example.spot.ui.components.CustomTextField
 import com.example.spot.ui.components.PrimaryButton
-import com.example.spot.ui.presentation.auth.components.emailError
-import com.example.spot.ui.presentation.auth.components.passwordError
 import com.example.spot.ui.presentation.auth.model.AuthState
 import com.example.spot.ui.presentation.auth.viewmodel.AuthViewModel
 import com.student.R
@@ -60,27 +56,26 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun SignUpScreen(
     onBack: () -> Unit,
-    onNavigateToConfirmCode: (String) -> Unit
+    onNavigateToConfirmCodeSignUp: (String, String) -> Unit
 ) {
     val viewModel = koinViewModel<AuthViewModel>()
     val state by viewModel.state.collectAsState()
-    val snackbarHostState = remember { SnackbarHostState() }
 
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var confirmPassword by remember { mutableStateOf("") }
     var agreed by remember { mutableStateOf(false) }
 
-    var errorOnEmail by remember { mutableStateOf(false) }
-    var errorOnPassword by remember { mutableStateOf(false) }
+    var errorOnEmailField by remember { mutableStateOf(false) }
+    var errorOnPasswordField by remember { mutableStateOf(false) }
     var passwordMismatch by remember { mutableStateOf(false) }
+    var showError by remember { mutableStateOf(false) }
 
     val emailFocusRequester = remember { FocusRequester() }
     val passwordFocusRequester = remember { FocusRequester() }
     val confirmFocusRequester = remember { FocusRequester() }
 
-    val emailShakeOffset = remember { Animatable(0f) }
-    val passwordShakeOffset = remember { Animatable(0f) }
+    val shakeOffset = remember { Animatable(0f) }
     val termsShakeOffset = remember { Animatable(0f) }
 
     val coroutineScope = rememberCoroutineScope()
@@ -102,14 +97,24 @@ fun SignUpScreen(
     LaunchedEffect(state) {
         when (val a = state) {
             is AuthState.Error -> {
-                snackbarHostState.showSnackbar(
-                    message = a.message,
-                    duration = SnackbarDuration.Short
-                )
+                showError = true
+                errorOnEmailField = false
+                errorOnPasswordField = false
+
+                if (a.message.contains("e-mail")) {
+                    errorOnEmailField = true
+                    emailFocusRequester.requestFocus()
+                } else if (a.message.contains("senha")) {
+                    errorOnPasswordField = true
+                    passwordFocusRequester.requestFocus()
+                }
+
+                shake(shakeOffset, 8f)
             }
 
             is AuthState.Success -> {
-                onNavigateToConfirmCode(email)
+                showError = false
+                onNavigateToConfirmCodeSignUp(email, password)
             }
 
             else -> Unit
@@ -175,9 +180,13 @@ fun SignUpScreen(
 
                 CustomTextField(
                     value = email,
-                    onValueChange = { email = it },
+                    onValueChange = {
+                        email = it
+                        errorOnEmailField = false
+                        showError = false
+                    },
                     placeholderText = "E-mail:",
-                    isError = errorOnEmail,
+                    isError = errorOnEmailField,
                     modifier = Modifier.focusRequester(emailFocusRequester)
                 )
 
@@ -185,9 +194,13 @@ fun SignUpScreen(
 
                 CustomTextField(
                     value = password,
-                    onValueChange = { password = it },
+                    onValueChange = {
+                        password = it
+                        errorOnPasswordField = false
+                        showError = false
+                    },
                     placeholderText = "Senha:",
-                    isError = errorOnPassword,
+                    isError = errorOnPasswordField,
                     isPassword = true,
                     modifier = Modifier.focusRequester(passwordFocusRequester)
                 )
@@ -198,13 +211,13 @@ fun SignUpScreen(
                     value = confirmPassword,
                     onValueChange = { confirmPassword = it },
                     placeholderText = "Confirmar senha:",
-                    isError = errorOnPassword,
+                    isError = passwordMismatch,
                     isPassword = true,
                     modifier = Modifier.focusRequester(confirmFocusRequester)
                 )
 
-                when {
-                    passwordMismatch -> Text(
+                if (passwordMismatch) {
+                    Text(
                         text = "As senhas não coincidem",
                         color = MaterialTheme.colorScheme.tertiary,
                         style = MaterialTheme.typography.bodySmall,
@@ -212,35 +225,27 @@ fun SignUpScreen(
                             .fillMaxWidth(0.9f)
                             .padding(start = 8.dp, top = 10.dp)
                             .graphicsLayer {
-                                translationX = passwordShakeOffset.value
+                                translationX = shakeOffset.value
                             }
                     )
+                } else {
+                    Spacer(modifier = Modifier.height(5.dp))
+                }
 
-                    errorOnEmail -> Text(
-                        text = "O e-mail informado não é válido.",
+                if (showError && state is AuthState.Error) {
+                    Text(
+                        text = (state as AuthState.Error).message,
                         color = MaterialTheme.colorScheme.tertiary,
                         style = MaterialTheme.typography.bodySmall,
                         modifier = Modifier
                             .fillMaxWidth(0.9f)
                             .padding(start = 8.dp, top = 10.dp)
                             .graphicsLayer {
-                                translationX = emailShakeOffset.value
+                                translationX = shakeOffset.value
                             }
                     )
-
-                    errorOnPassword -> Text(
-                        text = "A senha informada não é válida.",
-                        color = MaterialTheme.colorScheme.tertiary,
-                        style = MaterialTheme.typography.bodySmall,
-                        modifier = Modifier
-                            .fillMaxWidth(0.9f)
-                            .padding(start = 8.dp, top = 10.dp)
-                            .graphicsLayer {
-                                translationX = passwordShakeOffset.value
-                            }
-                    )
-
-                    else -> Spacer(modifier = Modifier.height(5.dp))
+                } else {
+                    Spacer(modifier = Modifier.height(5.dp))
                 }
 
                 Row(
@@ -281,27 +286,27 @@ fun SignUpScreen(
                     text = "Cadastrar",
                     isLoading = state is AuthState.Loading,
                     onClick = {
+                        val emailBlank = email.isBlank()
+                        val passwordBlank = password.isBlank()
+                        val confirmPasswordBlank = confirmPassword.isBlank()
+
                         email = email.trim()
                         password = password.trim()
 
-                        val currentEmailError = emailError(email) || email.isBlank()
-                        val currentPasswordError = passwordError(password) || password.isBlank()
-
-                        errorOnEmail = currentEmailError
-                        errorOnPassword = currentPasswordError
-
                         when {
-                            currentEmailError -> {
-                                emailFocusRequester.requestFocus()
-                                shake(emailShakeOffset, 8f)
+                            emailBlank -> emailFocusRequester.requestFocus()
+
+                            passwordBlank -> passwordFocusRequester.requestFocus()
+
+                            confirmPasswordBlank -> confirmFocusRequester.requestFocus()
+
+                            passwordMismatch -> {
+                                confirmFocusRequester.requestFocus()
+                                shake(shakeOffset, 8f)
                             }
-                            currentPasswordError -> {
-                                passwordFocusRequester.requestFocus()
-                                shake(passwordShakeOffset, 8f)
-                            }
-                            confirmPassword.isBlank() -> confirmFocusRequester.requestFocus()
-                            passwordMismatch -> shake(passwordShakeOffset, 8f)
+
                             !agreed -> shake(termsShakeOffset, 8f)
+
                             else -> viewModel.onSignUpClicked(email, password)
                         }
                     }

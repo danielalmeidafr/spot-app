@@ -1,4 +1,4 @@
-package com.example.spot.ui.presentation.auth.screens.forgot_password
+package com.example.spot.ui.presentation.auth.screens.confirm_code
 
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
@@ -48,19 +48,18 @@ import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun ForgotPasswordScreen(
+fun ConfirmCodePasswordScreen(
     onBack: () -> Unit,
-    onNavigateToConfirmCodePassword: (String) -> Unit
+    onNavigateToNewPassword: (String, String) -> Unit,
+    email: String
 ) {
     val viewModel = koinViewModel<AuthViewModel>()
     val state by viewModel.state.collectAsState()
     val isKeyboardVisible = rememberKeyboardVisibility()
 
-    var email by remember { mutableStateOf("") }
-    var errorOnEmailField by remember { mutableStateOf(false) }
-    var showError by remember { mutableStateOf(false) }
+    var code by remember { mutableStateOf("") }
 
-    val emailFocusRequester = remember { FocusRequester() }
+    val codeFocusRequester = remember { FocusRequester() }
 
     val shakeOffset = remember { Animatable(0f) }
 
@@ -77,19 +76,9 @@ fun ForgotPasswordScreen(
 
     LaunchedEffect(state) {
         when (val a = state) {
-            is AuthState.Error -> {
-                errorOnEmailField = false
-                showError = true
+            is AuthState.Error -> shake(shakeOffset, 8f)
 
-                if (a.message.contains("e-mail")) {
-                    errorOnEmailField = true
-                    emailFocusRequester.requestFocus()
-                }
-
-                shake(shakeOffset, 8f)
-            }
-
-            is AuthState.Success -> onNavigateToConfirmCodePassword(email)
+            is AuthState.Success -> onNavigateToNewPassword(email, code)
 
             else -> Unit
         }
@@ -131,7 +120,7 @@ fun ForgotPasswordScreen(
                 Spacer(modifier = Modifier.height(30.dp))
 
                 Text(
-                    "Encontre sua conta",
+                    "Confirme sua Identidade",
                     style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.onBackground
                 )
@@ -139,7 +128,7 @@ fun ForgotPasswordScreen(
                 Spacer(modifier = Modifier.height(8.dp))
 
                 Text(
-                    "Insira seu email para redefenir a senha.",
+                    text = "Se o e-mail digitado estiver cadastrado, você receberá o código em alguns minutos.",
                     style = MaterialTheme.typography.bodySmall.copy(fontSize = 12.sp),
                     color = MaterialTheme.colorScheme.onBackground.copy(0.7f)
                 )
@@ -160,20 +149,15 @@ fun ForgotPasswordScreen(
                 Spacer(modifier = Modifier.height(40.dp))
 
                 CustomTextField(
-                    value = email,
-                    onValueChange = {
-                        email = it
-                        errorOnEmailField = false
-                        showError = false
-                    },
-                    placeholderText = "E-mail:",
-                    isError = errorOnEmailField,
-                    modifier = Modifier.focusRequester(emailFocusRequester)
+                    value = code,
+                    onValueChange = { code = it },
+                    placeholderText = "Código:",
+                    modifier = Modifier.focusRequester(codeFocusRequester)
                 )
 
-                if (showError && state is AuthState.Error) {
-                    Text(
-                        text = (state as AuthState.Error).message,
+                when (val a = state){
+                    is AuthState.Error -> Text(
+                        text = a.message,
                         color = MaterialTheme.colorScheme.tertiary,
                         style = MaterialTheme.typography.bodySmall,
                         modifier = Modifier
@@ -183,22 +167,22 @@ fun ForgotPasswordScreen(
                                 translationX = shakeOffset.value
                             }
                     )
+
+                    else -> Unit
                 }
 
                 Spacer(modifier = Modifier.weight(1f))
 
                 PrimaryButton(
-                    text = "Continuar",
+                    text = "Verificar",
                     isLoading = state is AuthState.Loading,
                     onClick = {
-                        val emailBlank = email.isBlank()
-
-                        email = email.trim()
+                        val codeBlank = code.isBlank()
 
                         when {
-                            emailBlank -> emailFocusRequester.requestFocus()
+                            codeBlank -> codeFocusRequester.requestFocus()
 
-                            else -> viewModel.onForgotPasswordClicked(email)
+                            else -> viewModel.onConfirmCodePasswordClicked(email, code)
                         }
                     }
                 )
