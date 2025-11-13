@@ -12,12 +12,6 @@ data class ConfirmCodePasswordDestination(
     val email: String
 )
 
-@Serializable
-data class ConfirmCodeSignUpDestination(
-    val email: String,
-    val password: String
-)
-
 fun NavGraphBuilder.confirmCodePasswordScreen(
     onBack: () -> Unit,
     onNavigateToNewPassword: (String, String) -> Unit
@@ -29,22 +23,6 @@ fun NavGraphBuilder.confirmCodePasswordScreen(
             onBack = onBack,
             onNavigateToNewPassword = onNavigateToNewPassword,
             email = userEmail.email,
-        )
-    }
-}
-
-fun NavGraphBuilder.confirmCodeSingUpScreen(
-    onBack: () -> Unit,
-    onNavigateToCreateProfile: () -> Unit
-) {
-    composable<ConfirmCodeSignUpDestination> { backStackEntry ->
-        val userEmailAndPassword = backStackEntry.toRoute<ConfirmCodeSignUpDestination>()
-
-        ConfirmCodeSignUpScreen (
-            onBack = onBack,
-            onNavigateToCreateProfile = onNavigateToCreateProfile,
-            email = userEmailAndPassword.email,
-            password = userEmailAndPassword.password
         )
     }
 }

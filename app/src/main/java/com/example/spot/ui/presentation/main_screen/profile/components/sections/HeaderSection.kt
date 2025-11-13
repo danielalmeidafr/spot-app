@@ -24,17 +24,6 @@ fun HeaderSection(
     val themeIconRes = if (isDarkTheme) R.drawable.light else R.drawable.dark
 
     Box(modifier = Modifier.fillMaxWidth()) {
-        Icon(
-            painter = painterResource(themeIconRes),
-            contentDescription = if (isDarkTheme) "Ativar modo claro" else "Ativar modo escuro",
-            tint = MaterialTheme.colorScheme.onBackground,
-            modifier = Modifier
-                .align(Alignment.CenterStart)
-                .padding(start = 20.dp)
-                .size(18.dp)
-                .clickable { onThemeToggle() }
-        )
-
         Text(
             "PERFIL",
             style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.SemiBold),
@@ -43,13 +32,14 @@ fun HeaderSection(
         )
 
         Icon(
-            painter = painterResource(id = R.drawable.settings),
-            contentDescription = "Configurações",
+            painter = painterResource(id = themeIconRes),
+            contentDescription = if (isDarkTheme) "Ativar modo claro" else "Ativar modo escuro",
             tint = MaterialTheme.colorScheme.onBackground,
             modifier = Modifier
                 .align(Alignment.CenterEnd)
                 .padding(end = 20.dp)
                 .size(18.dp)
+                .clickable { onThemeToggle() }
         )
     }
 }

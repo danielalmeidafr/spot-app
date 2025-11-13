@@ -45,6 +45,8 @@ android {
 }
 
 dependencies {
+    implementation("io.coil-kt:coil-compose:2.2.2")
+
     implementation(libs.androidx.datastore.preferences)
 
     implementation(libs.koin.android)
