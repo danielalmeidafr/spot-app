@@ -59,15 +59,18 @@ fun CreateProfileScreen(
     val fullNameFocusRequester = remember { FocusRequester() }
     val nicknameFocusRequester = remember { FocusRequester() }
     val birthDateFocusRequester = remember { FocusRequester() }
+    val genderFocusRequester = remember { FocusRequester() }
 
     LaunchedEffect(state) {
         when (val a = state) {
             is CreateProfileState.Error -> {
                 Toast.makeText(context, a.message, Toast.LENGTH_LONG).show()
             }
+
             is CreateProfileState.Success -> {
                 onNavigateToMain()
             }
+
             else -> Unit
         }
     }
@@ -154,7 +157,8 @@ fun CreateProfileScreen(
 
                 GenderDropdown(
                     selectedGender = gender,
-                    onGenderSelected = { gender = it }
+                    onGenderSelected = { gender = it },
+                    modifier = Modifier.focusRequester(genderFocusRequester)
                 )
 
                 Spacer(modifier = Modifier.weight(1f))
@@ -163,11 +167,21 @@ fun CreateProfileScreen(
                     text = "Finalizar",
                     isLoading = state is CreateProfileState.Loading,
                     onClick = {
+                        var genderSelected: String = ""
+                        genderSelected = when (gender) {
+                            "Masculino" -> "MALE"
+
+                            "Feminino" -> "FEMALE"
+
+                            else -> "OTHER"
+                        }
+
                         when {
                             fullName.isBlank() -> fullNameFocusRequester.requestFocus()
                             nickname.isBlank() -> nicknameFocusRequester.requestFocus()
                             birthDate.isBlank() -> birthDateFocusRequester.requestFocus()
-                            else -> viewModel.onCreateProfileClicked(fullName, nickname, birthDate)
+                            gender.isEmpty() -> genderFocusRequester.requestFocus()
+                            else -> viewModel.onCreateProfileClicked(fullName, nickname, birthDate, genderSelected)
                         }
                     }
                 )

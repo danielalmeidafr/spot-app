@@ -2,6 +2,7 @@ package com.example.spot.ui.presentation.create_profile.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.spot.data.dtos.create_profile.CreateProfileDto
 import com.example.spot.data.dtos.create_profile.CreateProfileRepository
 import com.example.spot.data.dtos.create_profile.CreateProfileRequest
 import com.example.spot.ui.presentation.create_profile.model.CreateProfileState
@@ -18,12 +19,14 @@ class CreateProfileViewModel(
     private val _state = MutableStateFlow<CreateProfileState>(CreateProfileState.Idle)
     val state = _state.asStateFlow()
 
-    fun onCreateProfileClicked(fullName: String, nickname: String, birthDate: String) {
+    fun onCreateProfileClicked(fullName: String, nickname: String, birthDate: String, gender: String) {
         _state.update { CreateProfileState.Loading }
 
         viewModelScope.launch {
             try {
-                val request = CreateProfileRequest(fullName, nickname, birthDate)
+                val newDate = convertDateForApi(birthDate)
+
+                val request = CreateProfileRequest(CreateProfileDto(nickname, fullName, newDate, gender))
                 repository.createProfile(request)
 
                 _state.update { CreateProfileState.Success }
@@ -37,4 +40,12 @@ class CreateProfileViewModel(
             }
         }
     }
+}
+
+fun convertDateForApi(dateString: String): String {
+    val day = dateString.take(2)
+    val month = dateString.substring(2, 4)
+    val year = dateString.substring(4, 8)
+
+    return "$year-$month-$day"
 }

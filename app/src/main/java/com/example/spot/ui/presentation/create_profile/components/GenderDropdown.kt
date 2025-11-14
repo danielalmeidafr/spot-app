@@ -32,6 +32,7 @@ import com.example.spot.core.theme.Montserrat
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun GenderDropdown(
+    modifier: Modifier = Modifier,
     selectedGender: String,
     onGenderSelected: (String) -> Unit
 ) {

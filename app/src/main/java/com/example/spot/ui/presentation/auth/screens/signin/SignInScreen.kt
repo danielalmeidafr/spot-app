@@ -256,9 +256,6 @@ fun SignInScreen(
                         val emailBlank = email.isBlank()
                         val passwordBlank = password.isBlank()
 
-                        email = email.trim()
-                        password = password.trim()
-
                         when {
                             emailBlank -> emailFocusRequester.requestFocus()
 

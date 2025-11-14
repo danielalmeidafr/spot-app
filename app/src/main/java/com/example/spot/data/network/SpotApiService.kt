@@ -35,7 +35,7 @@ interface SpotApiService {
         @Query("month") month: Int
     ): AppointmentResponse
 
-    @POST("api/authentication/signin")
+    @POST("api/authentication/sign-in")
     suspend fun signIn(@Body request: SignInRequest): AuthResponse
 
     @POST("api/authentication/logout")
@@ -56,6 +56,6 @@ interface SpotApiService {
     @POST("api/authentication/password-reset/confirm")
     suspend fun newPassword(@Body request: NewPasswordRequest)
 
-    @POST("")
+    @POST("api/profiles/me")
     suspend fun createProfile(@Body request: CreateProfileRequest)
 }

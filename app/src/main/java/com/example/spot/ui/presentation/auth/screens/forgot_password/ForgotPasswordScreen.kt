@@ -193,8 +193,6 @@ fun ForgotPasswordScreen(
                     onClick = {
                         val emailBlank = email.isBlank()
 
-                        email = email.trim()
-
                         when {
                             emailBlank -> emailFocusRequester.requestFocus()
 

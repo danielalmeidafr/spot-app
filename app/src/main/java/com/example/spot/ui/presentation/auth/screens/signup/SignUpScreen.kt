@@ -290,9 +290,6 @@ fun SignUpScreen(
                         val passwordBlank = password.isBlank()
                         val confirmPasswordBlank = confirmPassword.isBlank()
 
-                        email = email.trim()
-                        password = password.trim()
-
                         when {
                             emailBlank -> emailFocusRequester.requestFocus()
 

@@ -232,8 +232,6 @@ fun NewPasswordScreen(
                         val newPasswordBlank = newPassword.isBlank()
                         val confirmNewPasswordBlank = confirmNewPassword.isBlank()
 
-                        newPassword = newPassword.trim()
-
                         when {
                             newPasswordBlank -> newPasswordFocusRequester.requestFocus()
 
