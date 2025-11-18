@@ -19,6 +19,7 @@ import com.example.spot.ui.presentation.create_profile.navigation.CreateProfileD
 import com.example.spot.ui.presentation.create_profile.navigation.createProfileScreen
 import com.example.spot.ui.presentation.details_establishment.details.navigation.DetailsDestination
 import com.example.spot.ui.presentation.details_establishment.details.navigation.detailsScreen
+import com.example.spot.ui.presentation.details_establishment.reviews.navigation.reviewsScreen
 import com.example.spot.ui.presentation.details_establishment.services.navigation.ServicesDestination
 import com.example.spot.ui.presentation.details_establishment.services.navigation.servicesScreen
 import com.example.spot.ui.presentation.main_screen.home.navigation.homeScreen
@@ -32,11 +33,7 @@ fun AppNavHost(
     onThemeToggle: () -> Unit
 ) {
     val navController = rememberNavController()
-    NavHost(navController = navController, startDestination = MainScreenDestination) {
-        detailsScreen(
-            onBack = { navController.popBackStack() }
-        )
-
+    NavHost(navController = navController, startDestination = DetailsDestination) {
         mainScreen(
             onNavigateToSignIn = { navController.navigate(SignInDestination) },
             onNavigateToDetails = { navController.navigate(DetailsDestination) },
@@ -96,7 +93,15 @@ fun AppNavHost(
             onThemeToggle = onThemeToggle
         )
 
+        detailsScreen(
+            onBack = { navController.popBackStack() }
+        )
+
         servicesScreen(
+            onBack = { navController.popBackStack() }
+        )
+
+        reviewsScreen(
             onBack = { navController.popBackStack() }
         )
     }

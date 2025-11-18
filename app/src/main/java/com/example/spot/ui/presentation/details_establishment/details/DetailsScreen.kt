@@ -3,6 +3,8 @@ package com.example.spot.ui.presentation.details_establishment.details
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.calculateEndPadding
+import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
@@ -25,6 +27,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalLayoutDirection
 import com.example.spot.ui.presentation.details_establishment.description.DescriptionScreen
 import com.example.spot.ui.presentation.details_establishment.reviews.ReviewsScreen
 import com.example.spot.ui.presentation.details_establishment.services.ServicesScreen
@@ -122,7 +125,10 @@ fun DetailsScreen(
     ) { innerPadding ->
         HorizontalPager(
             pagerState,
-            Modifier.padding(innerPadding)
+            Modifier.padding(
+                start = innerPadding.calculateStartPadding(LocalLayoutDirection.current),
+                end = innerPadding.calculateEndPadding(LocalLayoutDirection.current)
+            )
         ) { page ->
             val item = screens[page]
             when (item) {
@@ -130,7 +136,9 @@ fun DetailsScreen(
                     onBack = onBack
                 )
 
-                ScreenItem.Reviews -> ReviewsScreen()
+                ScreenItem.Reviews -> ReviewsScreen(
+                    onBack = onBack
+                )
                 ScreenItem.Details -> DescriptionScreen()
             }
         }

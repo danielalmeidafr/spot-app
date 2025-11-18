@@ -28,7 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.spot.core.util.clearFocusOnTap
 import com.example.spot.core.util.rememberKeyboardVisibility
-import com.example.spot.ui.presentation.main_screen.home.components.CustomSearchBar
+import com.example.spot.ui.components.CustomSearchBar
 import com.example.spot.ui.presentation.main_screen.home.components.EstablishmentCard
 import com.example.spot.ui.presentation.main_screen.home.components.EstablishmentCardSkeleton
 import com.example.spot.ui.presentation.main_screen.home.components.NextScheduleCard
@@ -59,6 +59,7 @@ fun HomeScreen(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 CustomSearchBar(
+                    text = "Procure sua barbearia favorita",
                     query = "",
                     onQueryChange = { newQuery -> viewModel.updateSearchQuery(newQuery) },
                     modifier = Modifier
@@ -105,6 +106,7 @@ fun HomeScreen(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 CustomSearchBar(
+                    text = "Procure sua barbearia favorita",
                     query = "",
                     onQueryChange = { newQuery -> viewModel.updateSearchQuery(newQuery) },
                     modifier = Modifier
@@ -160,6 +162,7 @@ fun HomeScreen(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 CustomSearchBar(
+                    text = "Procure sua barbearia favorita",
                     query = state.searchQuery,
                     onQueryChange = { newQuery -> viewModel.updateSearchQuery(newQuery) },
                     modifier = Modifier

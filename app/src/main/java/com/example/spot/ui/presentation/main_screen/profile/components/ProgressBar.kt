@@ -74,14 +74,14 @@ fun ProgressBar(
         Spacer(modifier = Modifier.height(8.dp))
 
         LinearProgressIndicator(
-        progress = { progress },
-        modifier = Modifier
-                        .fillMaxWidth()
-                        .height(6.dp)
-                        .clip(RoundedCornerShape(50)),
-        color = MaterialTheme.colorScheme.primary,
-        trackColor = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.3f),
-        strokeCap = ProgressIndicatorDefaults.LinearStrokeCap,
+            progress = { progress },
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(6.dp)
+                .clip(RoundedCornerShape(50)),
+            color = MaterialTheme.colorScheme.primary,
+            trackColor = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.3f),
+            strokeCap = ProgressIndicatorDefaults.LinearStrokeCap,
         )
 
         Spacer(modifier = Modifier.height(10.dp))

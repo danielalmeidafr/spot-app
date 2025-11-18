@@ -5,17 +5,15 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -25,6 +23,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -48,6 +49,8 @@ fun ServicesScreen(
     val viewModel: ServicesViewModel = viewModel()
     val state by viewModel.state.collectAsState()
 
+    var isClicked by remember { mutableStateOf(false) }
+
     when (val state = state) {
         is ServiceState.Error -> {
 
@@ -58,107 +61,134 @@ fun ServicesScreen(
         }
 
         is ServiceState.Success -> {
-            LazyColumn(
+            Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(MaterialTheme.colorScheme.background),
-                verticalArrangement = Arrangement.Top,
-                contentPadding = WindowInsets.navigationBars.asPaddingValues()
+                    .background(MaterialTheme.colorScheme.background)
             ) {
-                item {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(280.dp)
-                    ) {
-                        Surface(
+                LazyColumn(
+                    modifier = Modifier.fillMaxSize(),
+                    verticalArrangement = Arrangement.Top,
+                ) {
+                    item {
+                        Box(
                             modifier = Modifier
-                                .statusBarsPadding()
-                                .padding(start = 25.dp)
-                                .size(40.dp)
-                                .zIndex(2f),
-                            color = MaterialTheme.colorScheme.surface,
-                            shape = RoundedCornerShape(100.dp),
-                            onClick = onBack
+                                .fillMaxWidth()
+                                .height(300.dp)
                         ) {
-                            Icon(
-                                painter = painterResource(id = R.drawable.arrow_back),
-                                contentDescription = "Botão de voltar",
-                                tint = MaterialTheme.colorScheme.onBackground,
-                                modifier = Modifier.padding(8.dp)
+                            Image(
+                                painter = painterResource(id = R.drawable.establishment_image),
+                                contentDescription = "Imagens da barberia",
+                                contentScale = ContentScale.Crop,
+                                modifier = Modifier.matchParentSize()
                             )
                         }
+                    }
 
-                        Image(
-                            painter = painterResource(id = R.drawable.establishment_image),
-                            contentDescription = "Imagens da barberia",
-                            contentScale = ContentScale.Crop,
-                            modifier = Modifier.matchParentSize()
+                    item {
+                        Text(
+                            state.title,
+                            style = MaterialTheme.typography.titleMedium,
+                            color = MaterialTheme.colorScheme.onBackground,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .background(MaterialTheme.colorScheme.background)
+                                .padding(start = 20.dp, bottom = 10.dp, top = 20.dp)
+                        )
+                    }
+
+                    item {
+                        Text(
+                            state.location,
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.8f),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 20.dp)
+                        )
+                    }
+
+                    item {
+                        HorizontalDivider(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(top = 20.dp),
+                            thickness = 1.dp,
+                            color = MaterialTheme.colorScheme.outline
+                        )
+                    }
+
+                    items(state.servicesData) { serviceCategoryData ->
+                        Text(
+                            text = serviceCategoryData.title,
+                            style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.SemiBold),
+                            color = MaterialTheme.colorScheme.onBackground,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(start = 20.dp, top = 25.dp)
+                        )
+
+                        serviceCategoryData.services.forEachIndexed { index, service ->
+                            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                                Service(serviceData = service)
+
+                                if (index < serviceCategoryData.services.lastIndex) {
+                                    HorizontalDivider(
+                                        modifier = Modifier.fillMaxWidth(0.85f),
+                                        thickness = 1.dp,
+                                        color = MaterialTheme.colorScheme.outline
+                                    )
+                                }
+                            }
+                        }
+
+                        HorizontalDivider(
+                            modifier = Modifier.fillMaxWidth(),
+                            thickness = 1.dp,
+                            color = MaterialTheme.colorScheme.outline
                         )
                     }
                 }
 
-                stickyHeader {
-                    Text(
-                        state.title,
-                        style = MaterialTheme.typography.titleMedium,
-                        color = MaterialTheme.colorScheme.onBackground,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .background(MaterialTheme.colorScheme.background)
-                            .padding(start = 20.dp, top = 20.dp, bottom = 10.dp)
+                Surface(
+                    modifier = Modifier
+                        .statusBarsPadding()
+                        .align(Alignment.TopStart)
+                        .padding(start = 20.dp, top = 12.dp)
+                        .size(40.dp)
+                        .zIndex(2f),
+                    color = MaterialTheme.colorScheme.background,
+                    shape = CircleShape,
+                    onClick = onBack
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.arrow_back),
+                        contentDescription = "Botão de voltar",
+                        tint = MaterialTheme.colorScheme.onBackground,
+                        modifier = Modifier.padding(8.dp)
                     )
                 }
 
-                item {
-                    Text(
-                        state.location,
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.8f),
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 20.dp)
-                    )
-                }
-
-                item {
-                    HorizontalDivider(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(top = 20.dp),
-                        thickness = 1.dp,
-                        color = MaterialTheme.colorScheme.outline
-                    )
-                }
-
-                items(state.servicesData) { serviceCategoryData ->
-                    Text(
-                        text = serviceCategoryData.title,
-                        style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.SemiBold),
-                        color = MaterialTheme.colorScheme.onBackground,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(start = 20.dp, top = 25.dp)
-                    )
-
-                    serviceCategoryData.services.forEachIndexed { index, service ->
-                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                            Service(serviceData = service)
-
-                            if (index < serviceCategoryData.services.lastIndex) {
-                                HorizontalDivider(
-                                    modifier = Modifier.fillMaxWidth(0.85f),
-                                    thickness = 1.dp,
-                                    color = MaterialTheme.colorScheme.outline
-                                )
-                            }
-                        }
+                Surface(
+                    modifier = Modifier
+                        .statusBarsPadding()
+                        .align(Alignment.TopEnd)
+                        .padding(end = 20.dp, top = 12.dp)
+                        .size(40.dp)
+                        .zIndex(2f),
+                    color = MaterialTheme.colorScheme.background,
+                    shape = CircleShape,
+                    onClick = {
+                        isClicked = !isClicked
                     }
-
-                    HorizontalDivider(
-                        modifier = Modifier.fillMaxWidth(),
-                        thickness = 1.dp,
-                        color = MaterialTheme.colorScheme.outline
+                ) {
+                    Icon(
+                        painter = painterResource(
+                            if (!isClicked) R.drawable.favorite else R.drawable.favorite_filled
+                        ),
+                        contentDescription = "Botão de favoritar",
+                        tint = MaterialTheme.colorScheme.onBackground,
+                        modifier = Modifier.padding(11.dp)
                     )
                 }
             }
@@ -168,9 +198,7 @@ fun ServicesScreen(
 
 @Preview(showBackground = true)
 @Composable
-fun ServicesScreenPreview(
-
-) {
+fun ServicesScreenPreview() {
     SpotTheme {
         ServicesScreen(
             onBack = {}

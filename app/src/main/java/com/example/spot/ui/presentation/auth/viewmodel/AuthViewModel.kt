@@ -2,14 +2,14 @@ package com.example.spot.ui.presentation.auth.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.spot.data.dtos.auth.usecase.ErrorCause
-import com.example.spot.data.dtos.auth.usecase.Result
-import com.example.spot.data.dtos.auth.usecase.SignInUseCase
-import com.example.spot.data.dtos.auth.usecase.SignUpUseCase
-import com.example.spot.data.dtos.auth.usecase.confirm_code.ConfirmCodePasswordUseCase
-import com.example.spot.data.dtos.auth.usecase.confirm_code.ConfirmCodeSignUpUseCase
-import com.example.spot.data.dtos.auth.usecase.password.ForgotPasswordUseCase
-import com.example.spot.data.dtos.auth.usecase.password.NewPasswordUseCase
+import com.example.spot.data.remote.dtos.auth.usecase.ErrorCause
+import com.example.spot.data.remote.dtos.auth.usecase.Result
+import com.example.spot.data.remote.dtos.auth.usecase.SignInUseCase
+import com.example.spot.data.remote.dtos.auth.usecase.SignUpUseCase
+import com.example.spot.data.remote.dtos.auth.usecase.confirm_code.ConfirmCodePasswordUseCase
+import com.example.spot.data.remote.dtos.auth.usecase.confirm_code.ConfirmCodeSignUpUseCase
+import com.example.spot.data.remote.dtos.auth.usecase.password.ForgotPasswordUseCase
+import com.example.spot.data.remote.dtos.auth.usecase.password.NewPasswordUseCase
 import com.example.spot.ui.presentation.auth.model.AuthState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow

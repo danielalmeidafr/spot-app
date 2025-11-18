@@ -2,9 +2,9 @@ package com.example.spot.ui.presentation.create_profile.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.spot.data.dtos.create_profile.CreateProfileDto
-import com.example.spot.data.dtos.create_profile.CreateProfileRepository
-import com.example.spot.data.dtos.create_profile.CreateProfileRequest
+import com.example.spot.data.remote.dtos.create_profile.CreateProfileDto
+import com.example.spot.data.remote.dtos.create_profile.CreateProfileRepository
+import com.example.spot.data.remote.dtos.create_profile.CreateProfileRequest
 import com.example.spot.ui.presentation.create_profile.model.CreateProfileState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow

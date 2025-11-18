@@ -2,8 +2,8 @@ package com.example.spot.ui.presentation.main_screen.schedules.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.spot.data.dtos.schedules.AppointmentRepository
-import com.example.spot.data.dtos.schedules.toAppointmentData
+import com.example.spot.data.remote.dtos.schedules.AppointmentRepository
+import com.example.spot.data.remote.dtos.schedules.toAppointmentData
 import com.example.spot.ui.presentation.main_screen.schedules.model.AppointmentData
 import com.example.spot.ui.presentation.main_screen.schedules.model.ScheduleState
 import kotlinx.coroutines.flow.MutableStateFlow
