@@ -34,7 +34,7 @@ import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 
-private const val BASE_URL = "https://spot-server-production.up.railway.app/"
+private const val BASE_URL = "https://spot-server-ccgmcufudvfbbgec.eastus2-01.azurewebsites.net/"
 
 val networkModule = module {
 
