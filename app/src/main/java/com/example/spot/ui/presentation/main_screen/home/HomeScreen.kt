@@ -16,6 +16,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -47,6 +48,7 @@ fun HomeScreen(
 ) {
     val viewModel = koinViewModel<HomeViewModel>()
     val state by viewModel.state.collectAsState()
+    val isRefreshing by viewModel.isRefreshing.collectAsState()
     val isKeyboardVisible = rememberKeyboardVisibility()
 
     when (val state = state) {
@@ -98,53 +100,61 @@ fun HomeScreen(
         }
 
         is HomeState.Error -> {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(MaterialTheme.colorScheme.background)
-                    .clearFocusOnTap(),
-                horizontalAlignment = Alignment.CenterHorizontally
+            PullToRefreshBox(
+                isRefreshing = isRefreshing,
+                onRefresh = { viewModel.refresh() },
+                modifier = Modifier.fillMaxSize()
             ) {
-                CustomSearchBar(
-                    text = "Procure sua barbearia favorita",
-                    query = "",
-                    onQueryChange = { newQuery -> viewModel.updateSearchQuery(newQuery) },
-                    modifier = Modifier
-                        .padding(top = 20.dp)
-                )
-
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(innerPadding)
-                        .padding(bottom = if (isKeyboardVisible) 250.dp else 0.dp),
-                    verticalArrangement = Arrangement.Center,
+                        .background(MaterialTheme.colorScheme.background)
+                        .clearFocusOnTap(),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.signal),
-                        tint = MaterialTheme.colorScheme.onBackground,
-                        contentDescription = "Imagem de sem sinal",
+                    CustomSearchBar(
+                        text = "Procure sua barbearia favorita",
+                        query = "",
+                        onQueryChange = { newQuery -> viewModel.updateSearchQuery(newQuery) },
                         modifier = Modifier
-                            .size(60.dp)
-                            .alpha(0.7f)
+                            .padding(top = 20.dp)
                     )
 
-                    Spacer(modifier = Modifier.height(50.dp))
+                    LazyColumn(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(innerPadding)
+                            .padding(bottom = if (isKeyboardVisible) 250.dp else 0.dp),
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        item {
+                            Icon(
+                                painter = painterResource(id = R.drawable.signal),
+                                tint = MaterialTheme.colorScheme.onBackground,
+                                contentDescription = "Imagem de sem sinal",
+                                modifier = Modifier
+                                    .size(60.dp)
+                                    .alpha(0.7f)
+                            )
 
-                    Text(
-                        state.message,
-                        style = MaterialTheme.typography.titleSmall,
-                        color = MaterialTheme.colorScheme.onBackground
-                    )
+                            Spacer(modifier = Modifier.height(50.dp))
 
-                    Spacer(modifier = Modifier.height(15.dp))
+                            Text(
+                                state.message,
+                                style = MaterialTheme.typography.titleSmall,
+                                color = MaterialTheme.colorScheme.onBackground
+                            )
 
-                    Text(
-                        "Puxe para atualizar ou verifique sua rede",
-                        style = MaterialTheme.typography.bodySmall.copy(fontSize = 12.sp),
-                        color = MaterialTheme.colorScheme.onBackground
-                    )
+                            Spacer(modifier = Modifier.height(15.dp))
+
+                            Text(
+                                "Puxe para atualizar ou verifique sua rede",
+                                style = MaterialTheme.typography.bodySmall.copy(fontSize = 12.sp),
+                                color = MaterialTheme.colorScheme.onBackground
+                            )
+                        }
+                    }
                 }
             }
         }
@@ -204,36 +214,42 @@ fun HomeScreen(
                         )
                     }
                 } else {
-                    LazyColumn(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(innerPadding),
-                        verticalArrangement = Arrangement.spacedBy(25.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally
+                    PullToRefreshBox(
+                        isRefreshing = isRefreshing,
+                        onRefresh = { viewModel.refresh() },
+                        modifier = Modifier.fillMaxSize()
                     ) {
+                        LazyColumn(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(innerPadding),
+                            verticalArrangement = Arrangement.spacedBy(25.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
 
-                        item {
-                            NextScheduleCard(nextScheduleData = state.nextScheduleData)
-                        }
+                            item {
+                                NextScheduleCard(nextScheduleData = state.nextScheduleData)
+                            }
 
-                        stickyHeader {
-                            Text(
-                                text = state.listTitle,
-                                modifier = Modifier
-                                    .fillMaxWidth(0.9f)
-                                    .background(MaterialTheme.colorScheme.background)
-                                    .padding(bottom = 10.dp),
-                                style = MaterialTheme.typography.bodyMedium,
-                                color = MaterialTheme.colorScheme.onBackground,
-                                textAlign = TextAlign.Start
-                            )
-                        }
+                            stickyHeader {
+                                Text(
+                                    text = state.listTitle,
+                                    modifier = Modifier
+                                        .fillMaxWidth(0.9f)
+                                        .background(MaterialTheme.colorScheme.background)
+                                        .padding(bottom = 10.dp),
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    color = MaterialTheme.colorScheme.onBackground,
+                                    textAlign = TextAlign.Start
+                                )
+                            }
 
-                        items(state.establishmentsData) { establishment ->
-                            EstablishmentCard(
-                                establishmentData = establishment,
-                                onNavigateToDetails = onNavigateToDetails
-                            )
+                            items(state.establishmentsData) { establishment ->
+                                EstablishmentCard(
+                                    establishmentData = establishment,
+                                    onNavigateToDetails = onNavigateToDetails
+                                )
+                            }
                         }
                     }
                 }

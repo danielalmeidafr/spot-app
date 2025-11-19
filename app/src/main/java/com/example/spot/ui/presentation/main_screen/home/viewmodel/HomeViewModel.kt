@@ -27,11 +27,17 @@ class HomeViewModel(
     private val _state = MutableStateFlow<HomeState>(HomeState.Loading)
     val state = _state.asStateFlow()
 
+    private val _isRefreshing = MutableStateFlow(false)
+    val isRefreshing = _isRefreshing.asStateFlow()
+    private var currentToken: String = ""
+
     private var cachedEstablishments: List<EstablishmentData> = emptyList()
 
     init {
         viewModelScope.launch {
             userPreferencesRepository.accessToken.collect { accessToken ->
+                currentToken = accessToken
+
                 if (_state.value is HomeState.Error) return@collect
 
                 if (_state.value !is HomeState.Loading) {
@@ -68,6 +74,37 @@ class HomeViewModel(
                 } catch (e: Exception) {
                     _state.update { HomeState.Error("Ocorreu um erro: ${e.message}") }
                 }
+            }
+        }
+    }
+
+    fun refresh() {
+        viewModelScope.launch {
+            _isRefreshing.value = true
+            try {
+                val currentQuery = (_state.value as? HomeState.Success)?.searchQuery ?: ""
+
+                val establishments =
+                    fetchEstablishments(currentQuery.ifBlank { null })
+                cachedEstablishments = establishments
+                val nextSchedule = fetchNextSchedule(currentToken)
+
+                val listTitle =
+                    if (currentQuery.isNotBlank()) "Resultados da busca:" else if (establishments.isEmpty()) "" else "Recomendadas:"
+
+                _state.update {
+                    HomeState.Success(
+                        searchQuery = currentQuery,
+                        nextScheduleData = nextSchedule,
+                        listTitle = listTitle,
+                        establishmentsData = establishments
+                    )
+                }
+            } catch (e: Exception) {
+                _state.update { HomeState.Error("Ocorreu um erro ao recarregar a página") }
+
+            } finally {
+                _isRefreshing.value = false
             }
         }
     }
