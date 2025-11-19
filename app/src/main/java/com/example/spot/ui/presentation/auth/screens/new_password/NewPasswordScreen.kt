@@ -35,8 +35,10 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.spot.core.theme.SpotTheme
 import com.example.spot.core.util.clearFocusOnTap
 import com.example.spot.core.util.rememberKeyboardVisibility
 import com.example.spot.ui.components.CustomTextField
@@ -50,11 +52,11 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun NewPasswordScreen(
     onBack: () -> Unit,
-    onNavigateToSignIn: () -> Unit,
+    onNavigateToSuccessNewPassword: () -> Unit,
     email: String,
-    code: String
+    code: String,
+    viewModel: AuthViewModel = koinViewModel()
 ) {
-    val viewModel = koinViewModel<AuthViewModel>()
     val state by viewModel.state.collectAsState()
     val isKeyboardVisible = rememberKeyboardVisibility()
 
@@ -101,7 +103,7 @@ fun NewPasswordScreen(
                 shake(shakeOffset, 8f)
             }
 
-            is AuthState.Success -> onNavigateToSignIn()
+            is AuthState.Success -> onNavigateToSuccessNewPassword()
 
             else -> Unit
         }
@@ -116,7 +118,7 @@ fun NewPasswordScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .background(MaterialTheme.colorScheme.surface)
-                .padding(bottom = if (isKeyboardVisible) 350.dp else 0.dp)
+                .padding(bottom = if (isKeyboardVisible) 320.dp else 0.dp)
                 .statusBarsPadding()
         ) {
             Column(

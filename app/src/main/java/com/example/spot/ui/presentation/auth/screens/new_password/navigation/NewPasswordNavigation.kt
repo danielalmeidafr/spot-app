@@ -14,14 +14,14 @@ data class NewPasswordDestination(
 
 fun NavGraphBuilder.newPasswordScreen(
     onBack: () -> Unit,
-    onNavigateToSignIn: () -> Unit
+    onNavigateToSuccessNewPassword: () -> Unit
 ) {
     composable<NewPasswordDestination> { backStackEntry ->
         val userEmailAndCode = backStackEntry.toRoute<NewPasswordDestination>()
 
         NewPasswordScreen(
             onBack = onBack,
-            onNavigateToSignIn = onNavigateToSignIn,
+            onNavigateToSuccessNewPassword = onNavigateToSuccessNewPassword,
             email = userEmailAndCode.email,
             code = userEmailAndCode.code
         )

@@ -11,6 +11,8 @@ import com.example.spot.ui.presentation.auth.screens.forgot_password.navigation.
 import com.example.spot.ui.presentation.auth.screens.forgot_password.navigation.forgotPasswordScreen
 import com.example.spot.ui.presentation.auth.screens.new_password.navigation.NewPasswordDestination
 import com.example.spot.ui.presentation.auth.screens.new_password.navigation.newPasswordScreen
+import com.example.spot.ui.presentation.auth.screens.new_password.successful_new_passeword.navigation.SuccessfulNewPasswordDestination
+import com.example.spot.ui.presentation.auth.screens.new_password.successful_new_passeword.navigation.successfulNewPassword
 import com.example.spot.ui.presentation.auth.screens.signin.navigation.SignInDestination
 import com.example.spot.ui.presentation.auth.screens.signin.navigation.signInScreen
 import com.example.spot.ui.presentation.auth.screens.signup.navigation.SignUpDestination
@@ -68,6 +70,14 @@ fun AppNavHost(
 
         newPasswordScreen(
             onBack = { navController.popBackStack() },
+            onNavigateToSuccessNewPassword = {
+                navController.navigate(
+                    SuccessfulNewPasswordDestination
+                )
+            }
+        )
+
+        successfulNewPassword(
             onNavigateToSignIn = { navController.navigate(SignInDestination) }
         )
 

@@ -98,7 +98,10 @@ fun ReviewsScreen(
                                 ) {
                                     Text(
                                         text = "$i",
-                                        style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Medium, fontSize = 12.sp),
+                                        style = MaterialTheme.typography.bodyMedium.copy(
+                                            fontWeight = FontWeight.Medium,
+                                            fontSize = 12.sp
+                                        ),
                                         color = MaterialTheme.colorScheme.onBackground
                                     )
 
@@ -159,7 +162,8 @@ fun ReviewsScreen(
                                     painter = painterResource(id = R.drawable.arrow_down),
                                     contentDescription = "FIltro",
                                     tint = MaterialTheme.colorScheme.onBackground,
-                                    modifier = Modifier.size(25.dp)
+                                    modifier = Modifier
+                                        .size(25.dp)
                                         .offset(y = 1.dp)
                                 )
                             }
@@ -177,6 +181,8 @@ fun ReviewsScreen(
                     onQueryChange = { }
                 )
             }
+
+
         }
 
         Surface(

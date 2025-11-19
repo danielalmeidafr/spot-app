@@ -46,6 +46,8 @@ android {
 }
 
 dependencies {
+    implementation("com.airbnb.android:lottie-compose:6.4.1")
+
     implementation(libs.androidx.swiperefreshlayout)
 
     implementation(libs.androidx.room.runtime)
@@ -53,6 +55,7 @@ dependencies {
     ksp(libs.androidx.room.compiler)
 
     implementation(libs.coil.compose)
+    implementation("io.coil-kt:coil-gif:2.6.0")
 
     implementation(libs.androidx.datastore.preferences)
 
