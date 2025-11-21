@@ -39,7 +39,7 @@ fun CustomSearchBar(
     Row(
         modifier = modifier
             .width(340.dp)
-            .height(43.dp)
+            .height(40.dp)
             .shadow(
                 elevation = 0.5.dp,
                 shape = RoundedCornerShape(15.dp))

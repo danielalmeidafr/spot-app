@@ -80,7 +80,7 @@ fun Service(
                     Text(
                         text = serviceData.price ?: "",
                         style = MaterialTheme.typography.bodySmall.copy(
-                            fontWeight = FontWeight.ExtraBold,
+                            fontWeight = FontWeight.SemiBold,
                             fontSize = 12.sp
                         ),
                         color = MaterialTheme.colorScheme.onBackground,

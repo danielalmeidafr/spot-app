@@ -1,5 +1,6 @@
 package com.example.spot.data.remote.dtos.auth
 
+import com.example.spot.data.remote.dtos.UserPreferencesRepository
 import com.example.spot.data.remote.dtos.auth.code.ConfirmCodePasswordRequest
 import com.example.spot.data.remote.dtos.auth.code.ConfirmCodeSignUpRequest
 import com.example.spot.data.remote.dtos.auth.password.ForgotPasswordRequest

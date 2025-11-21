@@ -43,6 +43,7 @@ import com.example.spot.core.util.clearFocusOnTap
 import com.example.spot.core.util.rememberKeyboardVisibility
 import com.example.spot.ui.components.CustomTextField
 import com.example.spot.ui.components.PrimaryButton
+import com.example.spot.ui.presentation.auth.components.PasswordRequirements
 import com.example.spot.ui.presentation.auth.model.AuthState
 import com.example.spot.ui.presentation.auth.viewmodel.AuthViewModel
 import com.student.R
@@ -186,7 +187,11 @@ fun NewPasswordScreen(
                     modifier = Modifier.focusRequester(newPasswordFocusRequester)
                 )
 
-                Spacer(modifier = Modifier.height(30.dp))
+                Spacer(modifier = Modifier.height(10.dp))
+
+                PasswordRequirements(newPassword)
+
+                Spacer(modifier = Modifier.height(20.dp))
 
                 CustomTextField(
                     value = confirmNewPassword,

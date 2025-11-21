@@ -35,7 +35,7 @@ fun AppNavHost(
     onThemeToggle: () -> Unit
 ) {
     val navController = rememberNavController()
-    NavHost(navController = navController, startDestination = MainScreenDestination) {
+    NavHost(navController = navController, startDestination = MainScreenDestination ) {
         mainScreen(
             onNavigateToSignIn = { navController.navigate(SignInDestination) },
             onNavigateToDetails = { navController.navigate(DetailsDestination) },

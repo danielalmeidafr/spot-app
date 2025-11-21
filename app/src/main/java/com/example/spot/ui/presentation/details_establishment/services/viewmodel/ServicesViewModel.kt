@@ -2,6 +2,7 @@ package com.example.spot.ui.presentation.details_establishment.services.viewmode
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.spot.ui.presentation.details_establishment.services.model.EstablishmentData
 import com.example.spot.ui.presentation.details_establishment.services.model.ServiceCategoryData
 import com.example.spot.ui.presentation.details_establishment.services.model.ServiceData
 import com.example.spot.ui.presentation.details_establishment.services.model.ServiceState
@@ -21,14 +22,13 @@ class ServicesViewModel : ViewModel() {
     init {
         viewModelScope.launch {
             try {
-                val title = fetchTitle()
-                val location = fetchLocation()
+                val establishmentInfo = fetchInfoEstablishment()
                 val services = fetchServices()
 
                 _state.update {
                     ServiceState.Success(
-                        title = title,
-                        location = location,
+                        title = establishmentInfo.title,
+                        location = establishmentInfo.location,
                         servicesData = services
                     )
                 }
@@ -120,11 +120,10 @@ class ServicesViewModel : ViewModel() {
         )
     }
 
-    private fun fetchTitle(): String{
-        return "Barbearia Corleone"
-    }
-
-    private fun fetchLocation(): String{
-        return "Av. Brigadeiro Faria Lima, 1425 - Loja B2 - Jardim Paulistano, São Paulo - SP, 01452-002"
+    private fun fetchInfoEstablishment(): EstablishmentData{
+        return EstablishmentData(
+            title = "Barbearia Corleone",
+            location = "Av. Brigadeiro Faria Lima, 1425 - Loja B2 - Jardim Paulistano, São Paulo - SP, 01452-002"
+        )
     }
 }

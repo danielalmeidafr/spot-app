@@ -1,16 +1,31 @@
 package com.example.spot
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.spot.data.remote.dtos.UserPreferencesRepository
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 
 
-class ThemeViewModel : ViewModel() {
-    private val _isDarkTheme = MutableStateFlow(false)
+class ThemeViewModel(
+    private val userPreferencesRepository: UserPreferencesRepository
+) : ViewModel() {
 
-    val isDarkTheme = _isDarkTheme.asStateFlow()
+    val isDarkTheme: StateFlow<Boolean?> = userPreferencesRepository.isDarkMode
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5_000),
+            initialValue = null
+        )
 
     fun toggleTheme() {
-        _isDarkTheme.value = !_isDarkTheme.value
+        viewModelScope.launch {
+            val currentMode = isDarkTheme.value ?: false
+            userPreferencesRepository.saveThemePreference(!currentMode)
+        }
     }
 }

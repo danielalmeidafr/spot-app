@@ -2,7 +2,7 @@ package com.example.spot.ui.presentation.main_screen.home.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.spot.data.remote.dtos.auth.UserPreferencesRepository
+import com.example.spot.data.remote.dtos.UserPreferencesRepository
 import com.example.spot.data.remote.dtos.home.establishment.EstablishmentRepository
 import com.example.spot.data.remote.dtos.home.establishment.toEstablishmentData
 import com.example.spot.data.remote.dtos.home.nextschedule.NextScheduleRepository

@@ -1,6 +1,6 @@
 package com.example.spot.data.remote.network
 
-import com.example.spot.data.remote.dtos.auth.UserPreferencesRepository
+import com.example.spot.data.remote.dtos.UserPreferencesRepository
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor

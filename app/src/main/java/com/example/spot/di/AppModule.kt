@@ -2,8 +2,9 @@ package com.example.spot.di
 
 import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.preferencesDataStoreFile
+import com.example.spot.ThemeViewModel
 import com.example.spot.data.remote.dtos.auth.AuthRepository
-import com.example.spot.data.remote.dtos.auth.UserPreferencesRepository
+import com.example.spot.data.remote.dtos.UserPreferencesRepository
 import com.example.spot.data.remote.dtos.auth.usecase.password.ForgotPasswordUseCase
 import com.example.spot.data.remote.dtos.auth.usecase.password.NewPasswordUseCase
 import com.example.spot.data.remote.dtos.auth.usecase.SignInUseCase
@@ -85,6 +86,7 @@ val viewModelModule = module {
     viewModelOf(::ProfileViewModel)
     viewModelOf(::CreateProfileViewModel)
     viewModelOf(::ScheduleViewModel)
+    viewModelOf(::ThemeViewModel)
 }
 
 val storageModule = module {

@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.spot.data.remote.dtos.auth.AuthRepository
 import com.example.spot.data.remote.dtos.auth.sign.SignOutRequest
 // 1. Importe o novo repositório
-import com.example.spot.data.remote.dtos.auth.UserPreferencesRepository
+import com.example.spot.data.remote.dtos.UserPreferencesRepository
 import com.example.spot.ui.presentation.main_screen.profile.model.InfoData
 import com.example.spot.ui.presentation.main_screen.profile.model.ProfileState
 import com.example.spot.ui.presentation.main_screen.profile.model.ProgressData

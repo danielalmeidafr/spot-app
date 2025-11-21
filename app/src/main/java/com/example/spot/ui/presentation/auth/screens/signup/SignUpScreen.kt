@@ -2,8 +2,10 @@ package com.example.spot.ui.presentation.auth.screens.signup
 
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -15,6 +17,7 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
@@ -47,6 +50,7 @@ import com.example.spot.core.util.clearFocusOnTap
 import com.example.spot.ui.components.CustomButton
 import com.example.spot.ui.components.CustomTextField
 import com.example.spot.ui.components.PrimaryButton
+import com.example.spot.ui.presentation.auth.components.PasswordRequirements
 import com.example.spot.ui.presentation.auth.model.AuthState
 import com.example.spot.ui.presentation.auth.viewmodel.AuthViewModel
 import com.student.R
@@ -149,7 +153,7 @@ fun SignUpScreen(
                         painter = painterResource(id = R.drawable.arrow_back),
                         contentDescription = "Voltar",
                         tint = MaterialTheme.colorScheme.onSurface,
-                        modifier = Modifier.padding(16.dp)
+                        modifier = Modifier.padding(15.dp)
                     )
                 }
 
@@ -205,7 +209,11 @@ fun SignUpScreen(
                     modifier = Modifier.focusRequester(passwordFocusRequester)
                 )
 
-                Spacer(modifier = Modifier.height(30.dp))
+                Spacer(modifier = Modifier.height(10.dp))
+
+                PasswordRequirements(password)
+
+                Spacer(modifier = Modifier.height(20.dp))
 
                 CustomTextField(
                     value = confirmPassword,

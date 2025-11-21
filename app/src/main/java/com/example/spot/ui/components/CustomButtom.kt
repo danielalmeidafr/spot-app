@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
@@ -28,7 +29,7 @@ fun CustomButton(
     imagePainter: Int,
     modifier: Modifier = Modifier
         .fillMaxWidth(0.85f)
-        .height(50.dp),
+        .height(40.dp),
     containerColor: Color = MaterialTheme.colorScheme.surface,
     contentColor: Color = MaterialTheme.colorScheme.onSurface,
     borderColor: Color = MaterialTheme.colorScheme.outline
@@ -40,7 +41,7 @@ fun CustomButton(
             width = 0.2.dp,
             color = borderColor
         ),
-        shape = CircleShape,
+        shape = RoundedCornerShape(10.dp),
         colors = ButtonDefaults.buttonColors(
             containerColor = containerColor,
             contentColor = contentColor,
