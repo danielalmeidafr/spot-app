@@ -8,6 +8,8 @@ import com.example.spot.data.remote.dtos.auth.sign.SignOutRequest
 import com.example.spot.data.remote.dtos.auth.sign.SignInRequest
 import com.example.spot.data.remote.dtos.auth.sign.SignUpRequest
 import com.example.spot.data.remote.dtos.auth.password.NewPasswordRequest
+import com.example.spot.data.remote.dtos.auth.refresh.RefreshRequest
+import com.example.spot.data.remote.dtos.auth.refresh.RefreshResponse
 import com.example.spot.data.remote.dtos.create_profile.CreateProfileRequest
 import com.example.spot.data.remote.dtos.home.establishment.PagedEstablishmentsResponse
 import com.example.spot.data.remote.dtos.home.nextschedule.NextScheduleResponse
@@ -27,7 +29,9 @@ interface SpotApiService {
         @Query("size") size: Int,
         @Query("sortBy") sortBy: String,
         @Query("sortDir") sortDir: String,
-        @Query("name") name: String? = null
+        @Query("name") name: String? = null,
+        @Query("customerLatitude") latitude: Double? = null,
+        @Query("customerLongitude") longitude: Double? = null
     ): PagedEstablishmentsResponse
 
     @GET("api/appointments/me")

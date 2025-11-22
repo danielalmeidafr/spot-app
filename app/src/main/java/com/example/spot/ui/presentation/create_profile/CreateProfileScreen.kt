@@ -1,8 +1,13 @@
 package com.example.spot.ui.presentation.create_profile
 
+import android.net.Uri
 import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,6 +19,7 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -29,10 +35,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.rememberAsyncImagePainter
+import coil.request.ImageRequest
 import com.example.spot.core.util.clearFocusOnTap
 import com.example.spot.ui.components.CustomTextField
 import com.example.spot.ui.components.PrimaryButton
@@ -60,6 +69,13 @@ fun CreateProfileScreen(
     val nicknameFocusRequester = remember { FocusRequester() }
     val birthDateFocusRequester = remember { FocusRequester() }
     val genderFocusRequester = remember { FocusRequester() }
+
+    var photoUri: Uri? by remember { mutableStateOf(null) }
+
+    val launcher =
+        rememberLauncherForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
+            photoUri = uri
+        }
 
     LaunchedEffect(state) {
         when (val a = state) {
@@ -121,11 +137,43 @@ fun CreateProfileScreen(
             ) {
                 Spacer(modifier = Modifier.height(40.dp))
 
-                Image(
-                    painter = painterResource(R.drawable.user_image),
-                    contentDescription = "Profile image",
-                    modifier = Modifier.size(90.dp)
-                )
+                Box(
+                    modifier = Modifier
+                        .size(90.dp)
+                        .clip(CircleShape)
+                ) {
+                    if (photoUri == null) {
+                        Image(
+                            painter = painterResource(R.drawable.user_image),
+                            contentDescription = "Imagem de perfil",
+                            contentScale = ContentScale.Crop,
+                            modifier = Modifier
+                                .matchParentSize()
+                                .clickable {
+                                    launcher.launch(
+                                        PickVisualMediaRequest(
+                                            mediaType = ActivityResultContracts.PickVisualMedia.ImageOnly
+                                        )
+                                    )
+                                }
+                        )
+                    } else {
+                        val painter = rememberAsyncImagePainter(
+                            model = ImageRequest
+                                .Builder(LocalContext.current)
+                                .data(data = photoUri)
+                                .build()
+                        )
+
+                        Image(
+                            painter = painter,
+                            contentDescription = "Imagem de perfil",
+                            contentScale = ContentScale.Crop,
+                            modifier = Modifier
+                                .matchParentSize()
+                        )
+                    }
+                }
 
                 Spacer(modifier = Modifier.height(30.dp))
 

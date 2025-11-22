@@ -46,6 +46,8 @@ android {
 }
 
 dependencies {
+    implementation(libs.play.services.location)
+
     implementation(libs.androidx.core.splashscreen)
 
     implementation(libs.lottie.compose)

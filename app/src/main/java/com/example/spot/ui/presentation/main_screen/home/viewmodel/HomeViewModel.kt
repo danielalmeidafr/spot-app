@@ -32,6 +32,7 @@ class HomeViewModel(
     private var currentToken: String = ""
 
     private var cachedEstablishments: List<EstablishmentData> = emptyList()
+    private var userLocation: Pair<Double, Double>? = null
 
     init {
         viewModelScope.launch {
@@ -40,7 +41,7 @@ class HomeViewModel(
 
                 if (_state.value is HomeState.Error) return@collect
 
-                if (_state.value !is HomeState.Loading) {
+                if (_state.value !is HomeState.Success && _state.value !is HomeState.Loading) {
                     _state.update { HomeState.Loading }
                 }
 
@@ -62,19 +63,42 @@ class HomeViewModel(
                 } catch (e: IOException) {
                     _state.update { HomeState.Error("Falha na conexão") }
                 } catch (e: HttpException) {
-                    val message = try {
-                        val errorBody = e.response()?.errorBody()?.string()
-                        val json = JSONObject(errorBody ?: "")
-
-                        json.optString("message", "Erro no servidor")
-                    } catch (_: Exception) {
-                        "Erro no servidor"
-                    }
+                    val message = parseErrorMessage(e)
                     _state.update { HomeState.Error(message) }
                 } catch (e: Exception) {
                     _state.update { HomeState.Error("Ocorreu um erro: ${e.message}") }
                 }
             }
+        }
+    }
+
+    fun updateUserLocation(lat: Double, long: Double) {
+        val newLocation = Pair(lat, long)
+
+        if (userLocation == newLocation) return
+
+        userLocation = newLocation
+
+        if (_state.value is HomeState.Success) {
+            viewModelScope.launch {
+                reloadEstablishmentsWithLocation()
+            }
+        }
+    }
+
+    private suspend fun reloadEstablishmentsWithLocation() {
+        try {
+            val currentState = _state.value as? HomeState.Success ?: return
+            val currentQuery = currentState.searchQuery
+
+            val establishments = fetchEstablishments(currentQuery.ifBlank { null })
+            cachedEstablishments = establishments
+
+            _state.update {
+                currentState.copy(establishmentsData = establishments)
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
     }
 
@@ -84,8 +108,7 @@ class HomeViewModel(
             try {
                 val currentQuery = (_state.value as? HomeState.Success)?.searchQuery ?: ""
 
-                val establishments =
-                    fetchEstablishments(currentQuery.ifBlank { null })
+                val establishments = fetchEstablishments(currentQuery.ifBlank { null })
                 cachedEstablishments = establishments
                 val nextSchedule = fetchNextSchedule(currentToken)
 
@@ -102,7 +125,6 @@ class HomeViewModel(
                 }
             } catch (e: Exception) {
                 _state.update { HomeState.Error("Ocorreu um erro ao recarregar a página") }
-
             } finally {
                 _isRefreshing.value = false
             }
@@ -127,7 +149,11 @@ class HomeViewModel(
     }
 
     private suspend fun fetchEstablishments(searchQuery: String? = null): List<EstablishmentData> {
-        val establishmentsDto = establishmentRepository.getAllEstablishments(name = searchQuery)
+        val establishmentsDto = establishmentRepository.getAllEstablishments(
+            name = searchQuery,
+            customerLatitude = userLocation?.first,
+            customerLongitude = userLocation?.second
+        )
         return establishmentsDto.map { it.toEstablishmentData() }
     }
 
@@ -143,9 +169,7 @@ class HomeViewModel(
         viewModelScope.launch {
             try {
                 delay(300)
-
-                val establishments =
-                    if (newQuery.isBlank()) cachedEstablishments else fetchEstablishments(newQuery)
+                val establishments = if (newQuery.isBlank()) cachedEstablishments else fetchEstablishments(newQuery)
                 val listTitle = if (newQuery.isBlank()) "Recomendadas:" else "Resultados da busca:"
 
                 _state.update { currentState ->
@@ -158,27 +182,26 @@ class HomeViewModel(
                         } else {
                             currentState
                         }
-
                     } else {
                         currentState
                     }
                 }
-            } catch (e: IOException) {
-                _state.update { HomeState.Error("Falha na conexão") }
-            } catch (e: HttpException) {
-                val message = try {
-                    val errorBody = e.response()?.errorBody()?.string()
-                    val json = JSONObject(errorBody ?: "")
-
-                    json.optString("message", "Erro no servidor")
-                } catch (_: Exception) {
-                    "Erro no servidor"
-                }
-
-                _state.update { HomeState.Error(message) }
             } catch (e: Exception) {
-                _state.update { HomeState.Error("Ocorreu um erro: ${e.message}") }
+                val message = if (e is HttpException) parseErrorMessage(e) else "Erro ao buscar"
+                if(_state.value is HomeState.Success) {
+                } else {
+                    _state.update { HomeState.Error(message) }
+                }
             }
+        }
+    }
+    private fun parseErrorMessage(e: HttpException): String {
+        return try {
+            val errorBody = e.response()?.errorBody()?.string()
+            val json = JSONObject(errorBody ?: "")
+            json.optString("message", "Erro no servidor")
+        } catch (_: Exception) {
+            "Erro no servidor"
         }
     }
 }

@@ -10,9 +10,11 @@ class EstablishmentRepository(
         size: Int = 10,
         sortBy: String = "averageRating",
         sortDir: String = "desc",
-        name: String? = null
+        name: String? = null,
+        customerLatitude: Double? = null,
+        customerLongitude: Double? = null
     ): List<EstablishmentDto> {
-        val response = api.getAllEstablishments(page, size, sortBy, sortDir, name)
+        val response = api.getAllEstablishments(page, size, sortBy, sortDir, name, customerLatitude, customerLongitude)
         return response.establishments
     }
 }
