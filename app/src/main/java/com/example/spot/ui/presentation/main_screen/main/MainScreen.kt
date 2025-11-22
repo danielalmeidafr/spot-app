@@ -90,7 +90,7 @@ sealed class ScreenItem(
 @Composable
 fun MainScreen(
     modifier: Modifier = Modifier,
-    onNavigateToDetails: () -> Unit,
+    onNavigateToDetails: (String) -> Unit,
     onNavigateToSignIn: () -> Unit,
     isDarkTheme: Boolean,
     onThemeToggle: () -> Unit

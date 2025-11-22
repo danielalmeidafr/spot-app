@@ -1,6 +1,5 @@
-package com.example.spot.ui.presentation.details_establishment.reviews
+package com.example.spot.ui.presentation.details_establishment.screens.reviews
 
-import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -45,7 +44,6 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import com.example.spot.core.theme.SpotTheme
 import com.example.spot.core.util.clearFocusOnTap
-import com.example.spot.ui.components.CustomSearchBar
 import com.student.R
 
 @Composable

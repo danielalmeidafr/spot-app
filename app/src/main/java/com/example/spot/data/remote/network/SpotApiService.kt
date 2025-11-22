@@ -4,19 +4,19 @@ import com.example.spot.data.remote.dtos.auth.AuthResponse
 import com.example.spot.data.remote.dtos.auth.code.ConfirmCodePasswordRequest
 import com.example.spot.data.remote.dtos.auth.code.ConfirmCodeSignUpRequest
 import com.example.spot.data.remote.dtos.auth.password.ForgotPasswordRequest
-import com.example.spot.data.remote.dtos.auth.sign.SignOutRequest
-import com.example.spot.data.remote.dtos.auth.sign.SignInRequest
-import com.example.spot.data.remote.dtos.auth.sign.SignUpRequest
 import com.example.spot.data.remote.dtos.auth.password.NewPasswordRequest
-import com.example.spot.data.remote.dtos.auth.refresh.RefreshRequest
-import com.example.spot.data.remote.dtos.auth.refresh.RefreshResponse
+import com.example.spot.data.remote.dtos.auth.sign.SignInRequest
+import com.example.spot.data.remote.dtos.auth.sign.SignOutRequest
+import com.example.spot.data.remote.dtos.auth.sign.SignUpRequest
 import com.example.spot.data.remote.dtos.create_profile.CreateProfileRequest
+import com.example.spot.data.remote.dtos.details.EstablishmentDetailsWrapper
 import com.example.spot.data.remote.dtos.home.establishment.PagedEstablishmentsResponse
 import com.example.spot.data.remote.dtos.home.nextschedule.NextScheduleResponse
 import com.example.spot.data.remote.dtos.schedules.AppointmentResponse
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface SpotApiService {
@@ -33,6 +33,11 @@ interface SpotApiService {
         @Query("customerLatitude") latitude: Double? = null,
         @Query("customerLongitude") longitude: Double? = null
     ): PagedEstablishmentsResponse
+
+    @GET("api/establishments/{establishmentId}")
+    suspend fun getEstablishmentDetailsById(
+        @Path("establishmentId") establishmentId: String
+    ): EstablishmentDetailsWrapper
 
     @GET("api/appointments/me")
     suspend fun getAllAppointments(

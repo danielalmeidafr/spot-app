@@ -56,7 +56,7 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
-    onNavigateToDetails: () -> Unit,
+    onNavigateToDetails: (String) -> Unit,
     innerPadding: PaddingValues = PaddingValues()
 ) {
     val viewModel = koinViewModel<HomeViewModel>()
@@ -76,7 +76,11 @@ fun HomeScreen(
             if (location != null) {
                 viewModel.updateUserLocation(location.latitude, location.longitude)
             } else {
-                Toast.makeText(context, "Ative o GPS para ver barbearias próximas", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    context,
+                    "Ative o GPS para ver barbearias próximas",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
     }
@@ -93,8 +97,14 @@ fun HomeScreen(
     }
 
     LaunchedEffect(Unit) {
-        if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED ||
-            ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
+        if (ContextCompat.checkSelfPermission(
+                context,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED ||
+            ContextCompat.checkSelfPermission(
+                context,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED
         ) {
             getCurrentLocation()
         } else {
@@ -303,7 +313,7 @@ fun HomeScreen(
                             items(state.establishmentsData) { establishment ->
                                 EstablishmentCard(
                                     establishmentData = establishment,
-                                    onNavigateToDetails = onNavigateToDetails
+                                    onNavigateToDetails = { onNavigateToDetails(establishment.id) }
                                 )
                             }
                         }

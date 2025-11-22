@@ -1,4 +1,4 @@
-package com.example.spot.ui.presentation.details_establishment.services.components
+package com.example.spot.ui.presentation.details_establishment.screens.services.components
 
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
@@ -31,15 +31,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.spot.ui.presentation.details_establishment.services.model.ServiceData
+import com.example.spot.ui.presentation.details_establishment.screens.services.model.OfferedServiceData
 
 @Composable
 fun Service(
-    serviceData: ServiceData,
+    offeredServiceData: OfferedServiceData,
     modifier: Modifier = Modifier
 ) {
     var isExpanded by remember { mutableStateOf(false) }
-    var hasVisualOverflow by remember { mutableStateOf(false) }
 
     Row(
         modifier = modifier
@@ -55,12 +54,17 @@ fun Service(
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(
-                    text = serviceData.title,
+                    text = offeredServiceData.title,
                     style = MaterialTheme.typography.bodySmall.copy(
                         fontWeight = FontWeight.SemiBold,
                         fontSize = 12.sp
                     ),
-                    color = MaterialTheme.colorScheme.onBackground
+                    color = MaterialTheme.colorScheme.onBackground,
+                    maxLines = if (isExpanded) Int.MAX_VALUE else 1,
+                    overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier
+                        .weight(1f)
+                        .clickable { isExpanded = !isExpanded }
                 )
 
                 Spacer(modifier = Modifier.size(10.dp))
@@ -78,7 +82,7 @@ fun Service(
                     Spacer(modifier = Modifier.size(4.dp))
 
                     Text(
-                        text = serviceData.price ?: "",
+                        text = offeredServiceData.price ?: "",
                         style = MaterialTheme.typography.bodySmall.copy(
                             fontWeight = FontWeight.SemiBold,
                             fontSize = 12.sp
@@ -91,40 +95,14 @@ fun Service(
 
             Spacer(modifier = Modifier.height(2.dp))
 
-            val textModifier = if (hasVisualOverflow || isExpanded) {
-                Modifier.clickable { isExpanded = !isExpanded }
-            } else {
-                Modifier
-            }
-
             Text(
-                text = serviceData.description,
-                modifier = textModifier,
+                text = offeredServiceData.description,
+                modifier = Modifier.clickable { isExpanded = !isExpanded },
                 style = MaterialTheme.typography.bodySmall.copy(fontSize = 10.sp),
                 color = MaterialTheme.colorScheme.onBackground.copy(0.7f),
                 maxLines = if (isExpanded) Int.MAX_VALUE else 2,
-                overflow = TextOverflow.Ellipsis,
-                onTextLayout = { textLayoutResult ->
-                    hasVisualOverflow = textLayoutResult.hasVisualOverflow
-                }
+                overflow = TextOverflow.Ellipsis
             )
-
-            if (hasVisualOverflow && !isExpanded) {
-                Text(
-                    text = "···",
-                    modifier = Modifier
-                        .padding(top = 5.dp)
-                        .clip(RoundedCornerShape(4.dp))
-                        .background(MaterialTheme.colorScheme.surface)
-                        .padding(horizontal = 6.dp, vertical = 1.dp)
-                        .clickable { isExpanded = true },
-                    style = MaterialTheme.typography.bodySmall.copy(
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 8.sp,
-                        color = MaterialTheme.colorScheme.primary
-                    )
-                )
-            }
         }
 
         Spacer(modifier = Modifier.width(25.dp))

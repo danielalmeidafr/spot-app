@@ -1,4 +1,4 @@
-package com.example.spot.ui.presentation.details_establishment.details
+package com.example.spot.ui.presentation.details_establishment.screens.details
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -28,9 +28,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalLayoutDirection
-import com.example.spot.ui.presentation.details_establishment.description.DescriptionScreen
-import com.example.spot.ui.presentation.details_establishment.reviews.ReviewsScreen
-import com.example.spot.ui.presentation.details_establishment.services.ServicesScreen
+import com.example.spot.ui.presentation.details_establishment.screens.description.DescriptionScreen
+import com.example.spot.ui.presentation.details_establishment.screens.reviews.ReviewsScreen
+import com.example.spot.ui.presentation.details_establishment.screens.services.ServicesScreen
 
 class BottomAppBarItem(
     val label: String
@@ -62,6 +62,7 @@ sealed class ScreenItem(
 @Composable
 fun DetailsScreen(
     modifier: Modifier = Modifier,
+    establishmentId: String,
     onBack: () -> Unit
 ) {
     val screens = remember {
@@ -133,6 +134,7 @@ fun DetailsScreen(
             val item = screens[page]
             when (item) {
                 ScreenItem.Services -> ServicesScreen(
+                    establishmentId = establishmentId,
                     onBack = onBack
                 )
 

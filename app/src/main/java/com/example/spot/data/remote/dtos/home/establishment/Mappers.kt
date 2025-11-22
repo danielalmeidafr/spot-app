@@ -5,6 +5,7 @@ import com.example.spot.ui.presentation.main_screen.home.model.EstablishmentData
 
 fun EstablishmentDto.toEstablishmentData(): EstablishmentData {
     return EstablishmentData(
+        id = this.id,
         name = this.name,
         averageRating = this.averageRating,
         totalReviews = 0,

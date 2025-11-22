@@ -3,6 +3,7 @@ package com.example.spot.ui.presentation.main_screen.home.model
 import com.example.spot.ui.presentation.main_screen.home.components.PaymentsMethods
 
 data class EstablishmentData(
+    val id: String,
     val name: String,
     val averageRating: Double,
     val totalReviews: Int,

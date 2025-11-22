@@ -1,4 +1,4 @@
-package com.example.spot.ui.presentation.details_establishment.services
+package com.example.spot.ui.presentation.details_establishment.screens.services
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -21,6 +21,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -34,33 +35,46 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.spot.core.theme.SpotTheme
-import com.example.spot.ui.presentation.details_establishment.services.components.Service
-import com.example.spot.ui.presentation.details_establishment.services.model.ServiceState
-import com.example.spot.ui.presentation.details_establishment.services.viewmodel.ServicesViewModel
+import com.example.spot.ui.presentation.details_establishment.model.DetailsState
+import com.example.spot.ui.presentation.details_establishment.screens.services.components.Service
+import com.example.spot.ui.presentation.details_establishment.viewmodel.DetailsViewModel
 import com.student.R
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun ServicesScreen(
     modifier: Modifier = Modifier,
+    establishmentId: String,
     onBack: () -> Unit
 ) {
-    val viewModel: ServicesViewModel = viewModel()
+    val viewModel = koinViewModel<DetailsViewModel>()
     val state by viewModel.state.collectAsState()
 
     var isClicked by remember { mutableStateOf(false) }
 
+    LaunchedEffect(establishmentId) {
+        viewModel.loadEstablishment(establishmentId)
+    }
+
     when (val state = state) {
-        is ServiceState.Error -> {
+        is DetailsState.Error -> {
+            Box(
+                Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ){
+                Text(
+                    state.message
+                )
+
+            }
+        }
+
+        DetailsState.Loading -> {
 
         }
 
-        ServiceState.Loading -> {
-
-        }
-
-        is ServiceState.Success -> {
+        is DetailsState.Success -> {
             Box(
                 modifier = Modifier
                     .fillMaxSize()
@@ -87,7 +101,7 @@ fun ServicesScreen(
 
                     item {
                         Text(
-                            state.title,
+                            state.header.title,
                             style = MaterialTheme.typography.titleMedium,
                             color = MaterialTheme.colorScheme.onBackground,
                             modifier = Modifier
@@ -99,7 +113,7 @@ fun ServicesScreen(
 
                     item {
                         Text(
-                            state.location,
+                            state.header.location,
                             style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.8f),
                             modifier = Modifier
@@ -118,7 +132,7 @@ fun ServicesScreen(
                         )
                     }
 
-                    items(state.servicesData) { serviceCategoryData ->
+                    items(state.services) { serviceCategoryData ->
                         Text(
                             text = serviceCategoryData.title,
                             style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.SemiBold),
@@ -130,7 +144,7 @@ fun ServicesScreen(
 
                         serviceCategoryData.services.forEachIndexed { index, service ->
                             Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                                Service(serviceData = service)
+                                Service(offeredServiceData = service)
 
                                 if (index < serviceCategoryData.services.lastIndex) {
                                     HorizontalDivider(
@@ -201,6 +215,7 @@ fun ServicesScreen(
 fun ServicesScreenPreview() {
     SpotTheme {
         ServicesScreen(
+            establishmentId = "",
             onBack = {}
         )
     }

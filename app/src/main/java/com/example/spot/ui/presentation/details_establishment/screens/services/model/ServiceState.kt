@@ -1,4 +1,4 @@
-package com.example.spot.ui.presentation.details_establishment.services.model
+package com.example.spot.ui.presentation.details_establishment.screens.services.model
 
 sealed class ServiceState {
     data object Loading : ServiceState()
@@ -8,6 +8,6 @@ sealed class ServiceState {
     data class Success(
         val title: String = "",
         val location: String = "",
-        val servicesData: List<ServiceCategoryData> = emptyList()
+        val servicesData: List<OfferedServiceCategoryData> = emptyList()
     ) : ServiceState()
 }

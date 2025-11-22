@@ -1,4 +1,4 @@
-package com.example.spot.ui.presentation.details_establishment.description
+package com.example.spot.ui.presentation.details_establishment.screens.description
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

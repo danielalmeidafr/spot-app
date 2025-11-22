@@ -19,11 +19,11 @@ import com.example.spot.ui.presentation.auth.screens.signup.navigation.SignUpDes
 import com.example.spot.ui.presentation.auth.screens.signup.navigation.signUpScreen
 import com.example.spot.ui.presentation.create_profile.navigation.CreateProfileDestination
 import com.example.spot.ui.presentation.create_profile.navigation.createProfileScreen
-import com.example.spot.ui.presentation.details_establishment.details.navigation.DetailsDestination
-import com.example.spot.ui.presentation.details_establishment.details.navigation.detailsScreen
-import com.example.spot.ui.presentation.details_establishment.reviews.navigation.reviewsScreen
-import com.example.spot.ui.presentation.details_establishment.services.navigation.ServicesDestination
-import com.example.spot.ui.presentation.details_establishment.services.navigation.servicesScreen
+import com.example.spot.ui.presentation.details_establishment.screens.details.navigation.DetailsDestination
+import com.example.spot.ui.presentation.details_establishment.screens.details.navigation.detailsScreen
+import com.example.spot.ui.presentation.details_establishment.screens.reviews.navigation.reviewsScreen
+import com.example.spot.ui.presentation.details_establishment.screens.services.navigation.ServicesDestination
+import com.example.spot.ui.presentation.details_establishment.screens.services.navigation.servicesScreen
 import com.example.spot.ui.presentation.main_screen.home.navigation.homeScreen
 import com.example.spot.ui.presentation.main_screen.main.navigation.MainScreenDestination
 import com.example.spot.ui.presentation.main_screen.main.navigation.mainScreen
@@ -38,13 +38,13 @@ fun AppNavHost(
     NavHost(navController = navController, startDestination = MainScreenDestination ) {
         mainScreen(
             onNavigateToSignIn = { navController.navigate(SignInDestination) },
-            onNavigateToDetails = { navController.navigate(DetailsDestination) },
+            onNavigateToDetails = { id -> navController.navigate(DetailsDestination(id)) },
             isDarkTheme = isDarkTheme,
             onThemeToggle = onThemeToggle
         )
 
         homeScreen(
-            onNavigateToDetails = { navController.navigate(ServicesDestination) }
+            onNavigateToDetails = { id -> navController.navigate(ServicesDestination(id)) }
         )
 
         signInScreen(

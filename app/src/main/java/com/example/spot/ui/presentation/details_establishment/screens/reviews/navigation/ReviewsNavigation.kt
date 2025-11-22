@@ -1,8 +1,8 @@
-package com.example.spot.ui.presentation.details_establishment.reviews.navigation
+package com.example.spot.ui.presentation.details_establishment.screens.reviews.navigation
 
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import com.example.spot.ui.presentation.details_establishment.reviews.ReviewsScreen
+import com.example.spot.ui.presentation.details_establishment.screens.reviews.ReviewsScreen
 import kotlinx.serialization.Serializable
 
 @Serializable

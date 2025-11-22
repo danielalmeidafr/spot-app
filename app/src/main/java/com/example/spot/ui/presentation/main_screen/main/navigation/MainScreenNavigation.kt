@@ -10,7 +10,7 @@ import kotlinx.serialization.Serializable
 object MainScreenDestination
 
 fun NavGraphBuilder.mainScreen(
-    onNavigateToDetails: () -> Unit,
+    onNavigateToDetails: (String) -> Unit,
     onNavigateToSignIn: () -> Unit,
     isDarkTheme: Boolean,
     onThemeToggle: () -> Unit

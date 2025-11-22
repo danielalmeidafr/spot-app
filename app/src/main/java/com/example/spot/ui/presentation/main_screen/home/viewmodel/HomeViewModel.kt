@@ -86,22 +86,6 @@ class HomeViewModel(
         }
     }
 
-    private suspend fun reloadEstablishmentsWithLocation() {
-        try {
-            val currentState = _state.value as? HomeState.Success ?: return
-            val currentQuery = currentState.searchQuery
-
-            val establishments = fetchEstablishments(currentQuery.ifBlank { null })
-            cachedEstablishments = establishments
-
-            _state.update {
-                currentState.copy(establishmentsData = establishments)
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-    }
-
     fun refresh() {
         viewModelScope.launch {
             _isRefreshing.value = true
@@ -202,6 +186,22 @@ class HomeViewModel(
             json.optString("message", "Erro no servidor")
         } catch (_: Exception) {
             "Erro no servidor"
+        }
+    }
+
+    private suspend fun reloadEstablishmentsWithLocation() {
+        try {
+            val currentState = _state.value as? HomeState.Success ?: return
+            val currentQuery = currentState.searchQuery
+
+            val establishments = fetchEstablishments(currentQuery.ifBlank { null })
+            cachedEstablishments = establishments
+
+            _state.update {
+                currentState.copy(establishmentsData = establishments)
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
     }
 }
