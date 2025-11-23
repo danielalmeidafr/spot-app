@@ -10,11 +10,14 @@ import com.example.spot.data.remote.dtos.auth.sign.SignOutRequest
 import com.example.spot.data.remote.dtos.auth.sign.SignUpRequest
 import com.example.spot.data.remote.dtos.create_profile.CreateProfileRequest
 import com.example.spot.data.remote.dtos.details.EstablishmentDetailsWrapper
+import com.example.spot.data.remote.dtos.favorite.FavoriteEstablishmentWrapper
 import com.example.spot.data.remote.dtos.home.establishment.PagedEstablishmentsResponse
 import com.example.spot.data.remote.dtos.home.nextschedule.NextScheduleResponse
 import com.example.spot.data.remote.dtos.schedules.AppointmentResponse
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
+import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -65,6 +68,23 @@ interface SpotApiService {
     @POST("api/authentication/password-reset/confirm")
     suspend fun newPassword(@Body request: NewPasswordRequest)
 
+    @Multipart
     @POST("api/profiles/me")
     suspend fun createProfile(@Body request: CreateProfileRequest)
+
+    @POST("api/profiles/me/favorites/{establishmentId}")
+    suspend fun favorite(
+        @Path("establishmentId") establishmentId : String
+    )
+
+    @DELETE("api/profiles/me/favorites/{establishmentId}")
+    suspend fun unfavorite(
+        @Path("establishmentId") establishmentId : String
+    )
+
+    @GET("api/profiles/me/favorites")
+    suspend fun getAllFavoritesEstablishments(
+        @Query("customerLatitude") latitude: Double? = null,
+        @Query("customerLongitude") longitude: Double? = null
+    ) : FavoriteEstablishmentWrapper
 }

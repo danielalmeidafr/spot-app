@@ -24,6 +24,7 @@ import com.example.spot.ui.presentation.details_establishment.screens.details.na
 import com.example.spot.ui.presentation.details_establishment.screens.reviews.navigation.reviewsScreen
 import com.example.spot.ui.presentation.details_establishment.screens.services.navigation.ServicesDestination
 import com.example.spot.ui.presentation.details_establishment.screens.services.navigation.servicesScreen
+import com.example.spot.ui.presentation.main_screen.favorite.navigation.favoriteScreen
 import com.example.spot.ui.presentation.main_screen.home.navigation.homeScreen
 import com.example.spot.ui.presentation.main_screen.main.navigation.MainScreenDestination
 import com.example.spot.ui.presentation.main_screen.main.navigation.mainScreen
@@ -44,7 +45,11 @@ fun AppNavHost(
         )
 
         homeScreen(
-            onNavigateToDetails = { id -> navController.navigate(ServicesDestination(id)) }
+            onNavigateToDetails = { id -> navController.navigate(DetailsDestination(id)) }
+        )
+
+        favoriteScreen(
+            onNavigateToDetails = { id -> navController.navigate(DetailsDestination(id)) }
         )
 
         signInScreen(

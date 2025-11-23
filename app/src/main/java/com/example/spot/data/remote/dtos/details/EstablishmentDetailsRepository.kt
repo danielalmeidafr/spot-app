@@ -8,4 +8,12 @@ class EstablishmentDetailsRepository(
     suspend fun getEstablishmentDetailsById(establishmentId: String): EstablishmentDetailsWrapper{
         return api.getEstablishmentDetailsById(establishmentId)
     }
+
+    suspend fun favorite(establishmentId: String) {
+        return api.favorite(establishmentId)
+    }
+
+    suspend fun unfavorite(establishmentId: String) {
+        return api.unfavorite(establishmentId)
+    }
 }

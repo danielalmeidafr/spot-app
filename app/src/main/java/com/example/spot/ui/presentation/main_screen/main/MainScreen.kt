@@ -215,7 +215,10 @@ fun MainScreen(
                     )
                 }
 
-                ScreenItem.Favorite -> FavoriteScreen(innerPadding = innerPadding)
+                ScreenItem.Favorite -> FavoriteScreen(
+                    innerPadding = innerPadding,
+                    onNavigateToDetails = onNavigateToDetails
+                )
                 ScreenItem.Schedules -> ScheduleScreen()
                 ScreenItem.Profile -> ProfileScreen(
                     innerPadding = innerPadding,

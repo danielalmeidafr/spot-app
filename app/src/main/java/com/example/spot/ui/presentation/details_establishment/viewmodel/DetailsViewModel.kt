@@ -24,7 +24,8 @@ class DetailsViewModel(
             _state.update { DetailsState.Loading }
 
             try {
-                val wrapper = establishmentDetailsRepository.getEstablishmentDetailsById(establishmentId)
+                val wrapper =
+                    establishmentDetailsRepository.getEstablishmentDetailsById(establishmentId)
 
                 val response = wrapper.establishment
 
@@ -38,6 +39,34 @@ class DetailsViewModel(
                     )
                 }
 
+            } catch (e: IOException) {
+                _state.update { DetailsState.Error("Falha na conexão. Verifique sua internet.") }
+            } catch (e: HttpException) {
+                _state.update { DetailsState.Error("Erro no servidor: ${e.message()}") }
+            } catch (e: Exception) {
+                _state.update { DetailsState.Error("Erro desconhecido: ${e.message}") }
+            }
+        }
+    }
+
+    fun favorite(establishmentId: String) {
+        viewModelScope.launch {
+            try {
+                establishmentDetailsRepository.favorite(establishmentId)
+            } catch (e: IOException) {
+                _state.update { DetailsState.Error("Falha na conexão. Verifique sua internet.") }
+            } catch (e: HttpException) {
+                _state.update { DetailsState.Error("Erro no servidor: ${e.message()}") }
+            } catch (e: Exception) {
+                _state.update { DetailsState.Error("Erro desconhecido: ${e.message}") }
+            }
+        }
+    }
+
+    fun unfavorite(establishmentId: String) {
+        viewModelScope.launch {
+            try {
+                establishmentDetailsRepository.unfavorite(establishmentId)
             } catch (e: IOException) {
                 _state.update { DetailsState.Error("Falha na conexão. Verifique sua internet.") }
             } catch (e: HttpException) {

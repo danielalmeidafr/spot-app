@@ -51,7 +51,7 @@ fun ServicesScreen(
     val viewModel = koinViewModel<DetailsViewModel>()
     val state by viewModel.state.collectAsState()
 
-    var isClicked by remember { mutableStateOf(false) }
+    var isFavorite by remember { mutableStateOf(false) }
 
     LaunchedEffect(establishmentId) {
         viewModel.loadEstablishment(establishmentId)
@@ -193,12 +193,17 @@ fun ServicesScreen(
                     color = MaterialTheme.colorScheme.surfaceContainer,
                     shape = CircleShape,
                     onClick = {
-                        isClicked = !isClicked
+                        isFavorite = !isFavorite
+                        if (isFavorite){
+                            viewModel.favorite(establishmentId)
+                        } else {
+                            viewModel.unfavorite(establishmentId)
+                        }
                     }
                 ) {
                     Icon(
                         painter = painterResource(
-                            if (!isClicked) R.drawable.favorite else R.drawable.favorite_filled
+                            if (!isFavorite) R.drawable.favorite else R.drawable.favorite_filled
                         ),
                         contentDescription = "Botão de favoritar",
                         tint = MaterialTheme.colorScheme.onBackground,
