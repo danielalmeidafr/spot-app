@@ -4,6 +4,7 @@ coilCompose = "2.7.0"
 converterMoshi = "3.0.0"
 coreSplashscreen = "1.2.0"
 datastorePreferences = "1.1.7"
+gson = "2.13.2"
 koinAndroid = "4.1.1"
 koinAndroidxCompose = "4.1.1"
 kotlin = "2.2.21"
@@ -35,6 +36,7 @@ androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref =
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomCompiler" }
 androidx-swiperefreshlayout = { module = "androidx.swiperefreshlayout:swiperefreshlayout", version.ref = "swiperefreshlayout" }
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilCompose" }
+gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }

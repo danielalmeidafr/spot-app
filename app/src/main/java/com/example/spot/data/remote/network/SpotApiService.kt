@@ -14,11 +14,14 @@ import com.example.spot.data.remote.dtos.favorite.FavoriteEstablishmentWrapper
 import com.example.spot.data.remote.dtos.home.establishment.PagedEstablishmentsResponse
 import com.example.spot.data.remote.dtos.home.nextschedule.NextScheduleResponse
 import com.example.spot.data.remote.dtos.schedules.AppointmentResponse
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Multipart
 import retrofit2.http.POST
+import retrofit2.http.Part
 import retrofit2.http.Path
 import retrofit2.http.Query
 
@@ -70,7 +73,10 @@ interface SpotApiService {
 
     @Multipart
     @POST("api/profiles/me")
-    suspend fun createProfile(@Body request: CreateProfileRequest)
+    suspend fun createProfile(
+        @Part("data") data: RequestBody,
+        @Part image: MultipartBody.Part?
+    )
 
     @POST("api/profiles/me/favorites/{establishmentId}")
     suspend fun favorite(

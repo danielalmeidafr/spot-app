@@ -37,6 +37,9 @@ fun List<PaymentMethodsResponse>.toPaymentMethods(): List<PaymentMethods>{
     return this.map { it.type }
 }
 
+fun EstablishmentDetailsWrapper.toFavorite(){
+
+}
 private fun category(category: OfferedServiceCategory): String{
     return when (category){
         OfferedServiceCategory.CUT -> "Cortes"

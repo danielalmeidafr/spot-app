@@ -33,6 +33,13 @@ class FavoriteViewModel(
                 val logged = token.isNotEmpty()
                 _isLoggedIn.value = logged
 
+                if (!logged) {
+                    _state.update {
+                        FavoriteState.Success(establishmentsData = emptyList())
+                    }
+                    return@collect
+                }
+
                 try {
                     val establishments = fetchFavoritesEstablishments()
 
@@ -46,6 +53,9 @@ class FavoriteViewModel(
                 } catch (e: HttpException){
                     if (e.code() == 403){
                         _isLoggedIn.value = false
+                        _state.update {
+                            FavoriteState.Success(establishmentsData = emptyList())
+                        }
                         return@collect
                     }
                     val message = parseErrorMessage(e)

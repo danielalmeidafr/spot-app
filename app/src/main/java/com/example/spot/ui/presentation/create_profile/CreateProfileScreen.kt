@@ -229,7 +229,14 @@ fun CreateProfileScreen(
                             nickname.isBlank() -> nicknameFocusRequester.requestFocus()
                             birthDate.isBlank() -> birthDateFocusRequester.requestFocus()
                             gender.isEmpty() -> genderFocusRequester.requestFocus()
-                            else -> viewModel.onCreateProfileClicked(fullName, nickname, birthDate, genderSelected)
+                            else -> viewModel.onCreateProfileClicked(
+                                context = context,
+                                fullName,
+                                nickname,
+                                birthDate,
+                                genderSelected,
+                                photoUri
+                            )
                         }
                     }
                 )

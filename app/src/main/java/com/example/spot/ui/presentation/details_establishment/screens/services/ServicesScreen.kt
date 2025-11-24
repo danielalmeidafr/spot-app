@@ -15,18 +15,18 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -34,6 +34,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import com.example.spot.core.theme.SpotTheme
 import com.example.spot.ui.presentation.details_establishment.model.DetailsState
@@ -46,42 +47,82 @@ import org.koin.androidx.compose.koinViewModel
 fun ServicesScreen(
     modifier: Modifier = Modifier,
     establishmentId: String,
-    onBack: () -> Unit
+    onBack: () -> Unit,
 ) {
     val viewModel = koinViewModel<DetailsViewModel>()
     val state by viewModel.state.collectAsState()
-
-    var isFavorite by remember { mutableStateOf(false) }
 
     LaunchedEffect(establishmentId) {
         viewModel.loadEstablishment(establishmentId)
     }
 
-    when (val state = state) {
+    when (val currentState = state) {
         is DetailsState.Error -> {
             Box(
                 Modifier.fillMaxSize(),
                 contentAlignment = Alignment.Center
-            ){
-                Text(
-                    state.message
-                )
-
+            ) {
+                Text(currentState.message)
             }
         }
 
         DetailsState.Loading -> {
-
+            // Loading state...
         }
 
         is DetailsState.Success -> {
+            if (currentState.showLoginDialog) {
+                AlertDialog(
+                    onDismissRequest = { viewModel.dismissLoginDialog() },
+                    title = {
+                        Text(
+                            text = "Faça login",
+                            style = MaterialTheme.typography.bodyLarge,
+                            color = MaterialTheme.colorScheme.onBackground
+                        )
+                    },
+                    text = {
+                        Text(
+                            text = "Você precisa estar logado para favoritar este estabelecimento. Deseja entrar agora?",
+                            style = MaterialTheme.typography.bodyLarge.copy(fontSize = 12.sp),
+                            color = MaterialTheme.colorScheme.onBackground
+                        )
+                    },
+                    confirmButton = {
+                        TextButton(
+                            onClick = { viewModel.dismissLoginDialog() }
+                        ) {
+                            Text(
+                                text = "Entrar",
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onBackground
+                            )
+                        }
+                    },
+                    dismissButton = {
+                        TextButton(
+                            onClick = { viewModel.dismissLoginDialog() }
+                        ) {
+                            Text(
+                                text = "Cancelar",
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onBackground
+                            )
+                        }
+                    },
+                    containerColor = MaterialTheme.colorScheme.surfaceContainer
+                )
+            }
+
             Box(
                 modifier = Modifier
                     .fillMaxSize()
                     .background(MaterialTheme.colorScheme.background)
             ) {
                 LazyColumn(
-                    modifier = Modifier.fillMaxSize().navigationBarsPadding(),
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .navigationBarsPadding(),
                     verticalArrangement = Arrangement.Top,
                 ) {
                     item {
@@ -101,7 +142,7 @@ fun ServicesScreen(
 
                     item {
                         Text(
-                            state.header.title,
+                            currentState.header.title,
                             style = MaterialTheme.typography.titleMedium,
                             color = MaterialTheme.colorScheme.onBackground,
                             modifier = Modifier
@@ -113,7 +154,7 @@ fun ServicesScreen(
 
                     item {
                         Text(
-                            state.header.location,
+                            currentState.header.location,
                             style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.8f),
                             modifier = Modifier
@@ -132,7 +173,7 @@ fun ServicesScreen(
                         )
                     }
 
-                    items(state.services) { serviceCategoryData ->
+                    items(currentState.services) { serviceCategoryData ->
                         Text(
                             text = serviceCategoryData.title,
                             style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.SemiBold),
@@ -193,17 +234,16 @@ fun ServicesScreen(
                     color = MaterialTheme.colorScheme.surfaceContainer,
                     shape = CircleShape,
                     onClick = {
-                        isFavorite = !isFavorite
-                        if (isFavorite){
-                            viewModel.favorite(establishmentId)
-                        } else {
+                        if (currentState.isFavorite) {
                             viewModel.unfavorite(establishmentId)
+                        } else {
+                            viewModel.favorite(establishmentId)
                         }
                     }
                 ) {
                     Icon(
                         painter = painterResource(
-                            if (!isFavorite) R.drawable.favorite else R.drawable.favorite_filled
+                            if (!currentState.isFavorite) R.drawable.favorite else R.drawable.favorite_filled
                         ),
                         contentDescription = "Botão de favoritar",
                         tint = MaterialTheme.colorScheme.onBackground,

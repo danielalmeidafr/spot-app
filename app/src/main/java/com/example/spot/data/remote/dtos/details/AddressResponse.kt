@@ -8,5 +8,5 @@ data class AddressResponse(
     val city: String,
     val state: String,
     val zipCode: String,
-    val complement: String
+    val complement: String? = null
 )

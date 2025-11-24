@@ -11,6 +11,5 @@ data class EstablishmentDetailsResponse(
     val offeredServices: List<OfferedServicesResponse>,
     val attendants: List<Attendants>,
     val imageUrls: List<String>,
-    val type: String = "BARBERSHOP",
-    val available: Boolean
+    val type: String = "BARBERSHOP"
 )

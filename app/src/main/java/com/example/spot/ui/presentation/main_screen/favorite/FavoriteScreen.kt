@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -30,6 +31,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
@@ -50,6 +52,7 @@ fun FavoriteScreen(
 ) {
     val viewModel = koinViewModel<FavoriteViewModel>()
     val state by viewModel.state.collectAsState()
+    val isLogged by viewModel.isLoggedIn.collectAsState()
     val context = LocalContext.current
 
     val fusedLocationClient = remember { LocationServices.getFusedLocationProviderClient(context) }
@@ -114,9 +117,7 @@ fun FavoriteScreen(
         }
 
         is FavoriteState.Success -> {
-            val isNotFoundScreen = state.establishmentsData.isEmpty()
-
-            if (isNotFoundScreen) {
+            if (state.establishmentsData.isEmpty() || !isLogged) {
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
@@ -156,9 +157,23 @@ fun FavoriteScreen(
                         .fillMaxSize()
                         .background(MaterialTheme.colorScheme.background)
                         .padding(innerPadding),
-                    verticalArrangement = Arrangement.Top,
+                    verticalArrangement = Arrangement.spacedBy(25.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
+
+                    stickyHeader {
+                        Text(
+                            "Favoritadas:",
+                            modifier = Modifier
+                                .fillMaxWidth(0.9f)
+                                .background(MaterialTheme.colorScheme.background)
+                                .padding(bottom = 10.dp),
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onBackground,
+                            textAlign = TextAlign.Start
+                        )
+                    }
+
                     items(state.establishmentsData) { establishment ->
                         EstablishmentCard(
                             establishmentData = establishment,

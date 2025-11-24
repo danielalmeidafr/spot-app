@@ -24,18 +24,18 @@ class DetailsViewModel(
             _state.update { DetailsState.Loading }
 
             try {
-                val wrapper =
-                    establishmentDetailsRepository.getEstablishmentDetailsById(establishmentId)
-
+                val wrapper = establishmentDetailsRepository.getEstablishmentDetailsById(establishmentId)
                 val response = wrapper.establishment
 
                 val headerData = response.toEstablishmentDetailsData()
                 val servicesData = response.offeredServices.toOfferedServicesCategoryData()
+                val isFavorite = wrapper.isFavorite
 
                 _state.update {
                     DetailsState.Success(
                         header = headerData,
-                        services = servicesData
+                        services = servicesData,
+                        isFavorite = isFavorite
                     )
                 }
 
@@ -50,29 +50,63 @@ class DetailsViewModel(
     }
 
     fun favorite(establishmentId: String) {
+        updateFavoriteState(true)
+
         viewModelScope.launch {
             try {
                 establishmentDetailsRepository.favorite(establishmentId)
-            } catch (e: IOException) {
-                _state.update { DetailsState.Error("Falha na conexão. Verifique sua internet.") }
             } catch (e: HttpException) {
-                _state.update { DetailsState.Error("Erro no servidor: ${e.message()}") }
+                if (e.code() == 403) {
+                    updateFavoriteState(false)
+                    setLoginDialogVisibility(true)
+                } else {
+                    updateFavoriteState(false)
+                }
             } catch (e: Exception) {
-                _state.update { DetailsState.Error("Erro desconhecido: ${e.message}") }
+                updateFavoriteState(false)
             }
         }
     }
 
     fun unfavorite(establishmentId: String) {
+        updateFavoriteState(false)
+
         viewModelScope.launch {
             try {
                 establishmentDetailsRepository.unfavorite(establishmentId)
-            } catch (e: IOException) {
-                _state.update { DetailsState.Error("Falha na conexão. Verifique sua internet.") }
             } catch (e: HttpException) {
-                _state.update { DetailsState.Error("Erro no servidor: ${e.message()}") }
+                if (e.code() == 403) {
+                    updateFavoriteState(true)
+                    setLoginDialogVisibility(true)
+                } else {
+                    updateFavoriteState(true)
+                }
             } catch (e: Exception) {
-                _state.update { DetailsState.Error("Erro desconhecido: ${e.message}") }
+                updateFavoriteState(true)
+            }
+        }
+    }
+
+    fun dismissLoginDialog() {
+        setLoginDialogVisibility(false)
+    }
+
+    private fun setLoginDialogVisibility(show: Boolean) {
+        _state.update { currentState ->
+            if (currentState is DetailsState.Success) {
+                currentState.copy(showLoginDialog = show)
+            } else {
+                currentState
+            }
+        }
+    }
+
+    private fun updateFavoriteState(isFavorite: Boolean) {
+        _state.update { currentState ->
+            if (currentState is DetailsState.Success) {
+                currentState.copy(isFavorite = isFavorite)
+            } else {
+                currentState
             }
         }
     }

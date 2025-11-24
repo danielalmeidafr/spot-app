@@ -8,6 +8,8 @@ sealed class DetailsState {
     data class Error(val message: String) : DetailsState()
     data class Success(
         val header: EstablishmentDetailsData,
-        val services: List<OfferedServiceCategoryData>
+        val services: List<OfferedServiceCategoryData>,
+        val isFavorite : Boolean,
+        val showLoginDialog: Boolean = false
     ) : DetailsState()
 }

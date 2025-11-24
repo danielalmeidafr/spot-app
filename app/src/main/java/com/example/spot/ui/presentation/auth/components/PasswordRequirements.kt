@@ -10,7 +10,7 @@ import androidx.compose.ui.unit.dp
 fun PasswordRequirements(
     password: String
 ) {
-    val isLengthValid = password.length in 8..30
+    val isLengthValid = password.length in 6..30
     val hasNumber = password.any { it.isDigit() }
     val hasUpperCase = password.any { it.isUpperCase() }
     val hasSpecialChar = password.any { !it.isLetterOrDigit() }
@@ -20,7 +20,7 @@ fun PasswordRequirements(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         PasswordRequirementItem(
-            text = "8 a 30 caracteres",
+            text = "6 a 30 caracteres",
             isValid = isLengthValid
         )
         PasswordRequirementItem(
