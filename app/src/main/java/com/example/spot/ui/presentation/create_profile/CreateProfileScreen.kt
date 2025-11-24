@@ -54,7 +54,7 @@ import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun CreateProfileScreen(
-    onNavigateToMain: () -> Unit,
+    onNavigateToSuccessfulCreateProfile: () -> Unit,
     viewModel: CreateProfileViewModel = koinViewModel()
 ) {
     val state by viewModel.state.collectAsState()
@@ -84,7 +84,7 @@ fun CreateProfileScreen(
             }
 
             is CreateProfileState.Success -> {
-                onNavigateToMain()
+                onNavigateToSuccessfulCreateProfile()
             }
 
             else -> Unit

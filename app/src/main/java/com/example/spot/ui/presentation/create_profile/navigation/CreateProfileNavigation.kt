@@ -9,11 +9,11 @@ import kotlinx.serialization.Serializable
 object CreateProfileDestination
 
 fun NavGraphBuilder.createProfileScreen(
-    onNavigateToMain: () -> Unit
+    onNavigateToSuccessfulCreateProfile: () -> Unit
 ) {
     composable<CreateProfileDestination> {
         CreateProfileScreen(
-            onNavigateToMain = onNavigateToMain
+            onNavigateToSuccessfulCreateProfile = onNavigateToSuccessfulCreateProfile
         )
     }
 }

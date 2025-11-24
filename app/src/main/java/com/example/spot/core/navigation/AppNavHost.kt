@@ -19,6 +19,8 @@ import com.example.spot.ui.presentation.auth.screens.signup.navigation.SignUpDes
 import com.example.spot.ui.presentation.auth.screens.signup.navigation.signUpScreen
 import com.example.spot.ui.presentation.create_profile.navigation.CreateProfileDestination
 import com.example.spot.ui.presentation.create_profile.navigation.createProfileScreen
+import com.example.spot.ui.presentation.create_profile.successful_create_profile.navigation.SuccessfulCreateProfileDestination
+import com.example.spot.ui.presentation.create_profile.successful_create_profile.navigation.successfulCreateProfile
 import com.example.spot.ui.presentation.details_establishment.screens.details.navigation.DetailsDestination
 import com.example.spot.ui.presentation.details_establishment.screens.details.navigation.detailsScreen
 import com.example.spot.ui.presentation.details_establishment.screens.reviews.navigation.reviewsScreen
@@ -99,6 +101,10 @@ fun AppNavHost(
         )
 
         createProfileScreen(
+            onNavigateToSuccessfulCreateProfile = { navController.navigate(SuccessfulCreateProfileDestination) }
+        )
+
+        successfulCreateProfile(
             onNavigateToMain = { navController.navigate(MainScreenDestination) }
         )
 
