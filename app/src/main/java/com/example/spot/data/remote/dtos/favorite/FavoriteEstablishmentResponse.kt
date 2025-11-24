@@ -8,5 +8,6 @@ data class FavoriteEstablishmentResponse(
     val nextDate: String,
     val location: String,
     val distance: String?,
-    val paymentMethods: List<String>
+    val paymentMethods: List<String>,
+    val banner: String?
 )

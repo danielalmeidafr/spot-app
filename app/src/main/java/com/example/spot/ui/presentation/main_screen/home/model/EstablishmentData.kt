@@ -11,5 +11,6 @@ data class EstablishmentData(
     val nextDate: String,
     val location: String,
     val distance: String,
-    val paymentsMethods: List<PaymentsMethods>
+    val paymentsMethods: List<PaymentsMethods>,
+    val banner: String?
 )

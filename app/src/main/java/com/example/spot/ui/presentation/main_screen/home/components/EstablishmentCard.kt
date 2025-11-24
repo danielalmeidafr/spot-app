@@ -39,6 +39,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
 import com.example.spot.ui.presentation.main_screen.home.model.EstablishmentData
 import com.student.R
 import java.util.Locale
@@ -89,14 +90,14 @@ fun EstablishmentCard(
         Box(
             modifier = Modifier.fillMaxWidth()
         ) {
-            Image(
-                painter = painterResource(id = R.drawable.bar_image),
+            AsyncImage(
+                model = establishmentData.banner,
                 contentDescription = "Bar image",
+                contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(imageHeight)
-                    .clip(RoundedCornerShape(10.dp)),
-                contentScale = ContentScale.Crop
+                    .clip(RoundedCornerShape(10.dp))
             )
         }
 

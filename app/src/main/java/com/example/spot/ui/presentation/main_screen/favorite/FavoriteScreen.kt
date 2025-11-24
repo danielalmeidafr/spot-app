@@ -31,6 +31,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -163,12 +164,12 @@ fun FavoriteScreen(
 
                     stickyHeader {
                         Text(
-                            "Favoritadas:",
+                            "Favoritos:",
                             modifier = Modifier
                                 .fillMaxWidth(0.9f)
                                 .background(MaterialTheme.colorScheme.background)
                                 .padding(bottom = 10.dp),
-                            style = MaterialTheme.typography.bodyMedium,
+                            style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold),
                             color = MaterialTheme.colorScheme.onBackground,
                             textAlign = TextAlign.Start
                         )

@@ -30,12 +30,14 @@ class DetailsViewModel(
                 val headerData = response.toEstablishmentDetailsData()
                 val servicesData = response.offeredServices.toOfferedServicesCategoryData()
                 val isFavorite = wrapper.isFavorite
+                val imageUrls = response.imageUrls
 
                 _state.update {
                     DetailsState.Success(
                         header = headerData,
                         services = servicesData,
-                        isFavorite = isFavorite
+                        isFavorite = isFavorite,
+                        imageUrls = imageUrls
                     )
                 }
 

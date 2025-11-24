@@ -13,7 +13,8 @@ fun EstablishmentDto.toEstablishmentData(): EstablishmentData {
         nextDate = this.nextDate,
         location = this.location,
         distance = this.distance ?: "",
-        paymentsMethods = this.paymentMethods.toPaymentsMethods()
+        paymentsMethods = this.paymentMethods.toPaymentsMethods(),
+        banner = this.banner
     )
 }
 

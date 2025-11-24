@@ -119,7 +119,7 @@ fun NewPasswordScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .background(MaterialTheme.colorScheme.surface)
-                .padding(bottom = if (isKeyboardVisible) 320.dp else 0.dp)
+                .padding(bottom = if (isKeyboardVisible) 350.dp else 0.dp)
                 .statusBarsPadding()
         ) {
             Column(

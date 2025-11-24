@@ -8,6 +8,7 @@ data class EstablishmentDto(
     val nextDate: String,
     val location: String,
     val distance: String?,
-    val paymentMethods: List<String>
+    val paymentMethods: List<String>,
+    val banner: String?
     // val totalReviews: String
 )

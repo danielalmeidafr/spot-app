@@ -9,7 +9,8 @@ sealed class DetailsState {
     data class Success(
         val header: EstablishmentDetailsData,
         val services: List<OfferedServiceCategoryData>,
-        val isFavorite : Boolean,
+        val isFavorite: Boolean,
+        val imageUrls: List<String>,
         val showLoginDialog: Boolean = false
     ) : DetailsState()
 }
