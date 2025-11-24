@@ -24,6 +24,8 @@ import com.example.spot.ui.presentation.create_profile.successful_create_profile
 import com.example.spot.ui.presentation.details_establishment.screens.details.navigation.DetailsDestination
 import com.example.spot.ui.presentation.details_establishment.screens.details.navigation.detailsScreen
 import com.example.spot.ui.presentation.details_establishment.screens.reviews.navigation.reviewsScreen
+import com.example.spot.ui.presentation.details_establishment.screens.schedule_service.navigation.ScheduleServiceDestination
+import com.example.spot.ui.presentation.details_establishment.screens.schedule_service.navigation.scheduleServiceScreen
 import com.example.spot.ui.presentation.details_establishment.screens.services.navigation.ServicesDestination
 import com.example.spot.ui.presentation.details_establishment.screens.services.navigation.servicesScreen
 import com.example.spot.ui.presentation.main_screen.favorite.navigation.favoriteScreen
@@ -38,7 +40,7 @@ fun AppNavHost(
     onThemeToggle: () -> Unit
 ) {
     val navController = rememberNavController()
-    NavHost(navController = navController, startDestination = MainScreenDestination ) {
+    NavHost(navController = navController, startDestination = MainScreenDestination) {
         mainScreen(
             onNavigateToSignIn = { navController.navigate(SignInDestination) },
             onNavigateToDetails = { id -> navController.navigate(DetailsDestination(id)) },
@@ -101,7 +103,11 @@ fun AppNavHost(
         )
 
         createProfileScreen(
-            onNavigateToSuccessfulCreateProfile = { navController.navigate(SuccessfulCreateProfileDestination) }
+            onNavigateToSuccessfulCreateProfile = {
+                navController.navigate(
+                    SuccessfulCreateProfileDestination
+                )
+            }
         )
 
         successfulCreateProfile(
@@ -115,10 +121,18 @@ fun AppNavHost(
         )
 
         detailsScreen(
-            onBack = { navController.popBackStack() }
+            onBack = { navController.popBackStack() },
+            onNavigateToSignIn = { navController.navigate(SignInDestination) },
+            onNavigateToScheduleService = { navController.navigate(ScheduleServiceDestination) }
         )
 
         servicesScreen(
+            onBack = { navController.popBackStack() },
+            onNavigateToSignIn = { navController.navigate(SignInDestination) },
+            onNavigateToScheduleService = { navController.navigate(ScheduleServiceDestination) }
+        )
+
+        scheduleServiceScreen(
             onBack = { navController.popBackStack() }
         )
 

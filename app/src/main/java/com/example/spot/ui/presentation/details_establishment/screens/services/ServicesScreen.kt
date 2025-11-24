@@ -52,6 +52,8 @@ fun ServicesScreen(
     modifier: Modifier = Modifier,
     establishmentId: String,
     onBack: () -> Unit,
+    onNavigateToSignIn: () -> Unit,
+    onNavigateToScheduleService: () -> Unit
 ) {
     val viewModel = koinViewModel<DetailsViewModel>()
     val state by viewModel.state.collectAsState()
@@ -115,7 +117,10 @@ fun ServicesScreen(
                     },
                     confirmButton = {
                         TextButton(
-                            onClick = { viewModel.dismissLoginDialog() }
+                            onClick = {
+                                viewModel.dismissLoginDialog()
+                                onNavigateToSignIn()
+                            }
                         ) {
                             Text(
                                 text = "Entrar",
@@ -243,7 +248,7 @@ fun ServicesScreen(
 
                         serviceCategoryData.services.forEachIndexed { index, service ->
                             Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                                Service(offeredServiceData = service)
+                                Service(offeredServiceData = service, onClick = onNavigateToScheduleService)
 
                                 if (index < serviceCategoryData.services.lastIndex) {
                                     HorizontalDivider(
@@ -319,7 +324,9 @@ fun ServicesScreenPreview() {
     SpotTheme {
         ServicesScreen(
             establishmentId = "",
-            onBack = {}
+            onBack = {},
+            onNavigateToSignIn = {},
+            onNavigateToScheduleService = {}
         )
     }
 }

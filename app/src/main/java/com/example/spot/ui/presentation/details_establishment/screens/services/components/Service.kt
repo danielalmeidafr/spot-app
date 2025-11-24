@@ -36,6 +36,7 @@ import com.example.spot.ui.presentation.details_establishment.screens.services.m
 @Composable
 fun Service(
     offeredServiceData: OfferedServiceData,
+    onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     var isExpanded by remember { mutableStateOf(false) }
@@ -112,7 +113,7 @@ fun Service(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Button(
-                onClick = {},
+                onClick = onClick,
                 modifier = Modifier
                     .width(80.dp)
                     .height(28.dp),

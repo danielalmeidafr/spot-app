@@ -84,6 +84,7 @@ fun CustomTextField(
             focusedBorderColor = Color.Transparent,
             cursorColor = if (isError) MaterialTheme.colorScheme.tertiary else MaterialTheme.colorScheme.primary,
         ),
+        maxLines = 1,
 
         visualTransformation = if (isPassword) {
             if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation()

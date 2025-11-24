@@ -65,7 +65,9 @@ sealed class ScreenItem(
 fun DetailsScreen(
     modifier: Modifier = Modifier,
     establishmentId: String,
-    onBack: () -> Unit
+    onBack: () -> Unit,
+    onNavigateToSignIn: () -> Unit,
+    onNavigateToScheduleService: () -> Unit
 ) {
     val screens = remember {
         listOf(
@@ -137,7 +139,9 @@ fun DetailsScreen(
             when (item) {
                 ScreenItem.Services -> ServicesScreen(
                     establishmentId = establishmentId,
-                    onBack = onBack
+                    onBack = onBack,
+                    onNavigateToSignIn = onNavigateToSignIn,
+                    onNavigateToScheduleService = onNavigateToScheduleService
                 )
 
                 ScreenItem.Reviews -> ReviewsScreen(

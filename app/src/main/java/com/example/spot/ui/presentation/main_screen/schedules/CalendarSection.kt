@@ -31,7 +31,7 @@ import androidx.compose.ui.unit.dp
 import com.example.spot.ui.presentation.main_screen.schedules.util.CalendarDay
 import java.time.LocalDate
 
-private val WEEK = listOf("D", "S", "T", "Q", "Q", "S", "S")
+private val WEEK = listOf("DOM.", "SSEG.", "TER.", "QUA.", "QUI.", "SEX.", "SAB.")
 private val MONTHS = listOf(
     "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
     "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
@@ -53,7 +53,6 @@ fun CalendarSection(
             .background(MaterialTheme.colorScheme.surface)
             .padding(top = 15.dp, start = 5.dp, end = 5.dp)
     ) {
-        // Título
         Text(
             text = MONTHS[selectedMonth - 1],
             style = MaterialTheme.typography.bodyLarge,
