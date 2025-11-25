@@ -21,12 +21,13 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.example.spot.ui.presentation.details_establishment.screens.schedule_service.model.AttendantInfoData
 import com.student.R
 
 @Composable
 fun AttendantCard(
     modifier: Modifier = Modifier,
-    text: String
+    attendantInfoData: AttendantInfoData
 ) {
     Column(
         modifier = Modifier.width(80.dp),
@@ -50,7 +51,7 @@ fun AttendantCard(
         Spacer(modifier = Modifier.height(8.dp))
 
         Text(
-            text = text,
+            text = attendantInfoData.title,
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onBackground,
             maxLines = 1,

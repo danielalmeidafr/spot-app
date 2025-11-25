@@ -31,7 +31,7 @@ import androidx.compose.ui.unit.dp
 import com.example.spot.ui.presentation.main_screen.schedules.util.CalendarDay
 import java.time.LocalDate
 
-private val WEEK = listOf("DOM.", "SSEG.", "TER.", "QUA.", "QUI.", "SEX.", "SAB.")
+private val WEEK = listOf("DOM", "SEG", "TER", "QUA", "QUI", "SEX", "SAB")
 private val MONTHS = listOf(
     "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
     "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
@@ -51,7 +51,7 @@ fun CalendarSection(
         modifier = modifier
             .fillMaxWidth()
             .background(MaterialTheme.colorScheme.surface)
-            .padding(top = 15.dp, start = 5.dp, end = 5.dp)
+            .padding(top = 20.dp, start = 12.dp, end = 12.dp)
     ) {
         Text(
             text = MONTHS[selectedMonth - 1],
@@ -71,6 +71,7 @@ fun CalendarSection(
 
         CalendarGrid(calendarDays)
 
+        Spacer(modifier = Modifier.height(10.dp))
 
         MonthSelector(selectedMonth = selectedMonth, onMonthChange = onMonthChange)
 
@@ -100,10 +101,10 @@ private fun WeekHeader() {
 private fun CalendarGrid(calendarDays: List<CalendarDay>) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(7),
-        verticalArrangement = Arrangement.spacedBy(10.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp),
         modifier = Modifier
             .fillMaxWidth()
-            .height(235.dp)
+            .height(240.dp)
     ) {
         items(calendarDays, key = { it.date }) { day ->
             CalendarDayItem(day = day)
@@ -157,7 +158,7 @@ private fun MonthSelector(
     onMonthChange: (Int) -> Unit
 ) {
     val monthListState = rememberLazyListState()
-    LaunchedEffect(selectedMonth) {
+    LaunchedEffect(Unit) {
         monthListState.animateScrollToItem(selectedMonth - 1)
     }
 
