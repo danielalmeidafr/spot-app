@@ -1,5 +1,6 @@
-package com.example.spot.ui.presentation.details_establishment.screens.schedule_service.model
+package com.example.spot.ui.presentation.schedule_service.model
 
+import com.example.spot.data.remote.dtos.details.PaymentMethodsResponse
 import java.time.LocalDate
 
 sealed class ScheduleServiceState {
@@ -11,6 +12,7 @@ sealed class ScheduleServiceState {
         val availableTimes: AvailableHoursData,
         val serviceInfo: ServiceInfoData,
         val totalPrice: String,
+        val payments: List<PaymentMethodsResponse>,
         val showLoginDialog: Boolean = false
     ) : ScheduleServiceState()
 }

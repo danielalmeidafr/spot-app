@@ -2,9 +2,9 @@
 
 package com.example.spot.data.remote.dtos.schedule_service
 
-import com.example.spot.ui.presentation.details_establishment.screens.schedule_service.model.AttendantInfoData
-import com.example.spot.ui.presentation.details_establishment.screens.schedule_service.model.AvailableHoursData
-import com.example.spot.ui.presentation.details_establishment.screens.schedule_service.model.ServiceInfoData
+import com.example.spot.ui.presentation.schedule_service.model.AttendantInfoData
+import com.example.spot.ui.presentation.schedule_service.model.AvailableHoursData
+import com.example.spot.ui.presentation.schedule_service.model.ServiceInfoData
 import com.example.spot.ui.presentation.main_screen.home.components.PaymentsMethods
 import java.time.LocalDate
 import java.time.LocalTime

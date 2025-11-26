@@ -1,4 +1,4 @@
-package com.example.spot.ui.presentation.details_establishment.screens.schedule_service.components
+package com.example.spot.ui.presentation.schedule_service.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border

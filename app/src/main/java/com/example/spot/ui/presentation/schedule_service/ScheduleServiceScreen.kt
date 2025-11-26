@@ -1,4 +1,4 @@
-package com.example.spot.ui.presentation.details_establishment.screens.schedule_service
+package com.example.spot.ui.presentation.schedule_service
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -43,13 +43,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import com.example.spot.ui.components.PrimaryButton
-import com.example.spot.ui.presentation.details_establishment.screens.schedule_service.components.AttendantCard
-import com.example.spot.ui.presentation.details_establishment.screens.schedule_service.components.AvailableHours
-import com.example.spot.ui.presentation.details_establishment.screens.schedule_service.components.ServiceCalendarPager
-import com.example.spot.ui.presentation.details_establishment.screens.schedule_service.components.ServiceCard
-import com.example.spot.ui.presentation.details_establishment.screens.schedule_service.model.AttendantInfoData
-import com.example.spot.ui.presentation.details_establishment.screens.schedule_service.model.ScheduleServiceState
-import com.example.spot.ui.presentation.details_establishment.screens.schedule_service.viewmodel.ScheduleServiceViewModel
+import com.example.spot.ui.presentation.schedule_service.components.AttendantCard
+import com.example.spot.ui.presentation.schedule_service.components.AvailableHours
+import com.example.spot.ui.presentation.schedule_service.components.ServiceCalendarPager
+import com.example.spot.ui.presentation.schedule_service.components.ServiceCard
+import com.example.spot.ui.presentation.schedule_service.model.AttendantInfoData
+import com.example.spot.ui.presentation.schedule_service.model.ScheduleServiceState
+import com.example.spot.ui.presentation.schedule_service.viewmodel.ScheduleServiceViewModel
 import com.student.R
 import org.koin.androidx.compose.koinViewModel
 import java.time.LocalDate
@@ -61,7 +61,7 @@ fun ScheduleServiceScreen(
     serviceId: String,
     onBack: () -> Unit,
     onNavigateToSignIn: () -> Unit,
-    onNavigateToConfirmPayment: () -> Unit
+    onNavigateToConfirmPayment: (String, String) -> Unit
 ) {
     val viewModel: ScheduleServiceViewModel = koinViewModel()
     val state by viewModel.state.collectAsState()
@@ -94,52 +94,6 @@ fun ScheduleServiceScreen(
         }
 
         is ScheduleServiceState.Success -> {
-            if (currentState.showLoginDialog) {
-                AlertDialog(
-                    onDismissRequest = { viewModel.dismissLoginDialog() },
-                    title = {
-                        Text(
-                            text = "Faça login",
-                            style = MaterialTheme.typography.bodyLarge,
-                            color = MaterialTheme.colorScheme.onBackground
-                        )
-                    },
-                    text = {
-                        Text(
-                            text = "Você precisa estar logado para agendar este serviço. Deseja entrar agora?",
-                            style = MaterialTheme.typography.bodyLarge.copy(fontSize = 12.sp),
-                            color = MaterialTheme.colorScheme.onBackground
-                        )
-                    },
-                    confirmButton = {
-                        TextButton(
-                            onClick = {
-                                viewModel.dismissLoginDialog()
-                                onNavigateToSignIn()
-                            }
-                        ) {
-                            Text(
-                                text = "Entrar",
-                                style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.onBackground
-                            )
-                        }
-                    },
-                    dismissButton = {
-                        TextButton(
-                            onClick = { viewModel.dismissLoginDialog() }
-                        ) {
-                            Text(
-                                text = "Cancelar",
-                                style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.onBackground
-                            )
-                        }
-                    },
-                    containerColor = MaterialTheme.colorScheme.surfaceContainer
-                )
-            }
-
             LazyColumn(
                 modifier = Modifier
                     .fillMaxSize()
@@ -153,7 +107,7 @@ fun ScheduleServiceScreen(
                             .fillMaxWidth()
                             .background(MaterialTheme.colorScheme.background)
                             .statusBarsPadding()
-                            .padding(start = 25.dp, top = 12.dp, bottom = 13.dp),
+                            .padding(start = 30.dp, top = 12.dp, bottom = 13.dp),
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(15.dp)
                     ) {
@@ -315,10 +269,58 @@ fun ScheduleServiceScreen(
                             "Ir para pagamento",
                             onClick = {
                                 if(selectedHour != null && selectedAttendant != null) {
-                                    onNavigateToConfirmPayment()
+                                    viewModel.attemptPaymentNavigation(
+                                        onNavigate = { onNavigateToConfirmPayment(establishmentId, serviceId) }
+                                    )
                                 }
                             }
                         )
+
+                        if (currentState.showLoginDialog) {
+                            AlertDialog(
+                                onDismissRequest = { viewModel.dismissLoginDialog() },
+                                title = {
+                                    Text(
+                                        text = "Faça login",
+                                        style = MaterialTheme.typography.bodyLarge,
+                                        color = MaterialTheme.colorScheme.onBackground
+                                    )
+                                },
+                                text = {
+                                    Text(
+                                        text = "Você precisa estar logado para agendar este serviço. Deseja entrar agora?",
+                                        style = MaterialTheme.typography.bodyLarge.copy(fontSize = 12.sp),
+                                        color = MaterialTheme.colorScheme.onBackground
+                                    )
+                                },
+                                confirmButton = {
+                                    TextButton(
+                                        onClick = {
+                                            viewModel.dismissLoginDialog()
+                                            onNavigateToSignIn()
+                                        }
+                                    ) {
+                                        Text(
+                                            text = "Entrar",
+                                            style = MaterialTheme.typography.bodySmall,
+                                            color = MaterialTheme.colorScheme.onBackground
+                                        )
+                                    }
+                                },
+                                dismissButton = {
+                                    TextButton(
+                                        onClick = { viewModel.dismissLoginDialog() }
+                                    ) {
+                                        Text(
+                                            text = "Cancelar",
+                                            style = MaterialTheme.typography.bodySmall,
+                                            color = MaterialTheme.colorScheme.onBackground
+                                        )
+                                    }
+                                },
+                                containerColor = MaterialTheme.colorScheme.surfaceContainer
+                            )
+                        }
                     }
 
                     Spacer(modifier = Modifier.height(30.dp))

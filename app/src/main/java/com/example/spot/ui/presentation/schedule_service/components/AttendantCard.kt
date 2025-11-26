@@ -1,4 +1,4 @@
-package com.example.spot.ui.presentation.details_establishment.screens.schedule_service.components
+package com.example.spot.ui.presentation.schedule_service.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -20,7 +20,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import com.example.spot.ui.presentation.details_establishment.screens.schedule_service.model.AttendantInfoData
+import com.example.spot.ui.presentation.schedule_service.model.AttendantInfoData
 
 @Composable
 fun AttendantCard(

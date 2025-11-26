@@ -1,4 +1,4 @@
-package com.example.spot.ui.presentation.details_establishment.screens.schedule_service.components
+package com.example.spot.ui.presentation.schedule_service.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -27,7 +27,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
-import com.example.spot.ui.presentation.details_establishment.screens.schedule_service.model.ServiceInfoData
+import com.example.spot.ui.presentation.schedule_service.model.ServiceInfoData
 import com.student.R
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter

@@ -1,4 +1,4 @@
-package com.example.spot.ui.presentation.details_establishment.screens.schedule_service.components
+package com.example.spot.ui.presentation.schedule_service.components
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
@@ -21,7 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.example.spot.ui.presentation.details_establishment.screens.schedule_service.model.AvailableHoursData
+import com.example.spot.ui.presentation.schedule_service.model.AvailableHoursData
 
 @Composable
 fun AvailableHours(

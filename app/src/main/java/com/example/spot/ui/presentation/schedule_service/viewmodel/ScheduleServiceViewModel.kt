@@ -1,14 +1,15 @@
-package com.example.spot.ui.presentation.details_establishment.screens.schedule_service.viewmodel
+package com.example.spot.ui.presentation.schedule_service.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.spot.data.remote.dtos.UserPreferencesRepository
 import com.example.spot.data.remote.dtos.schedule_service.ScheduleServiceRepository
 import com.example.spot.data.remote.dtos.schedule_service.toAttendantInfoData
 import com.example.spot.data.remote.dtos.schedule_service.toAvailableDays
 import com.example.spot.data.remote.dtos.schedule_service.toAvailableHoursData
 import com.example.spot.data.remote.dtos.schedule_service.toServiceInfoData
 import com.example.spot.data.remote.dtos.schedule_service.toTotalPrice
-import com.example.spot.ui.presentation.details_establishment.screens.schedule_service.model.ScheduleServiceState
+import com.example.spot.ui.presentation.schedule_service.model.ScheduleServiceState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -19,15 +20,26 @@ import retrofit2.HttpException
 import java.time.LocalDate
 
 class ScheduleServiceViewModel(
-    private val repository: ScheduleServiceRepository
+    private val repository: ScheduleServiceRepository,
+    private val userPreferencesRepository: UserPreferencesRepository
 ) : ViewModel() {
 
     private val _state = MutableStateFlow<ScheduleServiceState>(ScheduleServiceState.Loading)
     val state = _state.asStateFlow()
 
+    private val _accessToken = MutableStateFlow("")
+
     private var currentEstablishmentId: String = ""
     private var currentServiceId: String = ""
     private var currentDate: LocalDate = LocalDate.now()
+
+    init {
+        viewModelScope.launch {
+            userPreferencesRepository.accessToken.collect { token ->
+                _accessToken.value = token
+            }
+        }
+    }
 
     fun loadSchedule(establishmentId: String, serviceId: String) {
         this.currentEstablishmentId = establishmentId
@@ -45,7 +57,10 @@ class ScheduleServiceViewModel(
 
     private fun fetchData(date: LocalDate) {
         viewModelScope.launch {
-            _state.update { ScheduleServiceState.Loading }
+            _state.update {
+                if (it is ScheduleServiceState.Success) it.copy(showLoginDialog = false)
+                else ScheduleServiceState.Loading
+            }
 
             try {
                 val formattedDate = date.toString()
@@ -62,21 +77,26 @@ class ScheduleServiceViewModel(
                         availableDays = response.toAvailableDays(),
                         availableTimes = response.toAvailableHoursData(),
                         serviceInfo = response.toServiceInfoData(),
-                        totalPrice = response.toTotalPrice()
+                        totalPrice = response.toTotalPrice(),
+                        payments = response.paymentMethods
                     )
                 }
-
             } catch (e: IOException) {
                 _state.update { ScheduleServiceState.Error("Falha na conexão. Verifique sua internet.") }
             } catch (e: HttpException) {
-                if (e.code() == 403) {
-                    setLoginDialogVisibility(true)
-                }
                 val message = parseErrorMessage(e)
                 _state.update { ScheduleServiceState.Error(message) }
             } catch (e: Exception) {
                 _state.update { ScheduleServiceState.Error("Ocorreu um erro: ${e.message}") }
             }
+        }
+    }
+
+    fun attemptPaymentNavigation(onNavigate: () -> Unit) {
+        if (_accessToken.value.isEmpty()) {
+            setLoginDialogVisibility(true)
+        } else {
+            onNavigate()
         }
     }
 

@@ -17,6 +17,8 @@ import com.example.spot.ui.presentation.auth.screens.signin.navigation.SignInDes
 import com.example.spot.ui.presentation.auth.screens.signin.navigation.signInScreen
 import com.example.spot.ui.presentation.auth.screens.signup.navigation.SignUpDestination
 import com.example.spot.ui.presentation.auth.screens.signup.navigation.signUpScreen
+import com.example.spot.ui.presentation.confirm_payment.navigation.ConfirmPaymentDestination
+import com.example.spot.ui.presentation.confirm_payment.navigation.confirmPaymentScreen
 import com.example.spot.ui.presentation.create_profile.navigation.CreateProfileDestination
 import com.example.spot.ui.presentation.create_profile.navigation.createProfileScreen
 import com.example.spot.ui.presentation.create_profile.successful_create_profile.navigation.SuccessfulCreateProfileDestination
@@ -24,9 +26,8 @@ import com.example.spot.ui.presentation.create_profile.successful_create_profile
 import com.example.spot.ui.presentation.details_establishment.screens.details.navigation.DetailsDestination
 import com.example.spot.ui.presentation.details_establishment.screens.details.navigation.detailsScreen
 import com.example.spot.ui.presentation.details_establishment.screens.reviews.navigation.reviewsScreen
-import com.example.spot.ui.presentation.details_establishment.screens.schedule_service.navigation.ScheduleServiceDestination
-import com.example.spot.ui.presentation.details_establishment.screens.schedule_service.navigation.scheduleServiceScreen
-import com.example.spot.ui.presentation.details_establishment.screens.services.navigation.ServicesDestination
+import com.example.spot.ui.presentation.schedule_service.navigation.ScheduleServiceDestination
+import com.example.spot.ui.presentation.schedule_service.navigation.scheduleServiceScreen
 import com.example.spot.ui.presentation.details_establishment.screens.services.navigation.servicesScreen
 import com.example.spot.ui.presentation.main_screen.favorite.navigation.favoriteScreen
 import com.example.spot.ui.presentation.main_screen.home.navigation.homeScreen
@@ -149,7 +150,18 @@ fun AppNavHost(
         scheduleServiceScreen(
             onBack = { navController.popBackStack() },
             onNavigateToSignIn = { navController.navigate(SignInDestination) },
-            onNavigateToConfirmPayment = { navController.navigate(SignInDestination) }
+            onNavigateToConfirmPayment = { establishmentId, offeredServiceId ->
+                navController.navigate(
+                    ConfirmPaymentDestination(
+                        establishmentId,
+                        offeredServiceId
+                    )
+                )
+            }
+        )
+
+        confirmPaymentScreen(
+            onBack = { navController.popBackStack() }
         )
 
         reviewsScreen(
