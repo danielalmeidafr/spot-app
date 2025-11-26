@@ -26,6 +26,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
 import com.example.spot.ui.presentation.details_establishment.screens.schedule_service.model.ServiceInfoData
 import com.student.R
 import java.time.LocalTime
@@ -48,6 +49,8 @@ fun ServiceCard(
     modifier: Modifier = Modifier,
     serviceInfoData: ServiceInfoData,
     selectedTime: String?,
+    nameAttendant: String,
+    attendantImage: String?
 ) {
     Surface(
         modifier = Modifier
@@ -112,16 +115,26 @@ fun ServiceCard(
                         .clip(CircleShape)
                         .background(Color.LightGray)
                 ) {
-                    Image(
-                        painter = painterResource(R.drawable.user_image),
-                        contentDescription = "Imagem do usuário",
-                        contentScale = ContentScale.Crop,
-                        modifier = Modifier.matchParentSize()
-                    )
+                    if (attendantImage.isNullOrEmpty()) {
+                        Image(
+                            painter = painterResource(R.drawable.user_image),
+                            contentDescription = "Imagem do usuário",
+                            contentScale = ContentScale.Crop,
+                            modifier = Modifier.matchParentSize()
+                        )
+                    } else {
+                        AsyncImage(
+                            model = attendantImage,
+                            contentDescription = "Imagem do atendente",
+                            error = painterResource(R.drawable.user_image),
+                            contentScale = ContentScale.Crop,
+                            modifier = Modifier.matchParentSize()
+                        )
+                    }
                 }
 
                 Text(
-                    text = serviceInfoData.nameAttendant,
+                    text = nameAttendant,
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onBackground
                 )

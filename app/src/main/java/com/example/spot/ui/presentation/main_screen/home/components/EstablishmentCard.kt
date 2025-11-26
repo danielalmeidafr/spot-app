@@ -92,7 +92,7 @@ fun EstablishmentCard(
         ) {
             AsyncImage(
                 model = establishmentData.banner,
-                contentDescription = "Bar image",
+                contentDescription = "Imagem da barbearia",
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .fillMaxWidth()

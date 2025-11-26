@@ -1,6 +1,5 @@
 package com.example.spot.ui.presentation.details_establishment.screens.schedule_service.components
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -18,11 +17,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
 import com.example.spot.ui.presentation.details_establishment.screens.schedule_service.model.AttendantInfoData
-import com.student.R
 
 @Composable
 fun AttendantCard(
@@ -40,9 +38,9 @@ fun AttendantCard(
                 .clip(CircleShape)
                 .background(Color.LightGray)
         ) {
-            Image(
-                painter = painterResource(R.drawable.user_image),
-                contentDescription = "Imagem do usuário",
+            AsyncImage(
+                model = attendantInfoData.profileImage,
+                contentDescription = "Imagem do barbeiro",
                 contentScale = ContentScale.Crop,
                 modifier = Modifier.matchParentSize()
             )
@@ -51,7 +49,7 @@ fun AttendantCard(
         Spacer(modifier = Modifier.height(8.dp))
 
         Text(
-            text = attendantInfoData.title,
+            text = attendantInfoData.name,
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onBackground,
             maxLines = 1,

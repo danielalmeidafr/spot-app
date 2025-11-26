@@ -6,7 +6,6 @@ data class EstablishmentDetailsResponse(
     val description: String,
     val address: AddressResponse,
     val openingDates: List<OpeningDatesResponse>,
-    val averageRating: Double,
     val paymentMethods: List<PaymentMethodsResponse>,
     val offeredServices: List<OfferedServicesResponse>,
     val attendants: List<Attendants>,

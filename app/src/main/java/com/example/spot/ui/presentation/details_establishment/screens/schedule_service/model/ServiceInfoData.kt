@@ -2,6 +2,5 @@ package com.example.spot.ui.presentation.details_establishment.screens.schedule_
 
 data class ServiceInfoData(
     val title: String,
-    val price: String,
-    val nameAttendant: String
+    val price: String
 )

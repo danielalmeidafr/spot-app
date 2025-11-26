@@ -1,8 +1,11 @@
 package com.example.spot.ui.presentation.details_establishment.screens.schedule_service
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -14,13 +17,18 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -28,43 +36,110 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.spot.ui.components.PrimaryButton
 import com.example.spot.ui.presentation.details_establishment.screens.schedule_service.components.AttendantCard
-import com.example.spot.ui.presentation.details_establishment.screens.schedule_service.components.AvailableTimes
+import com.example.spot.ui.presentation.details_establishment.screens.schedule_service.components.AvailableHours
 import com.example.spot.ui.presentation.details_establishment.screens.schedule_service.components.ServiceCalendarPager
 import com.example.spot.ui.presentation.details_establishment.screens.schedule_service.components.ServiceCard
+import com.example.spot.ui.presentation.details_establishment.screens.schedule_service.model.AttendantInfoData
 import com.example.spot.ui.presentation.details_establishment.screens.schedule_service.model.ScheduleServiceState
 import com.example.spot.ui.presentation.details_establishment.screens.schedule_service.viewmodel.ScheduleServiceViewModel
 import com.student.R
+import org.koin.androidx.compose.koinViewModel
 import java.time.LocalDate
-import androidx.compose.foundation.lazy.items
 
 @Composable
 fun ScheduleServiceScreen(
     modifier: Modifier = Modifier,
-    onBack: () -> Unit
+    establishmentId: String,
+    serviceId: String,
+    onBack: () -> Unit,
+    onNavigateToSignIn: () -> Unit,
+    onNavigateToConfirmPayment: () -> Unit
 ) {
-    val viewModel: ScheduleServiceViewModel = viewModel()
+    val viewModel: ScheduleServiceViewModel = koinViewModel()
     val state by viewModel.state.collectAsState()
 
-    var selectedDate by remember { mutableStateOf(LocalDate.now()) }
-    var selectedTime by remember { mutableStateOf<String?>(null) }
+    var selectedDay by remember { mutableStateOf(LocalDate.now()) }
+    var selectedHour by remember { mutableStateOf<String?>(null) }
+    var selectedAttendant by remember { mutableStateOf<AttendantInfoData?>(null) }
 
-    when (val state = state) {
+    LaunchedEffect(Unit) {
+        viewModel.loadSchedule(establishmentId, serviceId)
+    }
+
+    LaunchedEffect(state) {
+        if (state is ScheduleServiceState.Success && selectedAttendant == null) {
+            selectedAttendant = (state as ScheduleServiceState.Success).attendants.firstOrNull()
+        }
+    }
+
+    when (val currentState = state) {
         is ScheduleServiceState.Loading -> {
-
+            Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                Text("Carregando...")
+            }
         }
 
         is ScheduleServiceState.Error -> {
-
+            Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                Text(text = currentState.message)
+            }
         }
 
         is ScheduleServiceState.Success -> {
+            if (currentState.showLoginDialog) {
+                AlertDialog(
+                    onDismissRequest = { viewModel.dismissLoginDialog() },
+                    title = {
+                        Text(
+                            text = "Faça login",
+                            style = MaterialTheme.typography.bodyLarge,
+                            color = MaterialTheme.colorScheme.onBackground
+                        )
+                    },
+                    text = {
+                        Text(
+                            text = "Você precisa estar logado para agendar este serviço. Deseja entrar agora?",
+                            style = MaterialTheme.typography.bodyLarge.copy(fontSize = 12.sp),
+                            color = MaterialTheme.colorScheme.onBackground
+                        )
+                    },
+                    confirmButton = {
+                        TextButton(
+                            onClick = {
+                                viewModel.dismissLoginDialog()
+                                onNavigateToSignIn()
+                            }
+                        ) {
+                            Text(
+                                text = "Entrar",
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onBackground
+                            )
+                        }
+                    },
+                    dismissButton = {
+                        TextButton(
+                            onClick = { viewModel.dismissLoginDialog() }
+                        ) {
+                            Text(
+                                text = "Cancelar",
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onBackground
+                            )
+                        }
+                    },
+                    containerColor = MaterialTheme.colorScheme.surfaceContainer
+                )
+            }
+
             LazyColumn(
                 modifier = Modifier
                     .fillMaxSize()
@@ -78,7 +153,7 @@ fun ScheduleServiceScreen(
                             .fillMaxWidth()
                             .background(MaterialTheme.colorScheme.background)
                             .statusBarsPadding()
-                            .padding(start = 20.dp, top = 12.dp, bottom = 13.dp),
+                            .padding(start = 25.dp, top = 12.dp, bottom = 13.dp),
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(15.dp)
                     ) {
@@ -114,29 +189,43 @@ fun ScheduleServiceScreen(
                 }
 
                 item {
-                    Spacer(modifier = Modifier.height(25.dp))
+                    if (currentState.attendants.isNotEmpty()){
+                        Spacer(modifier = Modifier.height(25.dp))
 
-                    LazyRow(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 10.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.SpaceAround
-                    ) {
-                        items(state.attendants) { attendant ->
-                            AttendantCard(
-                                attendantInfoData = attendant
-                            )
+                        LazyRow(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 10.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.SpaceAround
+                        ) {
+                            items(currentState.attendants) { attendant ->
+                                val isSelected = selectedAttendant?.id == attendant.id
+
+                                val borderColor = if (isSelected) MaterialTheme.colorScheme.primary else Color.Transparent
+
+                                Box(
+                                    modifier = Modifier
+                                        .clip(RoundedCornerShape(12.dp))
+                                        .border(1.dp, borderColor, RoundedCornerShape(12.dp))
+                                        .clickable { selectedAttendant = attendant }
+                                        .padding(10.dp)
+                                ) {
+                                    AttendantCard(
+                                        attendantInfoData = attendant
+                                    )
+                                }
+                            }
                         }
+
+                        Spacer(modifier = Modifier.height(25.dp))
+
+                        HorizontalDivider(
+                            modifier = Modifier.fillMaxWidth(),
+                            thickness = 1.dp,
+                            color = MaterialTheme.colorScheme.outline
+                        )
                     }
-
-                    Spacer(modifier = Modifier.height(25.dp))
-
-                    HorizontalDivider(
-                        modifier = Modifier.fillMaxWidth(),
-                        thickness = 1.dp,
-                        color = MaterialTheme.colorScheme.outline
-                    )
                 }
 
                 item {
@@ -146,10 +235,12 @@ fun ScheduleServiceScreen(
                             .padding(top = 25.dp)
                     ) {
                         ServiceCalendarPager(
-                            selectedDate = selectedDate,
+                            selectedDay = selectedDay,
+                            availableDates = currentState.availableDays,
                             onDateSelected = { date ->
-                                selectedDate = date
-                                selectedTime = null
+                                selectedDay = date
+                                selectedHour = null
+                                viewModel.onDateSelected(date)
                             }
                         )
                     }
@@ -166,11 +257,11 @@ fun ScheduleServiceScreen(
                 item {
                     Spacer(modifier = Modifier.height(25.dp))
 
-                    AvailableTimes(
-                        availableTimesData = state.availableTimes,
-                        selectedTime = selectedTime,
+                    AvailableHours(
+                        availableHoursData = currentState.availableTimes,
+                        selectedHour = selectedHour,
                         onTimeSelected = { newTime ->
-                            selectedTime = newTime
+                            selectedHour = newTime
                         }
                     )
 
@@ -187,51 +278,46 @@ fun ScheduleServiceScreen(
                     Spacer(modifier = Modifier.height(25.dp))
 
                     ServiceCard(
-                        serviceInfoData = state.serviceInfo,
-                        selectedTime = selectedTime,
+                        serviceInfoData = currentState.serviceInfo,
+                        selectedTime = selectedHour,
+                        nameAttendant = selectedAttendant?.name ?: "Selecione um profissional",
+                        attendantImage = selectedAttendant?.profileImage
                     )
-                }
-
-                item {
-                    Spacer(modifier = Modifier.height(25.dp))
-
-                    Row(
-                        modifier = Modifier.fillMaxWidth(0.9f),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(5.dp)
-                    ) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.add),
-                            tint = MaterialTheme.colorScheme.primary,
-                            contentDescription = null,
-                            modifier = Modifier.size(30.dp)
-                        )
-
-                        Text(
-                            "Adicionar outro serviço",
-                            style = MaterialTheme.typography.bodyLarge.copy(fontSize = 14.sp),
-                            color = MaterialTheme.colorScheme.primary
-                        )
-                    }
                 }
 
                 item {
                     Spacer(modifier = Modifier.height(35.dp))
 
-                    Row(
-                        modifier = Modifier.fillMaxWidth(0.85f),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.SpaceBetween
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        Text(
-                            text = state.serviceInfo.price,
-                            style = MaterialTheme.typography.titleMedium,
-                            color = MaterialTheme.colorScheme.onBackground
-                        )
+                        Row(
+                            modifier = Modifier.fillMaxWidth(0.85f),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
+                            Text(
+                                "Total:",
+                                style = MaterialTheme.typography.bodyMedium.copy(fontSize = 15.sp),
+                                color = MaterialTheme.colorScheme.onBackground
+                            )
+
+                            Text(
+                                text = "R$ ${currentState.totalPrice}",
+                                style = MaterialTheme.typography.bodyMedium.copy(fontSize = 15.sp),
+                                color = MaterialTheme.colorScheme.onBackground
+                            )
+                        }
+
+                        Spacer(modifier = Modifier.height(20.dp))
 
                         PrimaryButton(
-                            "Agendar",
-                            onClick = {}
+                            "Ir para pagamento",
+                            onClick = {
+                                if(selectedHour != null && selectedAttendant != null) {
+                                    onNavigateToConfirmPayment()
+                                }
+                            }
                         )
                     }
 

@@ -27,6 +27,7 @@ fun List<OfferedServicesResponse>.toOfferedServicesCategoryData(): List<OfferedS
 
 fun OfferedServicesResponse.toOfferedServicesData(): OfferedServiceData{
     return OfferedServiceData(
+        id = this.id,
         title = this.name,
         description = this.description,
         price = String.format(Locale("pt", "BR"), "%.2f", this.price)

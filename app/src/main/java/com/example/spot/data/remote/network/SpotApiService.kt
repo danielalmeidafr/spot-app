@@ -13,6 +13,7 @@ import com.example.spot.data.remote.dtos.details.EstablishmentDetailsWrapper
 import com.example.spot.data.remote.dtos.favorite.FavoriteEstablishmentWrapper
 import com.example.spot.data.remote.dtos.home.establishment.PagedEstablishmentsResponse
 import com.example.spot.data.remote.dtos.home.nextschedule.NextScheduleResponse
+import com.example.spot.data.remote.dtos.schedule_service.ScheduleServiceResponse
 import com.example.spot.data.remote.dtos.schedules.AppointmentResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -49,6 +50,13 @@ interface SpotApiService {
     suspend fun getAllAppointments(
         @Query("month") month: Int
     ): AppointmentResponse
+
+    @GET("api/appointments/info")
+    suspend fun getInfoAppointment(
+        @Query("establishmentId") establishmentId: String,
+        @Query("offeredServiceId") offeredServiceId: String,
+        @Query("appointmentDate") appointmentDate: String
+    ): ScheduleServiceResponse
 
     @POST("api/authentication/sign-in")
     suspend fun signIn(@Body request: SignInRequest): AuthResponse

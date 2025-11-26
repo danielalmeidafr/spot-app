@@ -35,7 +35,8 @@ data class ServiceCalendarDay(
 @Composable
 fun ServiceCalendarPager(
     modifier: Modifier = Modifier,
-    selectedDate: LocalDate,
+    selectedDay: LocalDate,
+    availableDates: List<LocalDate>,
     onDateSelected: (LocalDate) -> Unit
 ) {
     val pageCount = 24
@@ -90,7 +91,8 @@ fun ServiceCalendarPager(
                     items(days) { day ->
                         ServiceCalendarDayItem(
                             day = day,
-                            isSelected = day.date == selectedDate,
+                            isAvailable = availableDates.contains(day.date),
+                            isSelected = day.date == selectedDay,
                             onDateSelected = onDateSelected
                         )
                     }
@@ -104,18 +106,19 @@ fun ServiceCalendarPager(
 fun ServiceCalendarDayItem(
     day: ServiceCalendarDay,
     isSelected: Boolean,
+    isAvailable: Boolean,
     onDateSelected: (LocalDate) -> Unit
 ) {
     val isToday = day.isToday
     val isPastDate = remember(day.date) { day.date.isBefore(LocalDate.now()) }
 
-    val isEnabled = day.isCurrentMonth && !isPastDate
+    val isEnabled = day.isCurrentMonth && !isPastDate && isAvailable
 
     val backgroundColor = if (isSelected) MaterialTheme.colorScheme.primary else Color.Transparent
 
     val textColor = when {
         isSelected -> MaterialTheme.colorScheme.onPrimary
-        !day.isCurrentMonth || isPastDate -> MaterialTheme.colorScheme.onBackground.copy(alpha = 0.3f)
+        !isEnabled -> MaterialTheme.colorScheme.onBackground.copy(alpha = 0.3f)
         else -> MaterialTheme.colorScheme.onBackground
     }
 

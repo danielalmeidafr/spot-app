@@ -15,7 +15,7 @@ data class DetailsDestination(
 fun NavGraphBuilder.detailsScreen(
     onBack: () -> Unit,
     onNavigateToSignIn: () -> Unit,
-    onNavigateToScheduleService: () -> Unit
+    onNavigateToScheduleService: (String, String) -> Unit
 ) {
     composable<DetailsDestination> { backStackEntry ->
         val id = backStackEntry.toRoute<DetailsDestination>()

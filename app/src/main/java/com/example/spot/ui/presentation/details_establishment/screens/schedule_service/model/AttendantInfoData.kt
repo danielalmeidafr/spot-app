@@ -1,5 +1,7 @@
 package com.example.spot.ui.presentation.details_establishment.screens.schedule_service.model
 
 data class AttendantInfoData(
-    val title: String
+    val id: String,
+    val name: String,
+    val profileImage: String
 )

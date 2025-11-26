@@ -123,17 +123,33 @@ fun AppNavHost(
         detailsScreen(
             onBack = { navController.popBackStack() },
             onNavigateToSignIn = { navController.navigate(SignInDestination) },
-            onNavigateToScheduleService = { navController.navigate(ScheduleServiceDestination) }
+            onNavigateToScheduleService = { establishmentId, offeredServiceId ->
+                navController.navigate(
+                    ScheduleServiceDestination(
+                        establishmentId,
+                        offeredServiceId
+                    )
+                )
+            }
         )
 
         servicesScreen(
             onBack = { navController.popBackStack() },
             onNavigateToSignIn = { navController.navigate(SignInDestination) },
-            onNavigateToScheduleService = { navController.navigate(ScheduleServiceDestination) }
+            onNavigateToScheduleService = { establishmentId, offeredServiceId ->
+                navController.navigate(
+                    ScheduleServiceDestination(
+                        establishmentId,
+                        offeredServiceId
+                    )
+                )
+            }
         )
 
         scheduleServiceScreen(
-            onBack = { navController.popBackStack() }
+            onBack = { navController.popBackStack() },
+            onNavigateToSignIn = { navController.navigate(SignInDestination) },
+            onNavigateToConfirmPayment = { navController.navigate(SignInDestination) }
         )
 
         reviewsScreen(

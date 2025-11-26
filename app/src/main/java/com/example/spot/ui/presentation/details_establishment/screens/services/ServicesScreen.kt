@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -34,12 +35,10 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import coil.compose.AsyncImage
-import com.example.spot.core.theme.SpotTheme
 import com.example.spot.ui.presentation.details_establishment.model.DetailsState
 import com.example.spot.ui.presentation.details_establishment.screens.services.components.Service
 import com.example.spot.ui.presentation.details_establishment.screens.services.components.ServicesScreenSkeleton
@@ -53,7 +52,7 @@ fun ServicesScreen(
     establishmentId: String,
     onBack: () -> Unit,
     onNavigateToSignIn: () -> Unit,
-    onNavigateToScheduleService: () -> Unit
+    onNavigateToScheduleService: (String, String) -> Unit
 ) {
     val viewModel = koinViewModel<DetailsViewModel>()
     val state by viewModel.state.collectAsState()
@@ -243,12 +242,12 @@ fun ServicesScreen(
                             color = MaterialTheme.colorScheme.onBackground,
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(start = 20.dp, top = 25.dp)
+                                .padding(start = 20.dp, top = 35.dp)
                         )
 
                         serviceCategoryData.services.forEachIndexed { index, service ->
                             Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                                Service(offeredServiceData = service, onClick = onNavigateToScheduleService)
+                                Service(offeredServiceData = service, onClick = {onNavigateToScheduleService(establishmentId, service.id)})
 
                                 if (index < serviceCategoryData.services.lastIndex) {
                                     HorizontalDivider(
@@ -261,10 +260,14 @@ fun ServicesScreen(
                         }
 
                         HorizontalDivider(
-                            modifier = Modifier.fillMaxWidth(),
+                            modifier = Modifier.fillMaxWidth().padding(top = 10.dp),
                             thickness = 1.dp,
                             color = MaterialTheme.colorScheme.outline
                         )
+                    }
+
+                    item{
+                        Spacer(modifier = Modifier.height(30.dp))
                     }
                 }
 
@@ -315,18 +318,5 @@ fun ServicesScreen(
                 }
             }
         }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun ServicesScreenPreview() {
-    SpotTheme {
-        ServicesScreen(
-            establishmentId = "",
-            onBack = {},
-            onNavigateToSignIn = {},
-            onNavigateToScheduleService = {}
-        )
     }
 }

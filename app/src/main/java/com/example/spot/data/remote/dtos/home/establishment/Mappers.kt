@@ -7,8 +7,8 @@ fun EstablishmentDto.toEstablishmentData(): EstablishmentData {
     return EstablishmentData(
         id = this.id,
         name = this.name,
-        averageRating = this.averageRating,
-        totalReviews = 0,
+        averageRating = this.averageScore,
+        totalReviews = this.totalReviews,
         isOpen = this.isOpen,
         nextDate = this.nextDate,
         location = this.location,

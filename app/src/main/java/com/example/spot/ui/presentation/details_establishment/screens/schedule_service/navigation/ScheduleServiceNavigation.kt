@@ -2,18 +2,30 @@ package com.example.spot.ui.presentation.details_establishment.screens.schedule_
 
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
+import androidx.navigation.toRoute
 import com.example.spot.ui.presentation.details_establishment.screens.schedule_service.ScheduleServiceScreen
 import kotlinx.serialization.Serializable
 
 @Serializable
-object ScheduleServiceDestination
+data class ScheduleServiceDestination(
+    val establishmentId: String,
+    val offeredServiceId: String
+)
 
 fun NavGraphBuilder.scheduleServiceScreen(
-    onBack: () -> Unit
+    onBack: () -> Unit,
+    onNavigateToSignIn: () -> Unit,
+    onNavigateToConfirmPayment: () -> Unit
 ) {
-    composable<ScheduleServiceDestination> {
+    composable<ScheduleServiceDestination> { backStackEntry ->
+        val ids = backStackEntry.toRoute<ScheduleServiceDestination>()
+
         ScheduleServiceScreen(
-            onBack = onBack
+            onBack = onBack,
+            establishmentId = ids.establishmentId,
+            serviceId = ids.offeredServiceId,
+            onNavigateToSignIn = onNavigateToSignIn,
+            onNavigateToConfirmPayment = onNavigateToConfirmPayment
         )
     }
 }
