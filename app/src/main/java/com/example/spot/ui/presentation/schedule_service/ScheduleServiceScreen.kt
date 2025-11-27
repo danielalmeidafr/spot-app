@@ -204,7 +204,7 @@ fun ScheduleServiceScreen(
                     HorizontalDivider(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(top = 35.dp),
+                            .padding(top = 20.dp),
                         thickness = 1.dp,
                         color = MaterialTheme.colorScheme.outline
                     )

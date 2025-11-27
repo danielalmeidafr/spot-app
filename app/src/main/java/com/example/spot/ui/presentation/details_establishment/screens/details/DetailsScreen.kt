@@ -28,7 +28,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalLayoutDirection
-import com.example.spot.ui.presentation.details_establishment.screens.description.DescriptionScreen
 import com.example.spot.ui.presentation.details_establishment.screens.reviews.ReviewsScreen
 import com.example.spot.ui.presentation.details_establishment.screens.services.ServicesScreen
 
@@ -50,12 +49,6 @@ sealed class ScreenItem(
             label = "Avaliações"
         )
     )
-
-    data object Details : ScreenItem(
-        bottomAppBarItem = BottomAppBarItem(
-            label = "Detalhes"
-        )
-    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -70,8 +63,7 @@ fun DetailsScreen(
     val screens = remember {
         listOf(
             ScreenItem.Services,
-            ScreenItem.Reviews,
-            ScreenItem.Details,
+            ScreenItem.Reviews
         )
     }
     var currentScreen by remember {
@@ -143,10 +135,9 @@ fun DetailsScreen(
                 )
 
                 ScreenItem.Reviews -> ReviewsScreen(
-                    onBack = onBack
+                    onBack = onBack,
+                    establishmentId = establishmentId,
                 )
-
-                ScreenItem.Details -> DescriptionScreen()
             }
         }
     }

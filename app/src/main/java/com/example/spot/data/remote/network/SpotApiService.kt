@@ -16,6 +16,7 @@ import com.example.spot.data.remote.dtos.favorite.FavoriteEstablishmentWrapper
 import com.example.spot.data.remote.dtos.home.establishment.PagedEstablishmentsResponse
 import com.example.spot.data.remote.dtos.home.nextschedule.NextScheduleResponse
 import com.example.spot.data.remote.dtos.profile.ProfileWrapper
+import com.example.spot.data.remote.dtos.reviews.ReviewResponse
 import com.example.spot.data.remote.dtos.schedule_service.ScheduleServiceResponse
 import com.example.spot.data.remote.dtos.schedules.AppointmentResponse
 import okhttp3.MultipartBody
@@ -112,4 +113,10 @@ interface SpotApiService {
 
     @GET("api/profiles/me")
     suspend fun getInfoProfile(): ProfileWrapper
+
+    @GET("api/appointments/establishments/{establishmentId}/reviews")
+    suspend fun getReviews(
+        @Path("establishmentId") establishmentId: String,
+        @Query("sortBy") sortBy: String
+    ): ReviewResponse
 }

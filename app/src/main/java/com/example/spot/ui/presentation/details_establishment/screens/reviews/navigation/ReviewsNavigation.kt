@@ -2,18 +2,25 @@ package com.example.spot.ui.presentation.details_establishment.screens.reviews.n
 
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
+import androidx.navigation.toRoute
+import com.example.spot.ui.presentation.details_establishment.screens.details.navigation.DetailsDestination
 import com.example.spot.ui.presentation.details_establishment.screens.reviews.ReviewsScreen
 import kotlinx.serialization.Serializable
 
 @Serializable
-object ReviewsDestination
+data class ReviewsDestination(
+    val establishmentId: String
+)
 
 fun NavGraphBuilder.reviewsScreen(
     onBack: () -> Unit
 ) {
-    composable<ReviewsDestination> {
+    composable<ReviewsDestination> { backStackEntry ->
+        val id = backStackEntry.toRoute<DetailsDestination>()
+
         ReviewsScreen(
-            onBack = onBack
+            onBack = onBack,
+            establishmentId = id.establishmentId
         )
     }
 }

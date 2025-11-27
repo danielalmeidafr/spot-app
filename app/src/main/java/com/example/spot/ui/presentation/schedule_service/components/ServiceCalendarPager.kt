@@ -84,7 +84,7 @@ fun ServiceCalendarPager(
                     columns = GridCells.Fixed(7),
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(280.dp),
+                        .height(300.dp),
                     verticalArrangement = Arrangement.spacedBy(15.dp),
                     userScrollEnabled = false
                 ) {

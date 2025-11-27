@@ -23,9 +23,11 @@ import com.example.spot.data.remote.dtos.confirm_payment.ConfirmPaymentRepositor
 import com.example.spot.data.remote.dtos.details.EstablishmentDetailsRepository
 import com.example.spot.data.remote.dtos.favorite.FavoriteEstablishmentRepository
 import com.example.spot.data.remote.dtos.profile.ProfileRepository
+import com.example.spot.data.remote.dtos.reviews.ReviewRepository
 import com.example.spot.data.remote.dtos.schedule_service.ScheduleServiceRepository
 import com.example.spot.ui.presentation.auth.viewmodel.AuthViewModel
 import com.example.spot.ui.presentation.create_profile.viewmodel.CreateProfileViewModel
+import com.example.spot.ui.presentation.details_establishment.screens.reviews.viewmodel.ReviewsViewModel
 import com.example.spot.ui.presentation.schedule_service.viewmodel.ScheduleServiceViewModel
 import com.example.spot.ui.presentation.details_establishment.viewmodel.DetailsViewModel
 import com.example.spot.ui.presentation.main_screen.favorite.viewmodel.FavoriteViewModel
@@ -91,6 +93,7 @@ val repositoryModule = module {
     singleOf(::ScheduleServiceRepository)
     singleOf(::ConfirmPaymentRepository)
     singleOf(::ProfileRepository)
+    singleOf(::ReviewRepository)
 }
 
 val viewModelModule = module {
@@ -103,6 +106,7 @@ val viewModelModule = module {
     viewModelOf(::DetailsViewModel)
     viewModelOf(::FavoriteViewModel)
     viewModelOf(::ScheduleServiceViewModel)
+    viewModelOf(::ReviewsViewModel)
 }
 
 val storageModule = module {
