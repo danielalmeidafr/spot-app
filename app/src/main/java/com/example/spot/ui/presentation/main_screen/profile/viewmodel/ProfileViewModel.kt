@@ -8,6 +8,7 @@ import com.example.spot.data.remote.dtos.auth.sign.SignOutRequest
 import com.example.spot.data.remote.dtos.UserPreferencesRepository
 import com.example.spot.data.remote.dtos.profile.ProfileRepository
 import com.example.spot.data.remote.dtos.profile.toInfoData
+import com.example.spot.data.remote.dtos.profile.toProgressData
 import com.example.spot.data.remote.dtos.profile.toStatsData
 import com.example.spot.ui.presentation.main_screen.profile.model.InfoData
 import com.example.spot.ui.presentation.main_screen.profile.model.ProfileState
@@ -52,7 +53,7 @@ class ProfileViewModel(
                     val response = profileRepository.getInfoProfile()
 
                     val profileInfo = response.profile.toInfoData()
-                    val profileProgress = fetchProfileProgress()
+                    val profileProgress = response.toProgressData()
                     val profileStats = response.toStatsData()
 
                     _state.update {
@@ -68,23 +69,6 @@ class ProfileViewModel(
             }
         }
     }
-
-    private fun fetchProfileProgress(): ProgressData {
-        return ProgressData(
-            currentVisits = 4,
-            goalVisits = 5,
-            rewardText = "10% OFF no próximo serviço"
-        )
-    }
-
-    private fun fetchProfileStats(): StatsData {
-        return StatsData(
-            reviews = 12,
-            schedules = 4,
-            favorites = 5
-        )
-    }
-
     fun signOut() {
         _isLoggingOut.value = true
 
