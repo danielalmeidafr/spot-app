@@ -252,7 +252,7 @@ fun SignUpScreen(
                 } else {
                     Spacer(modifier = Modifier.height(5.dp))
                 }
-
+    23
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier
