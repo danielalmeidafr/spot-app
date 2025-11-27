@@ -15,7 +15,7 @@ data class ScheduleServiceDestination(
 fun NavGraphBuilder.scheduleServiceScreen(
     onBack: () -> Unit,
     onNavigateToSignIn: () -> Unit,
-    onNavigateToConfirmPayment: (String, String) -> Unit
+    onNavigateToConfirmPayment: (String, String, String, String) -> Unit
 ) {
     composable<ScheduleServiceDestination> { backStackEntry ->
         val ids = backStackEntry.toRoute<ScheduleServiceDestination>()
@@ -23,7 +23,7 @@ fun NavGraphBuilder.scheduleServiceScreen(
         ScheduleServiceScreen(
             onBack = onBack,
             establishmentId = ids.establishmentId,
-            serviceId = ids.offeredServiceId,
+            offeredServiceId = ids.offeredServiceId,
             onNavigateToSignIn = onNavigateToSignIn,
             onNavigateToConfirmPayment = onNavigateToConfirmPayment
         )

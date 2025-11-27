@@ -8,11 +8,14 @@ import com.example.spot.data.remote.dtos.auth.password.NewPasswordRequest
 import com.example.spot.data.remote.dtos.auth.sign.SignInRequest
 import com.example.spot.data.remote.dtos.auth.sign.SignOutRequest
 import com.example.spot.data.remote.dtos.auth.sign.SignUpRequest
+import com.example.spot.data.remote.dtos.confirm_payment.ConfirmPaymentRequest
+import com.example.spot.data.remote.dtos.confirm_payment.ConfirmPaymentResponse
 import com.example.spot.data.remote.dtos.create_profile.CreateProfileRequest
 import com.example.spot.data.remote.dtos.details.EstablishmentDetailsWrapper
 import com.example.spot.data.remote.dtos.favorite.FavoriteEstablishmentWrapper
 import com.example.spot.data.remote.dtos.home.establishment.PagedEstablishmentsResponse
 import com.example.spot.data.remote.dtos.home.nextschedule.NextScheduleResponse
+import com.example.spot.data.remote.dtos.profile.ProfileWrapper
 import com.example.spot.data.remote.dtos.schedule_service.ScheduleServiceResponse
 import com.example.spot.data.remote.dtos.schedules.AppointmentResponse
 import okhttp3.MultipartBody
@@ -58,6 +61,11 @@ interface SpotApiService {
         @Query("appointmentDate") appointmentDate: String
     ): ScheduleServiceResponse
 
+    @POST("api/appointments/me")
+    suspend fun confirmPayment(
+        @Body request: ConfirmPaymentRequest
+    ) : ConfirmPaymentResponse
+
     @POST("api/authentication/sign-in")
     suspend fun signIn(@Body request: SignInRequest): AuthResponse
 
@@ -101,4 +109,7 @@ interface SpotApiService {
         @Query("customerLatitude") latitude: Double? = null,
         @Query("customerLongitude") longitude: Double? = null
     ) : FavoriteEstablishmentWrapper
+
+    @GET("api/profiles/me")
+    suspend fun getInfoProfile(): ProfileWrapper
 }

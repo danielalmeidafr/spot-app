@@ -58,10 +58,10 @@ import java.time.LocalDate
 fun ScheduleServiceScreen(
     modifier: Modifier = Modifier,
     establishmentId: String,
-    serviceId: String,
+    offeredServiceId: String,
     onBack: () -> Unit,
     onNavigateToSignIn: () -> Unit,
-    onNavigateToConfirmPayment: (String, String) -> Unit
+    onNavigateToConfirmPayment: (String, String, String, String) -> Unit
 ) {
     val viewModel: ScheduleServiceViewModel = koinViewModel()
     val state by viewModel.state.collectAsState()
@@ -71,7 +71,7 @@ fun ScheduleServiceScreen(
     var selectedAttendant by remember { mutableStateOf<AttendantInfoData?>(null) }
 
     LaunchedEffect(Unit) {
-        viewModel.loadSchedule(establishmentId, serviceId)
+        viewModel.loadSchedule(establishmentId, offeredServiceId)
     }
 
     LaunchedEffect(state) {
@@ -81,6 +81,8 @@ fun ScheduleServiceScreen(
     }
 
     when (val currentState = state) {
+        is ScheduleServiceState.PaymentSuccess -> Unit
+
         is ScheduleServiceState.Loading -> {
             Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 Text("Carregando...")
@@ -270,7 +272,11 @@ fun ScheduleServiceScreen(
                             onClick = {
                                 if(selectedHour != null && selectedAttendant != null) {
                                     viewModel.attemptPaymentNavigation(
-                                        onNavigate = { onNavigateToConfirmPayment(establishmentId, serviceId) }
+                                        onNavigate = {
+                                            val formattedScheduledAt = viewModel.getFormattedScheduledAt(selectedHour!!)
+
+                                            onNavigateToConfirmPayment(selectedAttendant!!.id, establishmentId, offeredServiceId, formattedScheduledAt)
+                                        }
                                     )
                                 }
                             }

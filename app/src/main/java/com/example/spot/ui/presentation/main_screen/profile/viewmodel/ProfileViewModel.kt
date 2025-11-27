@@ -6,6 +6,9 @@ import com.example.spot.data.remote.dtos.auth.AuthRepository
 import com.example.spot.data.remote.dtos.auth.sign.SignOutRequest
 // 1. Importe o novo repositório
 import com.example.spot.data.remote.dtos.UserPreferencesRepository
+import com.example.spot.data.remote.dtos.profile.ProfileRepository
+import com.example.spot.data.remote.dtos.profile.toInfoData
+import com.example.spot.data.remote.dtos.profile.toStatsData
 import com.example.spot.ui.presentation.main_screen.profile.model.InfoData
 import com.example.spot.ui.presentation.main_screen.profile.model.ProfileState
 import com.example.spot.ui.presentation.main_screen.profile.model.ProgressData
@@ -21,6 +24,7 @@ import retrofit2.HttpException
 
 class ProfileViewModel(
     private val authRepository: AuthRepository,
+    private val profileRepository: ProfileRepository,
     private val userPreferencesRepository: UserPreferencesRepository
 ) : ViewModel() {
     private val _state = MutableStateFlow<ProfileState>(ProfileState.Loading)
@@ -45,9 +49,11 @@ class ProfileViewModel(
                 if (logged && _state.value is ProfileState.Loading) {
                     _state.update { ProfileState.Loading }
 
-                    val profileInfo = fetchProfileInfo()
+                    val response = profileRepository.getInfoProfile()
+
+                    val profileInfo = response.profile.toInfoData()
                     val profileProgress = fetchProfileProgress()
-                    val profileStats = fetchProfileStats()
+                    val profileStats = response.toStatsData()
 
                     _state.update {
                         ProfileState.Success(
@@ -61,13 +67,6 @@ class ProfileViewModel(
                 }
             }
         }
-    }
-
-    private fun fetchProfileInfo(): InfoData {
-        return InfoData(
-            fullName = "Daniel Alves Almeida",
-            nickname = "@danielalmeidafr"
-        )
     }
 
     private fun fetchProfileProgress(): ProgressData {

@@ -44,17 +44,22 @@ import org.koin.androidx.compose.koinViewModel
 fun ConfirmPaymentScreen(
     modifier: Modifier = Modifier,
     onBack: () -> Unit,
+    onNavigateToSuccessFullConfirmPayment: () -> Unit,
+    attendantId:String,
     establishmentId: String,
-    serviceId: String,
+    offeredServiceId: String,
+    scheduledAt: String
 ) {
     val viewModel: ScheduleServiceViewModel = koinViewModel()
     val state by viewModel.state.collectAsState()
 
     LaunchedEffect(key1 = Unit) {
-        viewModel.loadSchedule(establishmentId, serviceId)
+        viewModel.loadSchedule(establishmentId, offeredServiceId)
     }
 
     when (val currentState = state) {
+        is ScheduleServiceState.PaymentSuccess -> onNavigateToSuccessFullConfirmPayment()
+
         is ScheduleServiceState.Loading -> {
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 CircularProgressIndicator()
@@ -68,7 +73,7 @@ fun ConfirmPaymentScreen(
         }
 
         is ScheduleServiceState.Success -> {
-            var selectedPaymentId by remember { mutableStateOf(currentState.payments.firstOrNull()?.id) }
+            var selectedPaymentId by remember { mutableStateOf(currentState.payments.firstOrNull()!!.id) }
 
             Column(
                 modifier = Modifier
@@ -121,12 +126,12 @@ fun ConfirmPaymentScreen(
 
                 currentState.payments.forEach { payment ->
 
-                    val (text, iconRes) = getPaymentMethodDetails(payment.type)
+                    val (text, icon) = getPaymentMethodDetails(payment.type)
 
                     PaymentMethodCard(
                         text = text,
                         agreed = selectedPaymentId == payment.id,
-                        iconRes = iconRes,
+                        icon = icon,
                         onToggle = {
                             selectedPaymentId = payment.id
                         }
@@ -144,6 +149,7 @@ fun ConfirmPaymentScreen(
                     text = "Confirmar Pagamento",
                     onClick = {
                         viewModel.attemptPaymentNavigation {
+                            viewModel.onConfirmPaymentClicked(attendantId, establishmentId, offeredServiceId, selectedPaymentId, scheduledAt)
                         }
                     }
                 )
@@ -154,11 +160,15 @@ fun ConfirmPaymentScreen(
     }
 }
 
-@Composable
-fun getPaymentMethodDetails(type: PaymentMethods): Pair<String, Int> {
+fun getPaymentMethodDetails(type: PaymentMethods): Triple<String, PaymentIcon, Boolean> {
     return when (type) {
-        PaymentMethods.CASH -> Pair("Pagar no local", R.drawable.dollar)
-        PaymentMethods.PIX -> Pair("Pix", R.drawable.pix)
-        PaymentMethods.CARD -> Pair("Meu cartão (débito/crédito)", R.drawable.card)
+        PaymentMethods.CASH -> Triple("Pagar no local", PaymentIcon.ImageRes(R.drawable.dollar), false)
+        PaymentMethods.PIX -> Triple("Pix", PaymentIcon.ImageRes(R.drawable.pix), false)
+        PaymentMethods.CARD -> Triple("Meu cartão (débito/crédito)", PaymentIcon.VectorRes(R.drawable.card), true)
     }
+}
+
+sealed class PaymentIcon {
+    data class ImageRes(val res: Int) : PaymentIcon()
+    data class VectorRes(val res: Int) : PaymentIcon()
 }

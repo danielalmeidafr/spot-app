@@ -3,7 +3,8 @@ package com.example.spot.data.remote.dtos.favorite
 data class FavoriteEstablishmentResponse(
     val id: String,
     val name: String,
-    val averageRating: Double,
+    val averageScore: Double,
+    val totalReviews: Int,
     val isOpen: Boolean,
     val nextDate: String,
     val location: String,

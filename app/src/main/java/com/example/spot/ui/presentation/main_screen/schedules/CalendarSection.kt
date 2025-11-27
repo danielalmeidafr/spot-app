@@ -75,7 +75,7 @@ fun CalendarSection(
 
         MonthSelector(selectedMonth = selectedMonth, onMonthChange = onMonthChange)
 
-        Spacer(modifier = Modifier.height(10.dp))
+        Spacer(modifier = Modifier.height(15.dp))
     }
 }
 

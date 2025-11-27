@@ -7,6 +7,6 @@ data class AppointmentDto(
     val day: Int,
     val month: String,
     val time: String,
-    val isPaid: Boolean,
+    val status: String,
     val price: Float
 )

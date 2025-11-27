@@ -3,6 +3,9 @@ package com.example.spot.ui.presentation.schedule_service.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.spot.data.remote.dtos.UserPreferencesRepository
+import com.example.spot.data.remote.dtos.confirm_payment.AppointmentRequest
+import com.example.spot.data.remote.dtos.confirm_payment.ConfirmPaymentRepository
+import com.example.spot.data.remote.dtos.confirm_payment.ConfirmPaymentRequest
 import com.example.spot.data.remote.dtos.schedule_service.ScheduleServiceRepository
 import com.example.spot.data.remote.dtos.schedule_service.toAttendantInfoData
 import com.example.spot.data.remote.dtos.schedule_service.toAvailableDays
@@ -18,10 +21,14 @@ import okio.IOException
 import org.json.JSONObject
 import retrofit2.HttpException
 import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.LocalTime
+import java.time.ZoneId
 
 class ScheduleServiceViewModel(
     private val repository: ScheduleServiceRepository,
-    private val userPreferencesRepository: UserPreferencesRepository
+    private val userPreferencesRepository: UserPreferencesRepository,
+    private val confirmPaymentRepository: ConfirmPaymentRepository
 ) : ViewModel() {
 
     private val _state = MutableStateFlow<ScheduleServiceState>(ScheduleServiceState.Loading)
@@ -92,6 +99,43 @@ class ScheduleServiceViewModel(
         }
     }
 
+    fun onConfirmPaymentClicked(attendantId: String, establishmentId: String, offeredServiceId: String, paymentMethodId: String, scheduledAt: String){
+        _state.update { ScheduleServiceState.Loading }
+
+        viewModelScope.launch {
+            try {
+                val appointmentRequest = AppointmentRequest(attendantId, establishmentId, offeredServiceId, paymentMethodId, scheduledAt)
+                val request = ConfirmPaymentRequest(appointmentRequest)
+
+                confirmPaymentRepository.confirmPayment(request)
+
+                _state.update { ScheduleServiceState.PaymentSuccess }
+            } catch (e: IOException) {
+                _state.update { ScheduleServiceState.Error("Falha na conexão. Verifique sua internet.") }
+            } catch (e: HttpException) {
+                val message = parseErrorMessage(e)
+                _state.update { ScheduleServiceState.Error(message) }
+            } catch (e: Exception) {
+                _state.update { ScheduleServiceState.Error("Ocorreu um erro: ${e.message}") }
+            }
+        }
+    }
+
+    fun getFormattedScheduledAt(timeStr: String): String {
+        return try {
+            val time = LocalTime.parse(timeStr)
+
+            val localDateTime = LocalDateTime.of(currentDate, time)
+
+            val instant = localDateTime.atZone(ZoneId.systemDefault()).toInstant()
+
+            instant.toString()
+        } catch (e: Exception) {
+            e.printStackTrace()
+            ""
+        }
+    }
+
     fun attemptPaymentNavigation(onNavigate: () -> Unit) {
         if (_accessToken.value.isEmpty()) {
             setLoginDialogVisibility(true)
@@ -123,4 +167,6 @@ class ScheduleServiceViewModel(
             "Erro no servidor"
         }
     }
+
+
 }

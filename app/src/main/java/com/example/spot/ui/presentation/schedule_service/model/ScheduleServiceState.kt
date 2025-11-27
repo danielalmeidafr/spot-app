@@ -15,4 +15,6 @@ sealed class ScheduleServiceState {
         val payments: List<PaymentMethodsResponse>,
         val showLoginDialog: Boolean = false
     ) : ScheduleServiceState()
+
+    data object PaymentSuccess : ScheduleServiceState()
 }

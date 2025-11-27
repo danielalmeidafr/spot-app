@@ -19,8 +19,10 @@ import com.example.spot.data.remote.network.AuthInterceptor
 import com.example.spot.data.remote.network.SpotApiService
 import com.example.spot.data.remote.dtos.auth.usecase.validators.EmailValidator
 import com.example.spot.data.remote.dtos.auth.usecase.validators.PasswordValidator
+import com.example.spot.data.remote.dtos.confirm_payment.ConfirmPaymentRepository
 import com.example.spot.data.remote.dtos.details.EstablishmentDetailsRepository
 import com.example.spot.data.remote.dtos.favorite.FavoriteEstablishmentRepository
+import com.example.spot.data.remote.dtos.profile.ProfileRepository
 import com.example.spot.data.remote.dtos.schedule_service.ScheduleServiceRepository
 import com.example.spot.ui.presentation.auth.viewmodel.AuthViewModel
 import com.example.spot.ui.presentation.create_profile.viewmodel.CreateProfileViewModel
@@ -87,6 +89,8 @@ val repositoryModule = module {
     singleOf(::EstablishmentDetailsRepository)
     singleOf(::FavoriteEstablishmentRepository)
     singleOf(::ScheduleServiceRepository)
+    singleOf(::ConfirmPaymentRepository)
+    singleOf(::ProfileRepository)
 }
 
 val viewModelModule = module {

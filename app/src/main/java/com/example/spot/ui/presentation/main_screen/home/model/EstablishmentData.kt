@@ -5,7 +5,7 @@ import com.example.spot.ui.presentation.main_screen.home.components.PaymentsMeth
 data class EstablishmentData(
     val id: String,
     val name: String,
-    val averageRating: Double,
+    val averageScore: Double,
     val totalReviews: Int,
     val isOpen: Boolean,
     val nextDate: String,

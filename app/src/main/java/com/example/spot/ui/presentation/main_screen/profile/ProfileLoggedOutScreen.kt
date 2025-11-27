@@ -31,8 +31,15 @@ import com.student.R
 fun ProfileLoggedOutScreen(
     modifier: Modifier = Modifier,
     onNavigateToSignIn: () -> Unit,
+    isDarkTheme: Boolean,
     innerPadding: PaddingValues = PaddingValues()
 ) {
+    val iconRes = if (isDarkTheme){
+        R.drawable.logo_dark
+    } else{
+        R.drawable.logo_light
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -43,7 +50,7 @@ fun ProfileLoggedOutScreen(
         verticalArrangement = Arrangement.Center
     ) {
         Image(
-            painter = painterResource(id = R.drawable.logo_light),
+            painter = painterResource(id = iconRes),
             contentDescription = "Profile image",
             modifier = Modifier
                 .size(150.dp)

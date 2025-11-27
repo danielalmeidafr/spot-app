@@ -19,6 +19,8 @@ import com.example.spot.ui.presentation.auth.screens.signup.navigation.SignUpDes
 import com.example.spot.ui.presentation.auth.screens.signup.navigation.signUpScreen
 import com.example.spot.ui.presentation.confirm_payment.navigation.ConfirmPaymentDestination
 import com.example.spot.ui.presentation.confirm_payment.navigation.confirmPaymentScreen
+import com.example.spot.ui.presentation.confirm_payment.success_confirm_payment.navigation.SuccessConfirmPaymentDestination
+import com.example.spot.ui.presentation.confirm_payment.success_confirm_payment.navigation.successConfirmPaymentScreen
 import com.example.spot.ui.presentation.create_profile.navigation.CreateProfileDestination
 import com.example.spot.ui.presentation.create_profile.navigation.createProfileScreen
 import com.example.spot.ui.presentation.create_profile.successful_create_profile.navigation.SuccessfulCreateProfileDestination
@@ -150,18 +152,25 @@ fun AppNavHost(
         scheduleServiceScreen(
             onBack = { navController.popBackStack() },
             onNavigateToSignIn = { navController.navigate(SignInDestination) },
-            onNavigateToConfirmPayment = { establishmentId, offeredServiceId ->
+            onNavigateToConfirmPayment = { attendantId, establishmentId, offeredServiceId, scheduleAt ->
                 navController.navigate(
                     ConfirmPaymentDestination(
+                        attendantId,
                         establishmentId,
-                        offeredServiceId
+                        offeredServiceId,
+                        scheduleAt
                     )
                 )
             }
         )
 
         confirmPaymentScreen(
-            onBack = { navController.popBackStack() }
+            onBack = { navController.popBackStack() },
+            onNavigateToSuccessFullConfirmPayment = { navController.navigate(SuccessConfirmPaymentDestination) }
+        )
+
+        successConfirmPaymentScreen(
+            onNavigateToMain = { navController.navigate(MainScreenDestination) }
         )
 
         reviewsScreen(

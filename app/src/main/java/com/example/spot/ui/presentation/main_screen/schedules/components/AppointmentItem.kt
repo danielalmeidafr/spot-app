@@ -19,11 +19,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.spot.data.remote.dtos.confirm_payment.Status
 import com.example.spot.ui.presentation.main_screen.schedules.model.AppointmentData
 import com.student.R
 
@@ -32,6 +33,8 @@ fun AppointmentItem(
     appointmentData: AppointmentData,
     modifier: Modifier = Modifier
 ) {
+    val isFinished = appointmentData.status == Status.FINISHED
+
     Row(
         modifier = modifier
             .fillMaxWidth()
@@ -49,50 +52,6 @@ fun AppointmentItem(
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onBackground
                 )
-
-                Spacer(modifier = Modifier.size(10.dp))
-
-                if (appointmentData.isPaid) {
-                    Text(
-                        "Pago",
-                        style = MaterialTheme.typography.bodySmall.copy(
-                            fontWeight = FontWeight.Medium
-                        ),
-                        color = MaterialTheme.colorScheme.secondary
-                    )
-
-                    Spacer(modifier = Modifier.size(3.dp))
-
-                    Icon(
-                        painter = painterResource(id = R.drawable.check),
-                        contentDescription = "Imagem de check",
-                        tint = MaterialTheme.colorScheme.secondary,
-                        modifier = Modifier.size(17.dp)
-                    )
-
-                } else {
-                    Row(verticalAlignment = Alignment.Bottom) {
-                        Text(
-                            "R$",
-                            style = MaterialTheme.typography.bodySmall.copy(
-                                fontWeight = FontWeight.Light,
-                                fontStyle = FontStyle.Italic,
-                            ),
-                            color = MaterialTheme.colorScheme.onBackground.copy(0.9f),
-                        )
-
-                        Spacer(modifier = Modifier.size(4.dp))
-
-                        Text(
-                            text = appointmentData.price.toString(),
-                            style = MaterialTheme.typography.bodySmall.copy(
-                                fontWeight = FontWeight.ExtraBold,
-                                fontSize = 12.sp
-                            ),
-                            color = MaterialTheme.colorScheme.onBackground.copy(0.9f)
-                        )
-                    }
-                }
             }
 
             Spacer(modifier = Modifier.height(1.dp))
@@ -157,46 +116,27 @@ fun AppointmentItem(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            if (appointmentData.isPaid) {
-                Button(
-                    onClick = {},
-                    modifier = Modifier
-                        .width(85.dp)
-                        .height(30.dp),
-                    shape = RoundedCornerShape(5.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = MaterialTheme.colorScheme.primary,
-                        contentColor = MaterialTheme.colorScheme.onPrimary
+            Button(
+                onClick = {},
+                enabled = isFinished,
+                modifier = Modifier
+                    .width(85.dp)
+                    .height(30.dp),
+                shape = RoundedCornerShape(5.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    contentColor = MaterialTheme.colorScheme.onPrimary,
+                    disabledContainerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.7f),
+                    disabledContentColor = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.7f)
+                )
+            ) {
+                Text(
+                    "Avaliar",
+                    style = MaterialTheme.typography.bodySmall.copy(
+                        fontWeight = FontWeight.SemiBold,
+                        fontSize = 9.sp
                     )
-                ) {
-                    Text(
-                        "Avaliar",
-                        style = MaterialTheme.typography.bodySmall.copy(
-                            fontWeight = FontWeight.SemiBold,
-                            fontSize = 9.sp
-                        )
-                    )
-                }
-            } else {
-                Button(
-                    onClick = {},
-                    modifier = Modifier
-                        .width(85.dp)
-                        .height(30.dp),
-                    shape = RoundedCornerShape(5.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = MaterialTheme.colorScheme.secondary,
-                        contentColor = MaterialTheme.colorScheme.onPrimary
-                    )
-                ) {
-                    Text(
-                        "Pagar",
-                        style = MaterialTheme.typography.bodySmall.copy(
-                            fontWeight = FontWeight.SemiBold,
-                            fontSize = 9.sp
-                        )
-                    )
-                }
+                )
             }
         }
     }

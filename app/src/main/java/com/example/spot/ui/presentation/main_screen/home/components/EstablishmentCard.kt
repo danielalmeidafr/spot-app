@@ -123,7 +123,7 @@ fun EstablishmentCard(
                     modifier = Modifier.animateContentSize(tween(durationMillis = 300))
                 ) {
                     Text(
-                        String.format(Locale("pt", "BR"), "%.1f", establishmentData.averageRating),
+                        String.format(Locale("pt", "BR"), "%.1f", establishmentData.averageScore),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onBackground
                     )

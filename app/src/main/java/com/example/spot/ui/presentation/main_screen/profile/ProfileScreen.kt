@@ -59,6 +59,7 @@ fun ProfileScreen(
         !isLogged -> {
             ProfileLoggedOutScreen(
                 onNavigateToSignIn = onNavigateToSignIn,
+                isDarkTheme = isDarkTheme,
                 innerPadding = innerPadding
             )
         }

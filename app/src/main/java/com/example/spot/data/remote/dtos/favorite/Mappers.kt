@@ -8,8 +8,8 @@ fun FavoriteEstablishmentResponse.toEstablishmentData(): EstablishmentData {
     return EstablishmentData(
         id = this.id,
         name = this.name,
-        averageRating = this.averageRating,
-        totalReviews = 0,
+        averageScore = this.averageScore,
+        totalReviews = this.totalReviews,
         isOpen = this.isOpen,
         nextDate = this.nextDate,
         location = this.location,

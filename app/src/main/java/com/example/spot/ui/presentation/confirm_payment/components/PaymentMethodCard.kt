@@ -25,6 +25,7 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.example.spot.ui.presentation.confirm_payment.PaymentIcon
 import com.student.R
 
 @Composable
@@ -32,7 +33,7 @@ fun PaymentMethodCard(
     modifier: Modifier = Modifier,
     text: String,
     agreed: Boolean,
-    iconRes: Int,
+    icon: PaymentIcon,
     onToggle: () -> Unit
 ) {
     val interactionSource = remember { MutableInteractionSource() }
@@ -61,11 +62,23 @@ fun PaymentMethodCard(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(10.dp)
             ) {
-                Image(
-                    painter = painterResource(iconRes),
-                    contentDescription = null,
-                    modifier = Modifier.size(16.dp)
-                )
+                when (icon) {
+                    is PaymentIcon.ImageRes -> {
+                        Image(
+                            painter = painterResource(icon.res),
+                            contentDescription = null,
+                            modifier = Modifier.size(16.dp)
+                        )
+                    }
+                    is PaymentIcon.VectorRes -> {
+                        Icon(
+                            painter = painterResource(icon.res),
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.onBackground,
+                            modifier = Modifier.size(16.dp)
+                        )
+                    }
+                }
 
                 Text(
                     text = text,
