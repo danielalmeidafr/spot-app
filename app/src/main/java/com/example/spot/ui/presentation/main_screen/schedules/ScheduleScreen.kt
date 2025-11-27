@@ -45,6 +45,7 @@ import java.time.LocalDate
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ScheduleScreen(
+    onNavigateToReviewEstablishment: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val viewModel = koinViewModel<ScheduleViewModel>()
@@ -147,7 +148,7 @@ fun ScheduleScreen(
                             }
 
                             items(appointments.size) { index ->
-                                AppointmentItem(appointments[index])
+                                AppointmentItem(appointments[index], onNavigateToReviewEstablishment)
 
                                 if (index < appointments.lastIndex) {
                                     HorizontalDivider(

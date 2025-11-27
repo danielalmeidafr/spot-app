@@ -31,6 +31,7 @@ import com.student.R
 @Composable
 fun AppointmentItem(
     appointmentData: AppointmentData,
+    onNavigateToReviewEstablishment: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val isFinished = appointmentData.status == Status.FINISHED
@@ -117,7 +118,7 @@ fun AppointmentItem(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Button(
-                onClick = {},
+                onClick = { onNavigateToReviewEstablishment(appointmentData.establishmentId) },
                 enabled = isFinished,
                 modifier = Modifier
                     .width(85.dp)

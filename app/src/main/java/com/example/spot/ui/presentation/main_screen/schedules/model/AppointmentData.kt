@@ -9,5 +9,6 @@ data class AppointmentData(
     val month: String,
     val time: String,
     val status: Status,
-    val price: Float? = null
+    val price: Float? = null,
+    val establishmentId: String
 )

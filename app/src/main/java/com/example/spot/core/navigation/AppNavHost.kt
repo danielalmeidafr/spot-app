@@ -31,11 +31,16 @@ import com.example.spot.ui.presentation.details_establishment.screens.reviews.na
 import com.example.spot.ui.presentation.schedule_service.navigation.ScheduleServiceDestination
 import com.example.spot.ui.presentation.schedule_service.navigation.scheduleServiceScreen
 import com.example.spot.ui.presentation.details_establishment.screens.services.navigation.servicesScreen
+import com.example.spot.ui.presentation.evaluate.navigation.EvaluateDestination
+import com.example.spot.ui.presentation.evaluate.navigation.evaluateScreen
+import com.example.spot.ui.presentation.evaluate.success_evaluate.navigation.SuccessEvaluateDestination
+import com.example.spot.ui.presentation.evaluate.success_evaluate.navigation.successEvaluateScreen
 import com.example.spot.ui.presentation.main_screen.favorite.navigation.favoriteScreen
 import com.example.spot.ui.presentation.main_screen.home.navigation.homeScreen
 import com.example.spot.ui.presentation.main_screen.main.navigation.MainScreenDestination
 import com.example.spot.ui.presentation.main_screen.main.navigation.mainScreen
 import com.example.spot.ui.presentation.main_screen.profile.navigation.profileScreen
+import com.example.spot.ui.presentation.main_screen.schedules.navigation.scheduleScreen
 
 @Composable
 fun AppNavHost(
@@ -47,6 +52,7 @@ fun AppNavHost(
         mainScreen(
             onNavigateToSignIn = { navController.navigate(SignInDestination) },
             onNavigateToDetails = { id -> navController.navigate(DetailsDestination(id)) },
+            onNavigateToReviewEstablishment = { id -> navController.navigate(EvaluateDestination(id)) },
             isDarkTheme = isDarkTheme,
             onThemeToggle = onThemeToggle
         )
@@ -57,6 +63,19 @@ fun AppNavHost(
 
         favoriteScreen(
             onNavigateToDetails = { id -> navController.navigate(DetailsDestination(id)) }
+        )
+
+        scheduleScreen(
+            onNavigateToReviewEstablishment = { id -> navController.navigate(EvaluateDestination(id)) }
+        )
+
+        evaluateScreen(
+            onBack = { navController.popBackStack() },
+            onNavigateToSuccess = { navController.navigate(SuccessEvaluateDestination) }
+        )
+
+        successEvaluateScreen(
+            onNavigateToMain = { navController.navigate(MainScreenDestination) }
         )
 
         signInScreen(
@@ -166,7 +185,11 @@ fun AppNavHost(
 
         confirmPaymentScreen(
             onBack = { navController.popBackStack() },
-            onNavigateToSuccessFullConfirmPayment = { navController.navigate(SuccessConfirmPaymentDestination) }
+            onNavigateToSuccessFullConfirmPayment = {
+                navController.navigate(
+                    SuccessConfirmPaymentDestination
+                )
+            }
         )
 
         successConfirmPaymentScreen(

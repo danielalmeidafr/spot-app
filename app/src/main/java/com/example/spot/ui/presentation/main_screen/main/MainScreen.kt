@@ -92,6 +92,7 @@ fun MainScreen(
     modifier: Modifier = Modifier,
     onNavigateToDetails: (String) -> Unit,
     onNavigateToSignIn: () -> Unit,
+    onNavigateToReviewEstablishment: (String) -> Unit,
     isDarkTheme: Boolean,
     onThemeToggle: () -> Unit
 ) {
@@ -219,7 +220,9 @@ fun MainScreen(
                     innerPadding = innerPadding,
                     onNavigateToDetails = onNavigateToDetails
                 )
-                ScreenItem.Schedules -> ScheduleScreen()
+                ScreenItem.Schedules -> ScheduleScreen(
+                    onNavigateToReviewEstablishment = onNavigateToReviewEstablishment
+                )
                 ScreenItem.Profile -> ProfileScreen(
                     innerPadding = innerPadding,
                     onNavigateToSignIn = onNavigateToSignIn,

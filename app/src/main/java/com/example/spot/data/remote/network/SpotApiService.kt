@@ -12,6 +12,7 @@ import com.example.spot.data.remote.dtos.confirm_payment.ConfirmPaymentRequest
 import com.example.spot.data.remote.dtos.confirm_payment.ConfirmPaymentResponse
 import com.example.spot.data.remote.dtos.create_profile.CreateProfileRequest
 import com.example.spot.data.remote.dtos.details.EstablishmentDetailsWrapper
+import com.example.spot.data.remote.dtos.evaluate.RatingRequest
 import com.example.spot.data.remote.dtos.favorite.FavoriteEstablishmentWrapper
 import com.example.spot.data.remote.dtos.home.establishment.PagedEstablishmentsResponse
 import com.example.spot.data.remote.dtos.home.nextschedule.NextScheduleResponse
@@ -119,4 +120,10 @@ interface SpotApiService {
         @Path("establishmentId") establishmentId: String,
         @Query("sortBy") sortBy: String
     ): ReviewResponse
+
+    @POST("api/appointments/{establishmentId}/rate")
+    suspend fun evaluate(
+        @Path("establishmentId") establishmentId: String,
+        @Body request: RatingRequest
+    )
 }

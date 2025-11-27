@@ -11,6 +11,7 @@ object MainScreenDestination
 
 fun NavGraphBuilder.mainScreen(
     onNavigateToDetails: (String) -> Unit,
+    onNavigateToReviewEstablishment: (String) -> Unit,
     onNavigateToSignIn: () -> Unit,
     isDarkTheme: Boolean,
     onThemeToggle: () -> Unit
@@ -19,6 +20,7 @@ fun NavGraphBuilder.mainScreen(
         MainScreen(
             onNavigateToDetails = onNavigateToDetails,
             onNavigateToSignIn = onNavigateToSignIn,
+            onNavigateToReviewEstablishment = onNavigateToReviewEstablishment,
             isDarkTheme = isDarkTheme,
             onThemeToggle = onThemeToggle
         )

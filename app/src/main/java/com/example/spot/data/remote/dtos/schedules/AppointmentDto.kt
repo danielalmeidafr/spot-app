@@ -4,6 +4,7 @@ data class AppointmentDto(
     val id: String,
     val title: String,
     val establishment: String,
+    val establishmentId: String,
     val day: Int,
     val month: String,
     val time: String,

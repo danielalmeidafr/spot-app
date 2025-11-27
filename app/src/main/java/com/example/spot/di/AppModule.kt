@@ -21,6 +21,7 @@ import com.example.spot.data.remote.dtos.auth.usecase.validators.EmailValidator
 import com.example.spot.data.remote.dtos.auth.usecase.validators.PasswordValidator
 import com.example.spot.data.remote.dtos.confirm_payment.ConfirmPaymentRepository
 import com.example.spot.data.remote.dtos.details.EstablishmentDetailsRepository
+import com.example.spot.data.remote.dtos.evaluate.EvaluateRepository
 import com.example.spot.data.remote.dtos.favorite.FavoriteEstablishmentRepository
 import com.example.spot.data.remote.dtos.profile.ProfileRepository
 import com.example.spot.data.remote.dtos.reviews.ReviewRepository
@@ -30,6 +31,7 @@ import com.example.spot.ui.presentation.create_profile.viewmodel.CreateProfileVi
 import com.example.spot.ui.presentation.details_establishment.screens.reviews.viewmodel.ReviewsViewModel
 import com.example.spot.ui.presentation.schedule_service.viewmodel.ScheduleServiceViewModel
 import com.example.spot.ui.presentation.details_establishment.viewmodel.DetailsViewModel
+import com.example.spot.ui.presentation.evaluate.viewmodel.EvaluateViewModel
 import com.example.spot.ui.presentation.main_screen.favorite.viewmodel.FavoriteViewModel
 import com.example.spot.ui.presentation.main_screen.home.viewmodel.HomeViewModel
 import com.example.spot.ui.presentation.main_screen.profile.viewmodel.ProfileViewModel
@@ -94,6 +96,7 @@ val repositoryModule = module {
     singleOf(::ConfirmPaymentRepository)
     singleOf(::ProfileRepository)
     singleOf(::ReviewRepository)
+    singleOf(::EvaluateRepository)
 }
 
 val viewModelModule = module {
@@ -107,6 +110,7 @@ val viewModelModule = module {
     viewModelOf(::FavoriteViewModel)
     viewModelOf(::ScheduleServiceViewModel)
     viewModelOf(::ReviewsViewModel)
+    viewModelOf(::EvaluateViewModel)
 }
 
 val storageModule = module {

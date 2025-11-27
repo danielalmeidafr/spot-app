@@ -7,6 +7,7 @@ fun AppointmentDto.toAppointmentData(): AppointmentData {
     return AppointmentData(
         title = title,
         location = establishment,
+        establishmentId = this.establishmentId,
         day = day,
         month = month,
         time = time,
