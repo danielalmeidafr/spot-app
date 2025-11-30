@@ -48,20 +48,30 @@ class ProfileViewModel(
                 _isCheckingLogin.value = false
 
                 if (logged && _state.value is ProfileState.Loading) {
-                    _state.update { ProfileState.Loading }
+                    try {
+                        val response = profileRepository.getInfoProfile()
 
-                    val response = profileRepository.getInfoProfile()
+                        val profileInfo = response.profile.toInfoData()
+                        val profileProgress = response.toProgressData()
+                        val profileStats = response.toStatsData()
 
-                    val profileInfo = response.profile.toInfoData()
-                    val profileProgress = response.toProgressData()
-                    val profileStats = response.toStatsData()
-
-                    _state.update {
-                        ProfileState.Success(
-                            infoData = profileInfo,
-                            progressData = profileProgress,
-                            statsData = profileStats
-                        )
+                        _state.update {
+                            ProfileState.Success(
+                                infoData = profileInfo,
+                                progressData = profileProgress,
+                                statsData = profileStats
+                            )
+                        }
+                    } catch (e: HttpException) {
+                        if (e.code() == 404) {
+                            println("Perfil não encontrado (404). O usuário deve estar criando o perfil.")
+                        } else {
+                            _state.update { ProfileState.Error("Erro no servidor: ${e.message}") }
+                        }
+                    } catch (e: IOException) {
+                        _state.update { ProfileState.Error("Falha na conexão") }
+                    } catch (e: Exception) {
+                        _state.update { ProfileState.Error("Erro desconhecido") }
                     }
                 } else if (!logged) {
                     _state.value = ProfileState.Loading
