@@ -6,7 +6,7 @@ import com.example.spot.ui.presentation.main_screen.profile.model.StatsData
 
 fun ProfileResponse.toInfoData(): InfoData {
     return InfoData(
-        profileImageUrl = this.profileImageUrl,
+        profileImageUrl = this.profileImageUrl ?: "",
         fullName = this.fullName,
         nickname = this.nickName
     )

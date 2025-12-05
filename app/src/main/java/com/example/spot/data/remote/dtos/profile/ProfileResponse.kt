@@ -8,6 +8,6 @@ data class ProfileResponse(
     val fullName: String,
     val birthDate: String,
     val gender: GenderTypes,
-    val profileImageUrl: String,
+    val profileImageUrl: String?,
     val userId: String
 )

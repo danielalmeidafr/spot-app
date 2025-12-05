@@ -48,6 +48,7 @@ class ProfileViewModel(
                 _isCheckingLogin.value = false
 
                 if (logged && _state.value is ProfileState.Loading) {
+
                     try {
                         val response = profileRepository.getInfoProfile()
 
@@ -63,7 +64,8 @@ class ProfileViewModel(
                             )
                         }
                     } catch (e: HttpException) {
-                        if (e.code() == 404) {
+                        if (e.code() == 404 || e.code() == 403) {
+                            _state.update { ProfileState.Error("Erro no token: ${e.message}") }
                             println("Perfil não encontrado (404). O usuário deve estar criando o perfil.")
                         } else {
                             _state.update { ProfileState.Error("Erro no servidor: ${e.message}") }
